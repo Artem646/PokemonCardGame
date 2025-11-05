@@ -6,7 +6,7 @@ using ColorUtility = UnityEngine.ColorUtility;
 [UxmlElement]
 public partial class CardView : VisualElement
 {
-    public CardData cardData { get; private set; }
+    public CardModel cardModel { get; private set; }
 
     private VisualElement cardRoot;
     private VisualElement card;
@@ -16,9 +16,9 @@ public partial class CardView : VisualElement
 
     public CardView() { }
 
-    public CardView(CardData data, VisualTreeAsset template)
+    public CardView(CardModel data, VisualTreeAsset template)
     {
-        cardData = data;
+        cardModel = data;
         cardTemplate = template;
         cardRoot = cardTemplate.Instantiate();
         FillCard(cardRoot);
@@ -57,25 +57,22 @@ public partial class CardView : VisualElement
 
     private void FillCard(VisualElement cardRoot)
     {
-        if (ColorUtility.TryParseHtmlString(cardData.colors.cardColor, out Color col))
-        {
-            card = cardRoot.Q<VisualElement>("fullCard");
-            card.style.backgroundColor = new StyleColor(col);
-        }
+        card = cardRoot.Q<VisualElement>("fullCard");
+        card.style.backgroundColor = new StyleColor(cardModel.colors.cardColor);
 
-        cardRoot.Q<Label>("title").text = cardData.title;
+        cardRoot.Q<Label>("title").text = cardModel.title;
 
         VisualElement bodyContainer = cardRoot.Q<VisualElement>("body");
         VisualElement elementsArea = cardRoot.Q<VisualElement>("elementsArea");
         string xmlWithSvgCodeFileName;
         XmlDocument xmlDocumentBodyBorder, xmlDocumentElementsBorder;
 
-        if (!string.IsNullOrEmpty(cardData.secondaryElement))
+        if (cardModel.secondaryElement == null)
         {
             xmlWithSvgCodeFileName = "borderWithLinearGradientForTwoElement";
             xmlDocumentBodyBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
 
-            UpdateGradientStops(xmlDocumentBodyBorder, 2, cardData.colors.borderColor1, cardData.colors.borderColor2);
+            UpdateGradientStops(xmlDocumentBodyBorder, 2, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
 
             xmlWithSvgCodeFileName = "borderForTwoElements";
             xmlDocumentElementsBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
@@ -84,7 +81,7 @@ public partial class CardView : VisualElement
         {
             xmlWithSvgCodeFileName = "borderWithLinearGradientForOneElement";
             xmlDocumentBodyBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
-            UpdateGradientStops(xmlDocumentBodyBorder, 1, cardData.colors.borderColor1, cardData.colors.borderColor2);
+            UpdateGradientStops(xmlDocumentBodyBorder, 1, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
 
             xmlWithSvgCodeFileName = "borderForOneElement";
             xmlDocumentElementsBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
@@ -96,12 +93,12 @@ public partial class CardView : VisualElement
         BindVisualElementWithSvg(bodyContainer, xmlDocumentBodyBorder.OuterXml);
         BindVisualElementWithSvg(elementsArea, xmlDocumentElementsBorder.OuterXml);
 
-        cardRoot.Q<VisualElement>("pokemonImage").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{cardData.imageName}"));
+        cardRoot.Q<VisualElement>("pokemonImage").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{cardModel.imageName}"));
 
-        cardRoot.Q<VisualElement>("mainElement").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardData.mainElement}"));
-        cardRoot.Q<VisualElement>("mainElement").userData = cardData.mainElement;
-        cardRoot.Q<VisualElement>("secondaryElement").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardData.secondaryElement}"));
-        cardRoot.Q<VisualElement>("secondaryElement").userData = cardData.secondaryElement;
+        cardRoot.Q<VisualElement>("mainElement").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.mainElement.ToString().ToLowerInvariant()}"));
+        cardRoot.Q<VisualElement>("mainElement").userData = cardModel.mainElement.ToString().ToLowerInvariant();
+        cardRoot.Q<VisualElement>("secondaryElement").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.secondaryElement.ToString().ToLowerInvariant()}"));
+        cardRoot.Q<VisualElement>("secondaryElement").userData = cardModel.secondaryElement.ToString().ToLowerInvariant();
 
         cardRoot.Q<Button>("addToCardDeck").style.unityBackgroundImageTintColor = new Color(0.5f, 0.5f, 0.5f);
     }
@@ -112,7 +109,7 @@ public partial class CardView : VisualElement
         visualElement.style.backgroundImage = new StyleBackground(texture);
     }
 
-    private void UpdateGradientStops(XmlDocument doc, int countOfElements, string color1, string color2)
+    private void UpdateGradientStops(XmlDocument doc, int countOfElements, Color color1, Color color2)
     {
         if (doc == null) return;
 
@@ -126,10 +123,10 @@ public partial class CardView : VisualElement
             stop2 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[2]", nsmgr);
 
             if (stop1?.Attributes["stop-color"] != null)
-                stop1.Attributes["stop-color"].Value = color1;
+                stop1.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color1);
 
             if (stop2?.Attributes["stop-color"] != null)
-                stop2.Attributes["stop-color"].Value = color2;
+                stop2.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color2);
         }
         else if (countOfElements == 2)
         {
@@ -137,10 +134,10 @@ public partial class CardView : VisualElement
             stop2 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[2]", nsmgr);
 
             if (stop1?.Attributes["stop-color"] != null)
-                stop1.Attributes["stop-color"].Value = color1;
+                stop1.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color1);
 
             if (stop2?.Attributes["stop-color"] != null)
-                stop2.Attributes["stop-color"].Value = color2;
+                stop2.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color2);
         }
     }
 }

@@ -17,12 +17,12 @@ public class CardCollectionPresenter
         this.overlay = overlay;
     }
 
-    public void ReloadCards(List<CardData> cards)
+    public void ReloadCards(List<CardModel> cards)
     {
         cardsContainer.Clear();
         cardViews.Clear();
 
-        foreach (CardData card in cards)
+        foreach (CardModel card in cards)
         {
             if (card != null)
             {
@@ -36,8 +36,6 @@ public class CardCollectionPresenter
 
 
     }
-
-
 
     //     List<CardData> cards = CardRepository.Instance.GetCachedCards();
 

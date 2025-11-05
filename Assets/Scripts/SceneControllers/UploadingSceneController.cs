@@ -13,7 +13,7 @@ public class UploadingSceneController : MonoBehaviour
     {
         FirebaseAuth auth = FirebaseService.Instance.GetAuth();
         string userId = auth.CurrentUser.UserId;
-        await CardRepository.Instance.LoadUserCardsFromDatabase(userId);
+        await CardRepository.Instance.GetCardsFromJsonById(userId);
     }
     private void OnEnable()
     {
@@ -42,7 +42,7 @@ public class UploadingSceneController : MonoBehaviour
 
     private void HandleCardsLoaded()
     {
-        statusLabel.text = $"Загружено {CardRepository.Instance.GetCachedCards().Count} карт";
+        statusLabel.text = $"Загружено {CardRepository.Instance.GetUserCards().Count} карт";
         SceneManager.LoadScene("CollectionScene");
     }
 }

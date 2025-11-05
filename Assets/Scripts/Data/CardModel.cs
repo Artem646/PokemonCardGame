@@ -5,29 +5,6 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 
-// [Serializable]
-// public class CardColors
-// {
-//     public Color cardColor;
-//     public Color borderColor1;
-//     public Color borderColor2;
-//     public static CardColors FromHex(string cardHex, string border1Hex, string border2Hex)
-//     {
-//         return new CardColors
-//         {
-//             cardColor = HexToColor(cardHex),
-//             borderColor1 = HexToColor(border1Hex),
-//             borderColor2 = HexToColor(border2Hex)
-//         };
-//     }
-
-//     private static Color HexToColor(string hex)
-//     {
-//         if (ColorUtility.TryParseHtmlString(hex, out Color color)) return color;
-//         return Color.white;
-//     }
-// }
-
 public class ColorHexConverter : JsonConverter<Color>
 {
     public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, JsonSerializer serializer)
@@ -41,13 +18,7 @@ public class ColorHexConverter : JsonConverter<Color>
 
         return Color.white;
     }
-
-    public override void WriteJson(JsonWriter writer, Color value, JsonSerializer serializer)
-    {
-        // Color32 c = value;
-        // string hex = $"#{c.r:X2}{c.g:X2}{c.b:X2}";
-        // writer.WriteValue(hex);
-    }
+    public override void WriteJson(JsonWriter writer, Color value, JsonSerializer serializer) { }
 }
 
 [JsonObject]
@@ -102,7 +73,14 @@ public class CardModel
 }
 
 [Serializable]
-public class CardModelList
+public class CardsModelList
 {
     public List<CardModel> cards;
 }
+
+[Serializable]
+public class UserCardsModelList
+{
+    public List<CardModel> cards;
+}
+

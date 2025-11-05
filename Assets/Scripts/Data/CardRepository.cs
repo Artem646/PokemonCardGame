@@ -4,16 +4,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 public class CardRepository : MonoBehaviour
 {
     public static CardRepository Instance { get; private set; }
     private FirebaseFirestore firebaseFirestore;
-    private List<CardData> cachedCards = new();
-    // private List<CardModel> cardModelList = new();
+    private CardsModelList cardsModelList = new();
+    private UserCardsModelList userCardsModelList = new();
+    private List<int> cardIds;
 
     [SerializeField] private TextAsset cardsJson;
 
@@ -34,57 +32,54 @@ public class CardRepository : MonoBehaviour
         }
     }
 
-    public async Task<List<CardData>> LoadUserCardsFromDatabase(string userId)
+    private async void LoadCardsIdFromDatabase(string userId)
     {
-        if (cachedCards.Count > 0)
-        {
-            cachedCards.Clear();
-        }
-
         try
         {
             firebaseFirestore = FirebaseService.Instance.GetFirestore();
-
             DocumentSnapshot snapshot = await firebaseFirestore.Collection("users").Document(userId).GetSnapshotAsync();
             if (snapshot.Exists)
             {
-                List<string> cardIDs = snapshot.GetValue<List<string>>("cardsInCollection");
-                var settings = new JsonSerializerSettings
-                {
-                    Converters = {
-                        new StringEnumConverter(new CamelCaseNamingStrategy()),
-                        new ColorHexConverter()
-                    }
-                };
-
-                CardModelList cardModelList = JsonConvert.DeserializeObject<CardModelList>(cardsJson.text, settings);
-
-                int total = cardIDs.Count;
-                int loaded = 0;
-
-                foreach (string id in cardIDs)
-                {
-                    int intId = Int32.Parse(id);
-                    CardModel card = cardModelList.cards.FirstOrDefault(c => c.id == intId);
-                    Debug.Log(card.title);
-                    Debug.Log(card.colors.cardColor);
-                    Debug.Log(card.imageName);
-                    Debug.Log(card.secondaryElement);
-                    Debug.Log(card.mainElement);
-                    Debug.Log(card.colors.borderColor1);
-
-                    // if (card != null)
-                    // {
-                    //     cachedCards.Add(card);
-                    // }
-
-                    loaded++;
-                    float progress = (float)loaded / total;
-                    OnProgressChanged?.Invoke(progress);
-
-                    await Task.Yield();
-                }
+                cardIds = snapshot.GetValue<List<int>>("cardsInCollection");
             }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[P]Ошибка при загрузке id карт из database: {e}");
+        }
+    }
+
+    public async Task<UserCardsModelList> GetCardsFromJsonById(string userId)
+    {
+        try
+        {
+            if (userCardsModelList.cards.Count > 0)
+            {
+                userCardsModelList.cards.Clear();
+            }
+
+            LoadCardsIdFromDatabase(userId);
+
+            // CardsLoader.FromJson(cardsJson);
+
+            int total = cardIds.Count;
+            // int loaded = 0;
+
+            // foreach (int id in cardIds)
+            // {
+            //     CardModel card = cardsModelList.cards.FirstOrDefault(c => c.id == int.Parse(id));
+
+            //     if (card != null)
+            //     {
+            //         userCardsModelList.cards.Add(card);
+            //     }
+
+            //     loaded++;
+            //     float progress = (float)loaded / total;
+            //     OnProgressChanged?.Invoke(progress);
+
+            //     await Task.Yield();
+            // }
         }
         catch (Exception e)
         {
@@ -92,7 +87,7 @@ public class CardRepository : MonoBehaviour
         }
 
         OnCardsLoaded?.Invoke();
-        return cachedCards;
+        return userCardsModelList;
     }
 
     // public async Task AddCardToCollection(string userId, string cardId)
@@ -108,5 +103,5 @@ public class CardRepository : MonoBehaviour
     //     }
     // }
 
-    public List<CardData> GetCachedCards() => cachedCards;
+    public List<CardModel> GetUserCards() => userCardsModelList.cards;
 }

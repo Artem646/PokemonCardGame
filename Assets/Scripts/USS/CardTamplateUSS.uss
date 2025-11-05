@@ -1,0 +1,7 @@
+.card-zoom {
+    scale: 1.75;
+    transition: scale 150ms ease;
+    transform-origin: center center;
+    transition: scale 2.3s ease, translate 2.3s ease;
+    translate: 0 0;
+}

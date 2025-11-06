@@ -3,7 +3,6 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
 
 public class ColorHexConverter : JsonConverter<Color>
 {
@@ -71,16 +70,3 @@ public class CardModel
     // public int physicalAttack;
     // public int health;
 }
-
-[Serializable]
-public class CardsModelList
-{
-    public List<CardModel> cards;
-}
-
-[Serializable]
-public class UserCardsModelList
-{
-    public List<CardModel> cards;
-}
-

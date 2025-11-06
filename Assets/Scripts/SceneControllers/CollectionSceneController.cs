@@ -22,8 +22,8 @@ public class CollectionSceneController : MonoBehaviour
         VisualElement overlay = uiDocument.rootVisualElement.Q<VisualElement>("overlay");
         CardCollectionPresenter cardPresenter = new CardCollectionPresenter(cardsContainer, cardTemplate, overlay);
 
-        List<CardModel> cards = CardRepository.Instance.GetUserCards();
-        cardPresenter.ReloadCards(cards);
+        UserCardsModelList cards = CardRepository.Instance.GetUserCards();
+        cardPresenter.ReloadCards(cards.cards);
 
         cardViews = cardPresenter.GetAllCardViews();
 

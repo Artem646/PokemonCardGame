@@ -1,0 +1,114 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CardRepositoryService
+{
+    private CardsModelList allCardsList = new();
+    private UserCardsModelList userCardsList = new();
+    private readonly TextAsset cardsJson;
+
+    public event Action OnCardsLoaded;
+    public event Action<float> OnProgressChanged;
+
+    public CardRepositoryService(TextAsset cardsJson)
+    {
+        this.cardsJson = cardsJson;
+    }
+
+    public async Task<UserCardsModelList> GetUserCardsCollection(string userId)
+    {
+        try
+        {
+            userCardsList.cards.Clear();
+
+            List<int> cardIds = await GetUserCardIds(userId);
+            if (cardIds.Count == 0)
+            {
+                Debug.LogWarning("[P] У пользователя нет карт в коллекции.");
+                OnCardsLoaded?.Invoke();
+                return userCardsList;
+            }
+
+            LoadAllCardsIfNeeded();
+            await AddCardsToCollectionByIds(cardIds);
+
+            Debug.Log($"[P] Успешно загружено {userCardsList.cards.Count} карт.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[P] Ошибка при загрузке карт: {e}");
+        }
+
+        OnCardsLoaded?.Invoke();
+        return userCardsList;
+    }
+
+    private async Task<List<int>> GetUserCardIds(string userId)
+    {
+        return await CardsLoader.GetCardIdsFromFirestore(userId) ?? new List<int>();
+    }
+
+    private void LoadAllCardsIfNeeded()
+    {
+        if (allCardsList != null && allCardsList.cards.Count > 0)
+            return;
+
+        try
+        {
+            allCardsList = CardsLoader.GetCardsListFromJson(cardsJson);
+            Debug.Log($"[P] Загружено {allCardsList.cards.Count} карт из JSON.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[P] Ошибка при загрузке JSON карт: {e}");
+        }
+    }
+
+    public void AddCardToCollection(CardModel card)
+    {
+        if (card == null)
+            return;
+
+        bool alreadyExists = userCardsList.cards.Any(c => c.id == card.id);
+        if (!alreadyExists)
+        {
+            userCardsList.cards.Add(card);
+        }
+    }
+
+    private CardModel CreateCardById(int cardId)
+    {
+        CardModel card = allCardsList.cards.FirstOrDefault(c => c.id == cardId);
+        if (card == null)
+        {
+            Debug.LogWarning($"[P] Карта с id = {cardId} не найдена.");
+        }
+        return card;
+    }
+
+    private async Task AddCardsToCollectionByIds(List<int> cardIds)
+    {
+        int total = cardIds.Count;
+        int loaded = 0;
+
+        foreach (int cardId in cardIds)
+        {
+            CardModel card = CreateCardById(cardId);
+            if (card != null)
+            {
+                AddCardToCollection(card);
+            }
+            loaded++;
+            float progress = (float)loaded / total;
+            OnProgressChanged?.Invoke(progress);
+
+            await Task.Yield();
+        }
+    }
+
+    public UserCardsModelList GetUserCardsList() => userCardsList;
+    public CardsModelList GetAllCardsList() => allCardsList;
+}

@@ -1,18 +1,17 @@
 using UnityEngine;
-using Firebase.Firestore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Runtime.CompilerServices;
-using System.Globalization;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Firebase.Firestore;
+using System;
 
 public static class CardsLoader
 {
-    public static CardsModelList FromJson(TextAsset cardsJson)
+    private static FirebaseFirestore firebaseFirestore;
+
+    public static CardsModelList GetCardsListFromJson(TextAsset cardsJson)
     {
         var settings = new JsonSerializerSettings
         {
@@ -23,5 +22,24 @@ public static class CardsLoader
             }
         };
         return JsonConvert.DeserializeObject<CardsModelList>(cardsJson.text, settings);
+    }
+
+    public static async Task<List<int>> GetCardIdsFromFirestore(string userId)
+    {
+        try
+        {
+            firebaseFirestore = FirebaseService.Instance.GetFirestore();
+            DocumentSnapshot snapshot = await firebaseFirestore.Collection("users").Document(userId).GetSnapshotAsync();
+            if (!snapshot.Exists)
+            {
+                return null;
+            }
+            return snapshot.GetValue<List<int>>("cardsInCollection") ?? null;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[P]Ошибка при загрузке ID карт из database: {e}");
+            return null;
+        }
     }
 }

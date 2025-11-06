@@ -9,11 +9,12 @@ public class UploadingSceneController : MonoBehaviour
     private ProgressBar progressBar;
     private Label statusLabel;
 
+
     private async void Start()
     {
         FirebaseAuth auth = FirebaseService.Instance.GetAuth();
         string userId = auth.CurrentUser.UserId;
-        await CardRepository.Instance.GetCardsFromJsonById(userId);
+        await CardRepository.Instance.GetUserCardsCollection(userId);
     }
     private void OnEnable()
     {
@@ -42,7 +43,7 @@ public class UploadingSceneController : MonoBehaviour
 
     private void HandleCardsLoaded()
     {
-        statusLabel.text = $"Загружено {CardRepository.Instance.GetUserCards().Count} карт";
+        statusLabel.text = $"Загружено {CardRepository.Instance.GetUserCards().cards.Count} карт";
         SceneManager.LoadScene("CollectionScene");
     }
 }

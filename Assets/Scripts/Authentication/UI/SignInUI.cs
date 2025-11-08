@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class SignInUI : MonoBehaviour
@@ -8,6 +9,7 @@ public class SignInUI : MonoBehaviour
 
     void Start()
     {
+        SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
         root = uiDocument.rootVisualElement;
         VisualElement googleSignInButton = root.Q<VisualElement>("googleSignInButton");
         VisualElement anonymousSignInButton = root.Q<VisualElement>("anonymousSignInButton");

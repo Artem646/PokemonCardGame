@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Firebase.Auth;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AuthManager : MonoBehaviour
 {
@@ -70,12 +71,23 @@ public class AuthManager : MonoBehaviour
         return AuthType.Unknown;
     }
 
+    public void CheckInternet()
+    {
+
+    }
+
     public void SignIn(AuthType type)
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
-            Debug.Log("[P] Нет подключения к интернету");
-            NotificationManager.ShowNotification("Нет подключения к интернету", true);
+            ConfirmDialogController.ShowDialog(
+                "Нет подключения к интернету. Хотите перейти в Бестиарий?",
+                onYes: () =>
+                {
+                    SceneManager.LoadScene("BestiaryScene");
+                },
+                onNo: () => Debug.Log("Остался на текущей сцене")
+            );
             return;
         }
 

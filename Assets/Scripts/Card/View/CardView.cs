@@ -1,142 +1,144 @@
-// using System.Xml;
-// using UnityEngine;
-// using UnityEngine.UIElements;
-// using ColorUtility = UnityEngine.ColorUtility;
+using System.Xml;
+using UnityEngine;
+using UnityEngine.UIElements;
+using ColorUtility = UnityEngine.ColorUtility;
 
-// public class CardView
-// {
-//     public CardModel cardModel { get; private set; }
+public class CardView
+{
+    private readonly CardModel cardModel;
+    private readonly VisualElement cardRoot;
+    private VisualElement cardElement;
+    private Button addToCardDeckButton;
+    private Label titleLabel;
+    private readonly VisualTreeAsset cardTemplate;
 
-//     private VisualElement cardRoot;
-//     private VisualElement card;
-//     private Button addToCardDeckButton;
-//     private VisualElement overlay;
-//     private readonly VisualTreeAsset cardTemplate;
+    public CardView(CardModel model, VisualTreeAsset template)
+    {
+        cardModel = model;
+        cardTemplate = template;
+        cardRoot = cardTemplate.Instantiate();
 
-//     public CardView() { }
+        InitializeElements();
+        BindViewWithData();
+    }
 
-//     public CardView(CardModel data, VisualTreeAsset template)
-//     {
-//         cardModel = data;
-//         cardTemplate = template;
-//         cardRoot = cardTemplate.Instantiate();
-//         FillCard(cardRoot);
-//         RegisterCallbacks(cardRoot);
-//         Add(cardRoot);
-//     }
+    private void InitializeElements()
+    {
+        cardElement = cardRoot.Q<VisualElement>("fullCard");
+        addToCardDeckButton = cardRoot.Q<Button>("addToCardDeck");
+        titleLabel = cardRoot.Q<Label>("title");
+    }
 
-//     private void RegisterCallbacks(VisualElement cardRoot)
-//     {
-//         addToCardDeckButton = cardRoot.Q<Button>("addToCardDeck");
+    private void BindViewWithData()
+    {
+        cardElement.style.backgroundColor = new StyleColor(cardModel.colors.cardColor);
+        titleLabel.text = cardModel.title;
 
-//         card?.RegisterCallback<ClickEvent>(evt =>
-//         {
-//             if (overlay == null) return;
+        SetBodyAndBorders();
+        SetImages();
 
-//             var clone = cardTemplate.Instantiate();
-//             FillCard(clone);
-//             CardScaleAnimator.AnimateCardFromListToOverlay(card, clone, overlay, evt.position);
-//         });
+        addToCardDeckButton.style.unityBackgroundImageTintColor = new Color(0.5f, 0.5f, 0.5f);
+    }
 
-//         addToCardDeckButton?.RegisterCallback<ClickEvent>(evt =>
-//         {
-//             CardDeck.Instance.ToggleAddToCardDeckButton(addToCardDeckButton, this);
-//         });
-//     }
+    public void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick, EventCallback<ClickEvent> onAddToCardDeckButtonClick)
+    {
+        cardElement?.RegisterCallback(onCardElementClick);
+        addToCardDeckButton?.RegisterCallback(onAddToCardDeckButtonClick);
+    }
 
-//     public void BindOverlay(VisualElement overlay)
-//     {
-//         this.overlay = overlay;
+    public void UnregisterClickHandlers(EventCallback<ClickEvent> onCardElementClick, EventCallback<ClickEvent> onAddToCardDeckButtonClick)
+    {
+        cardElement?.UnregisterCallback(onCardElementClick);
+        addToCardDeckButton?.UnregisterCallback(onAddToCardDeckButtonClick);
+    }
 
-//         overlay?.RegisterCallback<ClickEvent>(evt =>
-//         {
-//             CardScaleAnimator.AnimateCardBack(overlay);
-//         });
-//     }
+    private void SetBodyAndBorders()
+    {
+        VisualElement bodyContainer = cardRoot.Q<VisualElement>("body");
+        VisualElement elementsArea = cardRoot.Q<VisualElement>("elementsArea");
+        XmlDocument bodyBorderXmlDocument, elementsAreaBorderXmlDocument;
 
-//     private void FillCard(VisualElement cardRoot)
-//     {
-//         card = cardRoot.Q<VisualElement>("fullCard");
-//         card.style.backgroundColor = new StyleColor(cardModel.colors.cardColor);
+        string borderBodyFileName, borderElementsFileName;
 
-//         cardRoot.Q<Label>("title").text = cardModel.title;
+        if (cardModel.secondaryElement != null)
+        {
+            borderBodyFileName = "borderWithLinearGradientForTwoElement";
+            borderElementsFileName = "borderForTwoElements";
+            bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
+        }
+        else
+        {
+            borderBodyFileName = "borderWithLinearGradientForOneElement";
+            borderElementsFileName = "borderForOneElement";
+            bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
 
-//         VisualElement bodyContainer = cardRoot.Q<VisualElement>("body");
-//         VisualElement elementsArea = cardRoot.Q<VisualElement>("elementsArea");
-//         string xmlWithSvgCodeFileName;
-//         XmlDocument xmlDocumentBodyBorder, xmlDocumentElementsBorder;
+            elementsArea.style.width = new StyleLength(59);
+            elementsArea.style.left = new StyleLength(201);
+            cardRoot.Q<VisualElement>("mainElement").style.left = new StyleLength(22);
+        }
 
-//         if (cardModel.secondaryElement == null)
-//         {
-//             xmlWithSvgCodeFileName = "borderWithLinearGradientForTwoElement";
-//             xmlDocumentBodyBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
+        elementsAreaBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderElementsFileName);
 
-//             UpdateGradientStops(xmlDocumentBodyBorder, 2, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
+        UpdateGradientStops(bodyBorderXmlDocument, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
 
-//             xmlWithSvgCodeFileName = "borderForTwoElements";
-//             xmlDocumentElementsBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
-//         }
-//         else
-//         {
-//             xmlWithSvgCodeFileName = "borderWithLinearGradientForOneElement";
-//             xmlDocumentBodyBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
-//             UpdateGradientStops(xmlDocumentBodyBorder, 1, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
+        BindVisualElementWithSvg(bodyContainer, bodyBorderXmlDocument.OuterXml);
+        BindVisualElementWithSvg(elementsArea, elementsAreaBorderXmlDocument.OuterXml);
+    }
 
-//             xmlWithSvgCodeFileName = "borderForOneElement";
-//             xmlDocumentElementsBorder = XMLDocumentCreater.CreateXmlDocument(xmlWithSvgCodeFileName);
-//             elementsArea.style.width = new StyleLength(59);
-//             elementsArea.style.left = new StyleLength(201);
-//             cardRoot.Q<VisualElement>("mainElement").style.left = new StyleLength(22);
-//         }
+    private void SetImages()
+    {
+        cardRoot.Q<VisualElement>("pokemonImage").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{cardModel.imageName}"));
 
-//         BindVisualElementWithSvg(bodyContainer, xmlDocumentBodyBorder.OuterXml);
-//         BindVisualElementWithSvg(elementsArea, xmlDocumentElementsBorder.OuterXml);
+        VisualElement mainElement = cardRoot.Q<VisualElement>("mainElement");
+        mainElement.style.backgroundImage = new StyleBackground(
+            Resources.Load<Sprite>($"Sprites/Elements/{cardModel.mainElement.ToString().ToLowerInvariant()}"));
 
-//         cardRoot.Q<VisualElement>("pokemonImage").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{cardModel.imageName}"));
+        VisualElement secondaryElement = cardRoot.Q<VisualElement>("secondaryElement");
+        secondaryElement.style.backgroundImage = new StyleBackground(
+            Resources.Load<Sprite>($"Sprites/Elements/{cardModel.secondaryElement?.ToString().ToLowerInvariant()}"));
+    }
 
-//         cardRoot.Q<VisualElement>("mainElement").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.mainElement.ToString().ToLowerInvariant()}"));
-//         cardRoot.Q<VisualElement>("mainElement").userData = cardModel.mainElement.ToString().ToLowerInvariant();
-//         cardRoot.Q<VisualElement>("secondaryElement").style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.secondaryElement.ToString().ToLowerInvariant()}"));
-//         cardRoot.Q<VisualElement>("secondaryElement").userData = cardModel.secondaryElement.ToString().ToLowerInvariant();
+    private void BindVisualElementWithSvg(VisualElement visualElement, string xmlCode)
+    {
+        Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
+        visualElement.style.backgroundImage = new StyleBackground(texture);
+    }
 
-//         cardRoot.Q<Button>("addToCardDeck").style.unityBackgroundImageTintColor = new Color(0.5f, 0.5f, 0.5f);
-//     }
+    private void UpdateGradientStops(XmlDocument doc, Color color1, Color color2)
+    {
+        if (doc == null) return;
 
-//     private void BindVisualElementWithSvg(VisualElement visualElement, string xmlCode)
-//     {
-//         Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
-//         visualElement.style.backgroundImage = new StyleBackground(texture);
-//     }
+        var nsmgr = new XmlNamespaceManager(doc.NameTable);
+        nsmgr.AddNamespace("svg", "http://www.w3.org/2000/svg");
+        XmlNode stop1, stop2;
 
-//     private void UpdateGradientStops(XmlDocument doc, int countOfElements, Color color1, Color color2)
-//     {
-//         if (doc == null) return;
+        stop1 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[1]", nsmgr);
+        stop2 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[2]", nsmgr);
 
-//         var nsmgr = new XmlNamespaceManager(doc.NameTable);
-//         nsmgr.AddNamespace("svg", "http://www.w3.org/2000/svg");
-//         XmlNode stop1, stop2;
+        if (stop1?.Attributes["stop-color"] != null)
+            stop1.Attributes["stop-color"].Value = $"#{ColorUtility.ToHtmlStringRGB(color1)}";
 
-//         if (countOfElements == 1)
-//         {
-//             stop1 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[1]", nsmgr);
-//             stop2 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[2]", nsmgr);
+        if (stop2?.Attributes["stop-color"] != null)
+            stop2.Attributes["stop-color"].Value = $"#{ColorUtility.ToHtmlStringRGB(color2)}";
+    }
 
-//             if (stop1?.Attributes["stop-color"] != null)
-//                 stop1.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color1);
+    public void SetAddedToDeck(bool isAdded)
+    {
+        addToCardDeckButton.style.unityBackgroundImageTintColor = isAdded ? Color.green : Color.gray;
+    }
 
-//             if (stop2?.Attributes["stop-color"] != null)
-//                 stop2.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color2);
-//         }
-//         else if (countOfElements == 2)
-//         {
-//             stop1 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[1]", nsmgr);
-//             stop2 = doc.SelectSingleNode($"//svg:linearGradient/svg:stop[2]", nsmgr);
+    public void SetOpacity(bool IsFilterElement)
+    {
+        cardElement.style.opacity = IsFilterElement ? 1f : 0.3f;
+    }
 
-//             if (stop1?.Attributes["stop-color"] != null)
-//                 stop1.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color1);
+    public void SetStyleForBattle()
+    {
+        cardRoot.style.scale = new Scale(new Vector3(0.8f, 0.8f, 1f));
+        cardRoot.Q<Button>("addToCardDeck").style.display = DisplayStyle.None;
+    }
 
-//             if (stop2?.Attributes["stop-color"] != null)
-//                 stop2.Attributes["stop-color"].Value = ColorUtility.ToHtmlStringRGB(color2);
-//         }
-//     }
-// }
+    public VisualElement CardRoot => cardRoot;
+    public VisualTreeAsset CardTemplate => cardTemplate;
+}

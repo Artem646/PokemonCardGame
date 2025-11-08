@@ -9,7 +9,6 @@ public class UploadingSceneController : MonoBehaviour
     private ProgressBar progressBar;
     private Label statusLabel;
 
-
     private async void Start()
     {
         FirebaseAuth auth = FirebaseService.Instance.GetAuth();

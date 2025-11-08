@@ -1,27 +1,30 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CardDeck
 {
     public static CardDeck Instance { get; } = new CardDeck();
 
-    private List<VisualElement> cardDeck = new List<VisualElement>();
+    private readonly HashSet<int> deckCardIds = new();
 
-    public void ToggleAddToCardDeckButton(Button addToCardDeckButton, VisualElement cardVisualElement)
+    public void AddCardToDeck(int cardId)
     {
-        if (cardDeck.Contains(cardVisualElement))
+        if (!deckCardIds.Contains(cardId))
         {
-            cardDeck.Remove(cardVisualElement);
-            addToCardDeckButton.style.unityBackgroundImageTintColor = new Color(0.5f, 0.5f, 0.5f);
-        }
-        else
-        {
-            cardDeck.Add(cardVisualElement);
-            addToCardDeckButton.style.unityBackgroundImageTintColor = Color.white;
+            deckCardIds.Add(cardId);
         }
     }
 
-    public List<VisualElement> GetDeckCards() => cardDeck;
+    public void RemoveCardFromDeck(int cardId)
+    {
+        if (deckCardIds.Contains(cardId))
+        {
+            deckCardIds.Remove(cardId);
+        }
+    }
+
+    public bool IsCardInDeck(int cardId) => deckCardIds.Contains(cardId);
+
+    public List<int> GetDeckCards() => deckCardIds.ToList();
 }
 

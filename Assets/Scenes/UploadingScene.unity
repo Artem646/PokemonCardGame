@@ -145,10 +145,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 258452342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 784b36129089d7144be739f40dae0e65, type: 3}
+  m_Script: {fileID: 11500000, guid: 40e7fe222b52510438b8c5fab34dc582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardRepository
-  cardsJson: {fileID: 4900000, guid: 2a8ee3066587ef84c9d9903448419db4, type: 3}
+  cardsJson: {fileID: 4900000, guid: 78be81d549a7c6f4cb4a1289e0ad8cc4, type: 3}
 --- !u!4 &258452344
 Transform:
   m_ObjectHideFlags: 0

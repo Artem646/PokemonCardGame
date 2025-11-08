@@ -18,7 +18,7 @@ public class NotificationManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        var root = uiDocument.rootVisualElement;
+        VisualElement root = uiDocument.rootVisualElement;
         notificationContainer = root.Q<VisualElement>("notification-container");
         notificationText = root.Q<Label>("notification-text");
 
@@ -27,12 +27,6 @@ public class NotificationManager : MonoBehaviour
 
     public static void ShowNotification(string message, bool isError = false)
     {
-        if (Instance == null)
-        {
-            Debug.LogWarning("[P]NotificationManager не найден в сцене!");
-            return;
-        }
-
         Instance.Show(message, isError);
     }
 

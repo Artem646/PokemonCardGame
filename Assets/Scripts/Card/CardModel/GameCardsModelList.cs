@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class UserCardsModelList
+public class GameCardsModelList
 {
     public List<CardModel> cards = new();
 }

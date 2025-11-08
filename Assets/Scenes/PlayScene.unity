@@ -286,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlaySceneController
   uiDocument: {fileID: 2013698850}
+  cardTemplate: {fileID: 9197481963319205126, guid: 92817554c97a2af43b0f1b1c32d13cc0, type: 3}
 --- !u!4 &945886432
 Transform:
   m_ObjectHideFlags: 0

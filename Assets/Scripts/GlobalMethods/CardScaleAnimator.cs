@@ -100,6 +100,9 @@
 //     }
 // }
 
+
+
+
 // using UnityEngine;
 // using UnityEngine.UIElements;
 // using System;
@@ -244,7 +247,7 @@ public static class CardScaleAnimator
     private static bool isAnimating = false;
     private static readonly AnimationCurve easeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-    public static void AnimateCardFromListToOverlay(VisualElement sourceCard, VisualElement clone, VisualElement overlay, Vector2 clickPosition, float targetScale = 1.5f)
+    public static void AnimateCardFromListToOverlay(VisualElement sourceCard, VisualElement clone, VisualElement overlay, Vector2 clickPosition, float targetScale = 1f)
     {
         if (isAnimating || !IsClickInCenter(sourceCard, clickPosition))
             return;
@@ -253,7 +256,7 @@ public static class CardScaleAnimator
 
         var worldRect = sourceCard.worldBound;
         var topLeftLocal = overlay.WorldToLocal(new Vector2(worldRect.x, worldRect.y));
-        Rect localStart = new Rect(topLeftLocal.x, topLeftLocal.y, worldRect.width, worldRect.height);
+        Rect localStart = new(topLeftLocal.x, topLeftLocal.y, worldRect.width, worldRect.height);
         lastLocalRect = localStart;
 
         overlay.Clear();
@@ -306,14 +309,7 @@ public static class CardScaleAnimator
         clone.experimental.animation.Start(new StyleValues { opacity = 0f }, 400);
     }
 
-    private static void AnimateTransform(
-        VisualElement element,
-        Rect fromRect,
-        Rect toRect,
-        float fromScale,
-        float toScale,
-        float duration,
-        Action onComplete = null)
+    private static void AnimateTransform(VisualElement element, Rect fromRect, Rect toRect, float fromScale, float toScale, float duration, Action onComplete = null)
     {
         float t = 0f;
 
@@ -335,14 +331,10 @@ public static class CardScaleAnimator
         }).Every(16).Until(() => t >= duration);
     }
 
-    private static Rect CurrentRect(VisualElement ve)
+    private static Rect CurrentRect(VisualElement visualElement)
     {
-        return new Rect(
-            ve.resolvedStyle.left,
-            ve.resolvedStyle.top,
-            ve.resolvedStyle.width,
-            ve.resolvedStyle.height
-        );
+        return new Rect(visualElement.resolvedStyle.left, visualElement.resolvedStyle.top,
+            visualElement.resolvedStyle.width, visualElement.resolvedStyle.height);
     }
 
     private static bool IsClickInCenter(VisualElement card, Vector2 clickPosition)

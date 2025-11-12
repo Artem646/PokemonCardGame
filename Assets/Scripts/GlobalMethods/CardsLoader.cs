@@ -11,7 +11,7 @@ public static class CardsLoader
 {
     private static FirebaseFirestore firebaseFirestore;
 
-    public static GameCardsModelList GetCardsListFromJson(TextAsset cardsJson)
+    public static GameCardsModelList GetCardsListFromJson(string cardsJsonText)
     {
         var settings = new JsonSerializerSettings
         {
@@ -21,7 +21,7 @@ public static class CardsLoader
                 new ColorHexConverter()
             }
         };
-        return JsonConvert.DeserializeObject<GameCardsModelList>(cardsJson.text, settings);
+        return JsonConvert.DeserializeObject<GameCardsModelList>(cardsJsonText, settings);
     }
 
     public static async Task<List<int>> GetCardIdsFromFirestore(string userId)

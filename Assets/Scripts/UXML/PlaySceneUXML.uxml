@@ -1,14 +1,39 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 1; background-color: rgb(217, 61, 60); flex-direction: column-reverse; align-items: center;">
-        <ui:VisualElement style="flex-grow: 0; width: 100%; height: 30%; background-color: rgb(255, 255, 255); align-items: center; justify-content: center;">
-            <ui:VisualElement name="deckContainer" style="flex-grow: 0; align-items: center; justify-content: space-evenly; width: 50%; height: 90%; background-color: rgba(0, 0, 162, 0); flex-direction: row; align-self: auto;">
-                <ui:VisualElement style="flex-grow: 0; width: 20%; height: 100%; background-color: rgb(97, 89, 118);" />
-                <ui:VisualElement style="flex-grow: 0; width: 20%; height: 100%; margin-left: 0; background-color: rgb(97, 89, 118); left: 0;" />
-                <ui:VisualElement style="flex-grow: 0; width: 20%; height: 100%; left: 0; background-color: rgb(97, 89, 118);" />
-                <ui:VisualElement style="flex-grow: 0; width: 20%; height: 100%; left: 0; background-color: rgb(97, 89, 118);" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/PlayingSceneUSS.uss?fileID=7433441132597879392&amp;guid=33a0fe4ba8ceca04db2706e3b586d1c9&amp;type=3#PlayingSceneUSS" />
+    <ui:VisualElement name="battleField" class="playing-root" style="width: 2400px; height: 1080px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+        <ui:VisualElement name="enemyHand" class="hand-row">
+            <ui:VisualElement name="enemyCard1" class="hand-card" />
+            <ui:VisualElement name="enemyCard2" class="hand-card" />
+            <ui:VisualElement name="enemyCard3" class="hand-card" />
+            <ui:VisualElement name="enemyCard4" class="hand-card" />
+            <ui:VisualElement name="enemyCard5" class="hand-card" />
+        </ui:VisualElement>
+        <ui:VisualElement name="battleZone" class="battle-zone">
+            <ui:VisualElement name="enemyField" class="field-row">
+                <ui:VisualElement name="enemySlot1" class="battle-slot" />
+                <ui:VisualElement name="enemySlot2" class="battle-slot" />
+                <ui:VisualElement name="enemySlot3" class="battle-slot" />
+                <ui:VisualElement name="enemySlot4" class="battle-slot" />
+                <ui:VisualElement name="enemySlot5" class="battle-slot" />
+            </ui:VisualElement>
+            <ui:VisualElement name="playerField" class="field-row">
+                <ui:VisualElement name="playerSlot1" class="battle-slot droppable" />
+                <ui:VisualElement name="playerSlot2" class="battle-slot droppable" />
+                <ui:VisualElement name="playerSlot3" class="battle-slot droppable" />
+                <ui:VisualElement name="playerSlot4" class="battle-slot droppable" />
+                <ui:VisualElement name="playerSlot5" class="battle-slot droppable" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement style="flex-grow: 0; width: 90%; height: 30%; background-color: rgb(255, 255, 255); align-items: center; justify-content: center; align-self: auto; bottom: 70px;" />
-        <ui:Button text="Назад" name="back" style="position: absolute; top: 96px; left: 200px; height: 112px; width: 261px; font-size: 50px;" />
+        <ui:Button text="Назад" name="back" class="back-button" style="top: 68px; left: 22px;" />
+        <ui:VisualElement name="playerHand" class="hand-row" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: 100%;">
+            <ui:VisualElement name="playerSlotsLayer" class="hand-slots-layer" style="display: flex; top: 0; left: 0; width: 100%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; height: 217px; bottom: 0; right: 0; background-size: 100% 20%; justify-content: center;">
+                <ui:VisualElement name="playerSlot1" class="hand-slot droppable" />
+                <ui:VisualElement name="playerSlot2" class="hand-slot droppable" />
+                <ui:VisualElement name="playerSlot3" class="hand-slot droppable" />
+                <ui:VisualElement name="playerSlot4" class="hand-slot droppable" />
+                <ui:VisualElement name="playerSlot5" class="hand-slot droppable" />
+            </ui:VisualElement>
+            <ui:VisualElement name="playerCardsLayer" class="hand-cards-layer" style="top: 0; left: 0; bottom: 0; right: 0; background-size: 100% 20%;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

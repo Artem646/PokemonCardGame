@@ -135,8 +135,39 @@ public class CardView
 
     public void SetStyleForBattle()
     {
-        cardRoot.style.scale = new Scale(new Vector3(0.8f, 0.8f, 1f));
         cardRoot.Q<Button>("addToCardDeck").style.display = DisplayStyle.None;
+
+        // cardRoot.RegisterCallback<GeometryChangedEvent>(evt =>
+        // {
+        //     // float w = cardRoot.resolvedStyle.width;
+        //     // float h = cardRoot.resolvedStyle.height;
+
+        //     // float scaleX = 120f / w;
+        //     // float scaleY = 180f / h;
+
+        //     // float scale = Mathf.Min(scaleX, scaleY);
+
+
+        // });
+
+        // var scale = new Scale(new Vector3(1f, 1f, 1f));
+        // cardElement.style.scale = scale;
+
+        // сохраняем базовый scale в контроллере
+        cardElement.style.scale = new Scale(new Vector3(0.5f, 0.5f, 1f));
+
+        CardDragManipulator.originalScale = cardElement.style.scale.value;
+
+
+
+        Debug.Log($"[SetStyleForBattle] Applied scale={CardDragManipulator.originalScale}");
+    }
+
+    public void EnableDragging()
+    {
+        CardDragManipulator cardDragManipulator = new() { DroppableId = "droppable", RemoveClassOnDrag = "transitions" };
+        cardElement.AddManipulator(cardDragManipulator);
+        cardElement.AddToClassList("hand-slot");
     }
 
     public VisualElement CardRoot => cardRoot;

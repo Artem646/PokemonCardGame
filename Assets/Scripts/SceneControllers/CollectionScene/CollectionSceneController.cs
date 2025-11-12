@@ -31,28 +31,25 @@ public class CollectionSceneController : MonoBehaviour
     private VisualElement root;
     private CollectionCardsListController сollectionCardsListController;
     private FilterPanelView filterPanelView;
-    private UserProfileView userProfileView;
 
     private async void Start()
     {
         root = uiDocument.rootVisualElement;
 
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
+        сollectionCardsListController = new CollectionCardsListController(cardsContainer);
 
         VisualElement overlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.Init(overlay);
 
-        CardControllerBuilder.SetDefaultTemplate(cardTemplate);
-
-        сollectionCardsListController = new CollectionCardsListController(cardsContainer);
-
-        await сollectionCardsListController.LoadUserCardsToScrollView();
-
-        userProfileView = new UserProfileView(root);
-        await userProfileView.LoadUserData();
+        UserProfileView.Instance.SetUIDocument(uiDocument);
+        UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
 
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += сollectionCardsListController.ApplyElementFilter;
+
+        CardControllerBuilder.SetDefaultTemplate(cardTemplate);
+        await сollectionCardsListController.LoadUserCardsToScrollView();
 
         // UserCardsModelList userCards = CardRepository.Instance.GetUserCards();
 

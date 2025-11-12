@@ -33,13 +33,29 @@ public class CollectionCardController : BaseCardController
 
     private void OnAddToCardDeckButtonClicked(ClickEvent evt)
     {
-        isAddedToDeck = !isAddedToDeck;
+        // isAddedToDeck = !isAddedToDeck;
 
-        if (isAddedToDeck)
-            CardDeck.Instance.AddCardToDeck(CardModel.id);
+        // if (isAddedToDeck)
+        //     CardDeck.Instance.AddCardToDeck(CardModel.id);
+        // else
+        //     CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
+
+        // CardView.SetAddedToDeck(isAddedToDeck);
+
+        if (!isAddedToDeck)
+        {
+            bool added = CardDeck.Instance.AddCardToDeck(CardModel.id);
+            if (added)
+            {
+                isAddedToDeck = true;
+                CardView.SetAddedToDeck(true);
+            }
+        }
         else
+        {
             CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
-
-        CardView.SetAddedToDeck(isAddedToDeck);
+            isAddedToDeck = false;
+            CardView.SetAddedToDeck(false);
+        }
     }
 }

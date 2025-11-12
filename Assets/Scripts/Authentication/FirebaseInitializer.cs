@@ -1,18 +1,34 @@
-// Start вызывается перед первым обновлением фрейма
-// Когда приложение запустится, проверьте, есть ли у нас
-// необходимые зависимости для использования Firebase, и если нет,
-// добавьте их, если это возможно.
-
 using UnityEngine;
 using Firebase.Extensions;
 
-public class FirebaseInitializer : MonoBehaviour
+public class FirebaseInitializer
 {
-    private Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
-
-    private async void Start()
+    private static FirebaseInitializer _instance;
+    public static FirebaseInitializer Instance
     {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new FirebaseInitializer();
+            }
+            return _instance;
+        }
+    }
+
+    private bool isInitialized = false;
+    private Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
+    private FirebaseInitializer() { }
+
+    public async void Initialize()
+    {
+        if (isInitialized)
+        {
+            return;
+        }
+
         Debug.Log("[P][FirebaseInitializer] Starting Firebase dependency check...");
+
         await Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             dependencyStatus = task.Result;
@@ -25,6 +41,7 @@ public class FirebaseInitializer : MonoBehaviour
                     Debug.Log("[P][FirebaseInitializer] FirebaseInitializer initialized successfully.");
 
                     AuthManager.Instance.Initialize();
+                    isInitialized = true;
                 }
                 catch (System.Exception e)
                 {

@@ -17,7 +17,24 @@ public class SignInUI : MonoBehaviour
         anonymousSignInButton.RegisterCallback<ClickEvent>(OnAnonymousSignInClicked);
     }
 
-    public void OnGoogleSignInClicked(ClickEvent evt) => AuthManager.Instance.SignIn(AuthType.Google);
+    public void OnGoogleSignInClicked(ClickEvent evt)
+    {
+        InternetChecker.Instance.CheckBeforeAction(() =>
+        {
+            AuthManager.Instance.SignIn(AuthType.Google);
+        });
+    }
 
-    public void OnAnonymousSignInClicked(ClickEvent evt) => AuthManager.Instance.SignIn(AuthType.Anonymous);
+    public void OnAnonymousSignInClicked(ClickEvent evt)
+    {
+        InternetChecker.Instance.CheckBeforeAction(() =>
+        {
+            AuthManager.Instance.SignIn(AuthType.Anonymous);
+        });
+    }
+
+
+    // public void OnGoogleSignInClicked(ClickEvent evt) => AuthManager.Instance.SignIn(AuthType.Google);
+
+    // public void OnAnonymousSignInClicked(ClickEvent evt) => AuthManager.Instance.SignIn(AuthType.Anonymous);
 }

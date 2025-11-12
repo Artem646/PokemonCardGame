@@ -5,6 +5,7 @@ using Firebase.Auth;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Firebase.Firestore;
+using System.Threading.Tasks;
 
 public class FirebaseService
 {
@@ -13,10 +14,7 @@ public class FirebaseService
     {
         get
         {
-            if (_instance == null)
-            {
-                _instance = new FirebaseService();
-            }
+            _instance ??= new FirebaseService();
             return _instance;
         }
     }
@@ -28,12 +26,13 @@ public class FirebaseService
     public FirebaseFirestore GetFirestore() => firestore;
 
     private Dictionary<string, FirebaseUser> userByAuth = new();
-    private readonly bool fetchingToken = false;
     private bool isProcessingStateChange = false;
     private bool isAuthInitialized = false;
     private bool isFirestoreInitialized = false;
     private string lastToken = null;
-    private HashSet<string> loggedProviderIds = new HashSet<string>();
+    private HashSet<string> loggedProviderIds = new();
+    private string lastAnonymousUserId = null;
+    private bool isAnonymous;
 
     private FirebaseService() { }
 
@@ -73,33 +72,52 @@ public class FirebaseService
         Debug.Log("[P][FirebaseService] Firebase Firestore успешно инициализирован.");
     }
 
-    private void AuthStateChanged(object sender, EventArgs eventArgs)
+    private async void AuthStateChanged(object sender, EventArgs eventArgs)
     {
         if (isProcessingStateChange) return;
 
         isProcessingStateChange = true;
         FirebaseAuth senderAuth = sender as FirebaseAuth;
-        FirebaseUser user = null;
+        FirebaseUser previousUser = null;
 
-        if (senderAuth != null) userByAuth.TryGetValue(senderAuth.App.Name, out user);
-        if (senderAuth == auth && senderAuth.CurrentUser != user)
+        if (senderAuth != null) userByAuth.TryGetValue(senderAuth.App.Name, out previousUser);
+        if (senderAuth == auth && senderAuth.CurrentUser != previousUser)
         {
-            bool signedIn = user != senderAuth.CurrentUser && senderAuth.CurrentUser != null && auth.CurrentUser.IsValid();
-            if (!signedIn && user != null)
+            bool signedIn = previousUser != senderAuth.CurrentUser && senderAuth.CurrentUser != null && auth.CurrentUser.IsValid();
+
+            if (!signedIn && previousUser != null)
             {
-                Debug.Log("[P][FirebaseService] Signed out " + user.UserId);
+                Debug.Log("[P][FirebaseService] Signed out " + lastAnonymousUserId);
+                Debug.Log("[P][FirebaseService] Signed out " + isAnonymous.ToString());
+
+                if (isAnonymous)
+                {
+                    Debug.Log("[P][FirebaseService] Signed out " + lastAnonymousUserId);
+
+                    await DeleteAnonymousUserDocument(lastAnonymousUserId);
+                }
+
+                userByAuth[senderAuth.App.Name] = null;
                 SceneManager.LoadScene("SignInScene");
             }
 
-            user = senderAuth.CurrentUser;
-            userByAuth[senderAuth.App.Name] = user;
+            previousUser = senderAuth.CurrentUser;
+            userByAuth[senderAuth.App.Name] = previousUser;
 
             if (signedIn)
             {
-                Debug.Log("[P][FirebaseService] Signed in " + user.UserId);
-                DisplayDetailedUserInfo(user, 1);
-
-                CreateUserDocumentInFirestore(user.UserId);
+                Debug.Log("[P][FirebaseService] Signed in " + previousUser.UserId);
+                DisplayDetailedUserInfo(previousUser, 1);
+                CreateUserDocumentInFirestore(previousUser.UserId);
+                if (previousUser.IsAnonymous)
+                {
+                    lastAnonymousUserId = previousUser.UserId;
+                    isAnonymous = true;
+                }
+                else
+                {
+                    isAnonymous = false;
+                }
 
                 SceneManager.LoadScene("UploadingScene");
             }
@@ -115,18 +133,24 @@ public class FirebaseService
     private void IdTokenChanged(object sender, EventArgs eventArgs)
     {
         FirebaseAuth senderAuth = sender as FirebaseAuth;
-        if (senderAuth == auth && senderAuth.CurrentUser != null && !fetchingToken)
+        FirebaseUser currentUser = senderAuth.CurrentUser;
+
+        if (senderAuth == auth && currentUser != null)
         {
-            senderAuth.CurrentUser.TokenAsync(false).ContinueWithOnMainThread(task =>
+            currentUser.TokenAsync(false).ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted)
                 {
                     Debug.LogError("[P][FirebaseService] Token retrieval failed: " + task.Exception);
+                    return;
                 }
-                else if (task.Result != lastToken)
+
+                string token = task.Result;
+
+                if (token != lastToken)
                 {
-                    lastToken = task.Result;
-                    Debug.Log($"[P][FirebaseService] Token[0:8] = {task.Result.Substring(0, 8)}");
+                    lastToken = token;
+                    Debug.Log($"[P][FirebaseService] Новый токен: {token.Substring(0, 8)}...");
                 }
             });
         }
@@ -191,7 +215,8 @@ public class FirebaseService
 
             Dictionary<string, object> userData = new()
             {
-                { "cardsInCollection", new List<string>() }
+                { "cardsInCollection", new List<string>() },
+                { "createdAt", Timestamp.GetCurrentTimestamp() }
             };
 
             // Dictionary<string, object> userData = new()
@@ -210,6 +235,25 @@ public class FirebaseService
             Debug.Log($"[P][FirebaseService] Документ пользователя {userId} уже существует");
         }
     }
+
+    private async Task DeleteAnonymousUserDocument(string userId)
+    {
+        try
+        {
+            DocumentReference userDoc = firestore.Collection("users").Document(userId);
+            DocumentSnapshot snapshot = await userDoc.GetSnapshotAsync();
+
+            if (snapshot.Exists)
+            {
+                await userDoc.DeleteAsync();
+                Debug.Log($"[P][FirebaseService] Документ анонимного пользователя {userId} удалён.");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[P][FirebaseService] Ошибка при удалении документа анонимного пользователя: {e.Message}");
+        }
+    }
     public void Dispose()
     {
         if (auth != null)
@@ -219,11 +263,7 @@ public class FirebaseService
             auth = null;
         }
 
-        if (firestore != null)
-        {
-            firestore = null;
-        }
-
+        firestore = null;
         _instance = null;
     }
 }

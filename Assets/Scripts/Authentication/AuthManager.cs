@@ -37,21 +37,37 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    private void RestoreSession()
+    private async void RestoreSession()
     {
-        Debug.Log("[P][AuthManager] Восстановление сессии...");
-        AuthType type = GetAuthTypeFromProviderData(auth.CurrentUser);
-        if (type != AuthType.Unknown)
+        Debug.Log("[P][AuthManager] Попытка восстановления сессии...");
+
+        FirebaseUser currentUser = auth.CurrentUser;
+        if (currentUser == null)
         {
-            currentProvider = factory.CreateAuthProvider(type);
-            Debug.Log($"[P][AuthManager] Сессия восстановлена как {type}: {auth.CurrentUser.UserId}");
-        }
-        else
-        {
-            Debug.LogError("[P][AuthManager] Не удалось определить тип провайдера.");
+            Debug.Log("[P][AuthManager] Нет локального пользователя — переход к SignInScene.");
+            SceneManager.LoadScene("SignInScene");
+            return;
         }
 
-        IsRestored = true;
+        try
+        {
+            var token = await currentUser.TokenAsync(true);
+            AuthType type = GetAuthTypeFromProviderData(currentUser);
+            if (type != AuthType.Unknown)
+            {
+                currentProvider = factory.CreateAuthProvider(type);
+                IsRestored = true;
+                Debug.Log($"[P][AuthManager] Сессия восстановлена как {type}: {currentUser.UserId}");
+            }
+            else
+            {
+                Debug.LogWarning("[P][AuthManager] Не удалось определить тип провайдера.");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[P][AuthManager] Ошибка восстановления токена: {e.Message}");
+        }
     }
 
     private AuthType GetAuthTypeFromProviderData(FirebaseUser user)
@@ -71,26 +87,8 @@ public class AuthManager : MonoBehaviour
         return AuthType.Unknown;
     }
 
-    public void CheckInternet()
-    {
-
-    }
-
     public void SignIn(AuthType type)
     {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            ConfirmDialogController.ShowDialog(
-                "Нет подключения к интернету. Хотите перейти в Бестиарий?",
-                onYes: () =>
-                {
-                    SceneManager.LoadScene("BestiaryScene");
-                },
-                onNo: () => Debug.Log("Остался на текущей сцене")
-            );
-            return;
-        }
-
         currentProvider = factory.CreateAuthProvider(type);
         if (currentProvider == null)
         {

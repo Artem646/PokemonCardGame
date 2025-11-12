@@ -59,7 +59,8 @@ public class CardRepositoryService
 
         try
         {
-            var loaded = CardsLoader.GetCardsListFromJson(cardsJson);
+            string cardsJsonText = cardsJson.text;
+            var loaded = CardsLoader.GetCardsListFromJson(cardsJsonText);
             if (loaded?.cards == null || loaded.cards.Count == 0)
             {
                 Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
@@ -82,7 +83,8 @@ public class CardRepositoryService
 
         try
         {
-            var loaded = await Task.Run(() => CardsLoader.GetCardsListFromJson(cardsJson));
+            string cardsJsonText = cardsJson.text;
+            var loaded = await Task.Run(() => CardsLoader.GetCardsListFromJson(cardsJsonText));
             if (loaded?.cards == null || loaded.cards.Count == 0)
             {
                 Debug.LogWarning("[P] JSON загружен, но список карт пуст.");

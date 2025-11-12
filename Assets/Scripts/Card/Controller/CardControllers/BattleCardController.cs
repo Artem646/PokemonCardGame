@@ -10,5 +10,7 @@ public class BattleCardController : BaseCardController
     }
 
     public override void RegisterEvents()
-    { }
+    {
+        CardView.EnableDragging();
+    }
 }

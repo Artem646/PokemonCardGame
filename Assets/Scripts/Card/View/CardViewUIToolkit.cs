@@ -3,16 +3,17 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using ColorUtility = UnityEngine.ColorUtility;
 
-public class CardView
+public class CardViewUIToolkit : ICollectionCardView
 {
     private readonly CardModel cardModel;
     private readonly VisualElement cardRoot;
+    private readonly VisualTreeAsset cardTemplate;
+
     private VisualElement cardElement;
     private Button addToCardDeckButton;
     private Label titleLabel;
-    private readonly VisualTreeAsset cardTemplate;
 
-    public CardView(CardModel model, VisualTreeAsset template)
+    public CardViewUIToolkit(CardModel model, VisualTreeAsset template)
     {
         cardModel = model;
         cardTemplate = template;
@@ -133,43 +134,9 @@ public class CardView
         cardElement.style.opacity = IsFilterElement ? 1f : 0.3f;
     }
 
-    public void SetStyleForBattle()
-    {
-        cardRoot.Q<Button>("addToCardDeck").style.display = DisplayStyle.None;
-
-        // cardRoot.RegisterCallback<GeometryChangedEvent>(evt =>
-        // {
-        //     // float w = cardRoot.resolvedStyle.width;
-        //     // float h = cardRoot.resolvedStyle.height;
-
-        //     // float scaleX = 120f / w;
-        //     // float scaleY = 180f / h;
-
-        //     // float scale = Mathf.Min(scaleX, scaleY);
-
-
-        // });
-
-        // var scale = new Scale(new Vector3(1f, 1f, 1f));
-        // cardElement.style.scale = scale;
-
-        // сохраняем базовый scale в контроллере
-        cardElement.style.scale = new Scale(new Vector3(0.5f, 0.5f, 1f));
-
-        CardDragManipulator.originalScale = cardElement.style.scale.value;
-
-
-
-        Debug.Log($"[SetStyleForBattle] Applied scale={CardDragManipulator.originalScale}");
-    }
-
-    public void EnableDragging()
-    {
-        CardDragManipulator cardDragManipulator = new() { DroppableId = "droppable", RemoveClassOnDrag = "transitions" };
-        cardElement.AddManipulator(cardDragManipulator);
-        cardElement.AddToClassList("hand-slot");
-    }
-
     public VisualElement CardRoot => cardRoot;
     public VisualTreeAsset CardTemplate => cardTemplate;
+    public GameObject CardRootGameObject => null;
+    public VisualElement CardRootUIToolkit => cardRoot;
+
 }

@@ -1,17 +1,45 @@
-using UnityEngine.UIElements;
-using System;
+// using UnityEngine.UIElements;
+// using System;
+// using UnityEngine;
 
-public static class CardControllerBuilder
-{
-    private static VisualTreeAsset defaultTemplate;
+// public enum CardControllerMode
+// {
+//     CollectionUIToolkit,
+//     BattleUGUI
+// }
 
-    public static void SetDefaultTemplate(VisualTreeAsset template)
-    {
-        defaultTemplate = template;
-    }
 
-    public static BaseCardController CreateCardController<T>(CardModel card) where T : BaseCardController
-    {
-        return (BaseCardController)Activator.CreateInstance(typeof(T), card, defaultTemplate);
-    }
-}
+// public class CardControllerBuilder
+// {
+//     private readonly CardControllerMode cardControllerMode;
+//     private readonly VisualTreeAsset uxmlTemplate;
+//     private readonly GameObject uguiPrefab;
+//     private readonly Transform uguiParent;
+
+//     public CardControllerBuilder(CardControllerMode mode, VisualTreeAsset template = null, GameObject prefab = null, Transform parent = null)
+//     {
+//         cardControllerMode = mode;
+//         uxmlTemplate = template;
+//         uguiPrefab = prefab;
+//         uguiParent = parent;
+//     }
+
+//     public BaseCardController Build(CardModel model)
+//     {
+//         return cardControllerMode switch
+//         {
+//             CardControllerMode.CollectionUIToolkit =>
+//                 new CollectionCardController(
+//                     model,
+//                     new CardViewUIToolkit(model, uxmlTemplate),
+//                     this),
+
+//             CardControllerMode.BattleUGUI =>
+//                 new BattleCardController(
+//                     model,
+//                     new CardViewUGUI(model, uguiPrefab, uguiParent)),
+
+//             _ => throw new NotImplementedException()
+//         };
+//     }
+// }

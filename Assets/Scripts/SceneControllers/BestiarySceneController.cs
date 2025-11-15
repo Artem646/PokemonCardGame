@@ -23,7 +23,6 @@ public class BestiarySceneController : MonoBehaviour
         VisualElement overlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.Init(overlay);
 
-        CardControllerBuilder.SetDefaultTemplate(cardTemplate);
         bestiaryCardsListController = new CollectionCardsListController(cardsContainer);
 
         filterPanelView = new FilterPanelView(root);

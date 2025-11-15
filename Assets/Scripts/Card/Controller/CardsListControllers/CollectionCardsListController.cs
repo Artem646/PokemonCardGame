@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CollectionCardsListController : CardsListController<CollectionCardController>, IFilterableCardsListContainer
+public class CollectionCardsListController : CardsListController<CollectionCardController, ICollectionCardView>, IFilterableCardsListContainer
 {
     public CollectionCardsListController(VisualElement container)
         : base(container) { }
@@ -39,7 +39,7 @@ public class CollectionCardsListController : CardsListController<CollectionCardC
 
             bool IsFilterElement = activeFilters.Count == 0 || activeFilters.Any(filter => filter == mainElement || filter == secondaryElement);
 
-            cardController.CardView.SetOpacity(IsFilterElement);
+            cardController.CollectionCardView.SetOpacity(IsFilterElement);
         }
     }
 }

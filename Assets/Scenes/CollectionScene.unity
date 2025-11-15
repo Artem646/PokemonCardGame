@@ -1121,7 +1121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2121549689}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f1b918f0cfa5c4592b8585b615fca7, type: 3}
+  m_Script: {fileID: 11500000, guid: d4f574566891fa8428a2a2cfce2d67d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectionSceneController
   uiDocument: {fileID: 1711258452}

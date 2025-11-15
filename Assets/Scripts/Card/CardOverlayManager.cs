@@ -2,9 +2,12 @@ using UnityEngine.UIElements;
 
 public class CardOverlayManager
 {
-    public static CardOverlayManager Instance { get; } = new CardOverlayManager();
+    private static CardOverlayManager _instance;
+    public static CardOverlayManager Instance => _instance ??= new CardOverlayManager();
 
     private VisualElement overlay;
+
+    private CardOverlayManager() { }
 
     public void Init(VisualElement overlay)
     {
@@ -12,7 +15,7 @@ public class CardOverlayManager
         overlay?.RegisterCallback<ClickEvent>(evt => { CardScaleAnimator.AnimateCardBack(overlay); });
     }
 
-    public void ShowCard(CardView originalCardView, CardView cloneCardView, ClickEvent evt)
+    public void ShowCard(ICollectionCardView originalCardView, ICollectionCardView cloneCardView, ClickEvent evt)
     {
         CardScaleAnimator.AnimateCardFromListToOverlay(
             originalCardView.CardRoot.Q<VisualElement>("fullCard"), cloneCardView.CardRoot, overlay, evt.position, 1.6f);

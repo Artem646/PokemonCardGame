@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BattleFiledCardsListController : CardsListController<BattleCardController>
+public class BattleCardsListController : CardsListController<BattleCardController, IBattleCardView>
 {
-    public BattleFiledCardsListController(VisualElement container)
+    public BattleCardsListController(Transform container)
         : base(container) { }
 
     public async Task LoadUserCards()
@@ -13,9 +14,7 @@ public class BattleFiledCardsListController : CardsListController<BattleCardCont
         Clear();
         UserCardsModelList userCards = CardRepository.Instance.GetUserCards();
         List<int> deckCardIds = CardDeck.Instance.GetDeckCards();
-
         var deckCards = userCards.cards.Where(card => deckCardIds.Contains(card.id)).ToList();
-
         await LoadCardsToContainer(deckCards);
     }
 }

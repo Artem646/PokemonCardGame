@@ -36,6 +36,8 @@ public class CollectionSceneController : MonoBehaviour
     {
         root = uiDocument.rootVisualElement;
 
+        CardControllerFactory.Init(template: cardTemplate);
+
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
         сollectionCardsListController = new CollectionCardsListController(cardsContainer);
 
@@ -48,7 +50,6 @@ public class CollectionSceneController : MonoBehaviour
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += сollectionCardsListController.ApplyElementFilter;
 
-        CardControllerBuilder.SetDefaultTemplate(cardTemplate);
         await сollectionCardsListController.LoadUserCardsToScrollView();
 
         // UserCardsModelList userCards = CardRepository.Instance.GetUserCards();
@@ -60,7 +61,7 @@ public class CollectionSceneController : MonoBehaviour
     {
         root.Q<Button>("playButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneManager.LoadScene("PlayScene");
+            SceneManager.LoadScene("PlayingScene");
         });
 
         root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>

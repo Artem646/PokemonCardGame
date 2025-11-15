@@ -3,59 +3,55 @@ using UnityEngine.UIElements;
 public class CollectionCardController : BaseCardController
 {
     private bool isAddedToDeck;
-    public bool isInteractive;
+    private readonly ICollectionCardView collectionCardView;
 
-    public CollectionCardController(CardModel model, VisualTreeAsset template)
-        : base(model, template)
+    public CollectionCardController(CardModel model, ICollectionCardView view)
+        : base(model, view)
     {
-        RegisterEvents();
+        collectionCardView = view;
+
         isAddedToDeck = CardDeck.Instance.IsCardInDeck(model.id);
-        CardView.SetAddedToDeck(isAddedToDeck);
+        collectionCardView.SetAddedToDeck(isAddedToDeck);
+
+        RegisterEvents();
     }
 
     public override void RegisterEvents()
     {
-        CardView.RegisterClickHandlers(OnCardElementClicked, OnAddToCardDeckButtonClicked);
+        collectionCardView.RegisterClickHandlers(OnCardElementClicked, OnAddToCardDeckButtonClicked);
     }
 
-    public void UnregisterEvents()
+    public override void UnregisterEvents()
     {
-        CardView.UnregisterClickHandlers(OnCardElementClicked, OnAddToCardDeckButtonClicked);
+        collectionCardView.UnregisterClickHandlers(OnCardElementClicked, OnAddToCardDeckButtonClicked);
     }
 
     private void OnCardElementClicked(ClickEvent evt)
     {
-        CollectionCardController cloneCollectionCardController = new(CardModel, CardView.CardTemplate);
-        cloneCollectionCardController.UnregisterEvents();
-        CardView cloneCardView = cloneCollectionCardController.CardView;
-        CardOverlayManager.Instance?.ShowCard(CardView, cloneCardView, evt);
+        CollectionCardController cloneController = CardControllerFactory.Create<CollectionCardController>(CardModel);
+        cloneController?.UnregisterEvents();
+        ICollectionCardView cloneView = cloneController?.collectionCardView;
+        if (cloneView != null)
+            CardOverlayManager.Instance?.ShowCard(collectionCardView, cloneView, evt);
     }
 
     private void OnAddToCardDeckButtonClicked(ClickEvent evt)
     {
-        // isAddedToDeck = !isAddedToDeck;
-
-        // if (isAddedToDeck)
-        //     CardDeck.Instance.AddCardToDeck(CardModel.id);
-        // else
-        //     CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
-
-        // CardView.SetAddedToDeck(isAddedToDeck);
-
         if (!isAddedToDeck)
         {
-            bool added = CardDeck.Instance.AddCardToDeck(CardModel.id);
-            if (added)
+            if (CardDeck.Instance.AddCardToDeck(CardModel.id))
             {
                 isAddedToDeck = true;
-                CardView.SetAddedToDeck(true);
+                collectionCardView.SetAddedToDeck(true);
             }
         }
         else
         {
             CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
             isAddedToDeck = false;
-            CardView.SetAddedToDeck(false);
+            collectionCardView.SetAddedToDeck(false);
         }
     }
+
+    public ICollectionCardView CollectionCardView => collectionCardView;
 }

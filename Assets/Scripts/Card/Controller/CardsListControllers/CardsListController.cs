@@ -1,46 +1,101 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CardsListController<T> : ICardsListContainer where T : BaseCardController
+public class CardsListController<T, V> : ICardsListContainer where T : BaseCardController where V : class, ICardView
 {
-    public readonly VisualElement cardsContainer;
+    // public readonly VisualElement cardsContainer;
     public readonly List<T> activeCardControllers = new();
+    private readonly object container;
 
-    public CardsListController(VisualElement container)
+    // public CardsListController(VisualElement container)
+    // {
+    //     cardsContainer = container;
+    // }
+
+    public CardsListController(object container)
     {
-        cardsContainer = container;
+        if (container is VisualElement || container is Transform)
+        {
+            this.container = container;
+        }
+        else
+        {
+            throw new ArgumentException("Container must be VisualElement (UI Toolkit) or Transform (UGUI)");
+        }
     }
+
 
     public async Task LoadCardsToContainer(List<CardModel> cards)
     {
-        foreach (CardModel card in cards)
+        Clear();
+
+        foreach (CardModel model in cards)
         {
-            AddCardToContainer(card);
+            AddCardToContainer(model);
             await Task.Yield();
         }
     }
 
-    public void AddCardToContainer(CardModel card)
+    public void AddCardToContainer(CardModel model)
     {
-        T controller = (T)CardControllerBuilder.CreateCardController<T>(card);
+        T controller = CardControllerFactory.Create<T>(model);
         activeCardControllers.Add(controller);
-        cardsContainer.Add(controller.CardView.CardRoot);
-    }
 
-    // public void RefreshAllCards()
-    // {
-    //     cardsContainer.Clear();
-    //     foreach (T controller in activeCardControllers)
-    //     {
-    //         cardsContainer.Add(controller.CardView.CardRoot);
-    //     }
-    // }
+        ICardView view = controller.CardView;
+
+        // V view = controller.GetView<V>();
+
+        // switch (container)
+        // {
+        //     case VisualElement cardContainer:
+        //         cardContainer.Add(view.CardRootUIToolkit;);
+        //         break;
+        //     case Transform cardContainer:
+        //         view.CardRootGameObject.transform.SetParent(cardContainer, false);
+        //         break;
+        // }
+
+        switch (container)
+        {
+            case VisualElement ve:
+                if (view is ICollectionCardView collectionView)
+                {
+                    ve.Add(collectionView.CardRootUIToolkit);
+                }
+                break;
+
+            case Transform parent:
+                if (view is IBattleCardView battleView)
+                {
+                    battleView.CardRootGameObject.transform.SetParent(parent, false);
+                }
+                break;
+        }
+
+        // cardsContainer.Add(controller.CardView.CardRootUIToolkit);
+    }
 
     public void Clear()
     {
+        foreach (var controller in activeCardControllers)
+        {
+            V view = controller.GetView<V>();
+
+            switch (container)
+            {
+                case VisualElement:
+                    view.CardRootUIToolkit?.RemoveFromHierarchy();
+                    break;
+                case Transform:
+                    if (view.CardRootGameObject != null)
+                        UnityEngine.Object.Destroy(view.CardRootGameObject);
+                    break;
+            }
+        }
         activeCardControllers.Clear();
-        cardsContainer.Clear();
     }
 
     // public List<T> GetAllControllers() => cardControllers;

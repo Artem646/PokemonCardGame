@@ -1,15 +1,21 @@
-using UnityEngine.UIElements;
-
 public abstract class BaseCardController
 {
     public CardModel CardModel { get; protected set; }
-    public CardView CardView { get; protected set; }
+    public ICardView CardView { get; protected set; }
 
-    protected BaseCardController(CardModel card, VisualTreeAsset template)
+    protected ICardView cardView;
+
+    protected BaseCardController(CardModel model, ICardView view)
     {
-        CardModel = card;
-        CardView = new CardView(card, template);
+        CardModel = model;
+        CardView = view;
     }
 
     public abstract void RegisterEvents();
+    public virtual void UnregisterEvents() { }
+
+    public V GetView<V>() where V : class, ICardView
+    {
+        return cardView as V;
+    }
 }

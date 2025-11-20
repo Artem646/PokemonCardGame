@@ -32,7 +32,7 @@ public class CollectionCardController : BaseCardController
         cloneController?.UnregisterEvents();
         ICollectionCardView cloneView = cloneController?.collectionCardView;
         if (cloneView != null)
-            CardOverlayManager.Instance?.ShowCard(collectionCardView, cloneView, evt);
+            CardOverlayManager.Instance?.ShowCollectionCard(collectionCardView, cloneView, evt);
     }
 
     private void OnAddToCardDeckButtonClicked(ClickEvent evt)

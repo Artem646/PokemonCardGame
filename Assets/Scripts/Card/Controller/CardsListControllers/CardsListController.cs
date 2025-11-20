@@ -4,22 +4,16 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CardsListController<T, V> : ICardsListContainer where T : BaseCardController where V : class, ICardView
+public class CardsListController<T> : ICardsListContainer where T : BaseCardController
 {
-    // public readonly VisualElement cardsContainer;
     public readonly List<T> activeCardControllers = new();
-    private readonly object container;
-
-    // public CardsListController(VisualElement container)
-    // {
-    //     cardsContainer = container;
-    // }
+    private readonly object cardsContainer;
 
     public CardsListController(object container)
     {
         if (container is VisualElement || container is Transform)
         {
-            this.container = container;
+            cardsContainer = container;
         }
         else
         {
@@ -46,45 +40,29 @@ public class CardsListController<T, V> : ICardsListContainer where T : BaseCardC
 
         ICardView view = controller.CardView;
 
-        // V view = controller.GetView<V>();
-
-        // switch (container)
-        // {
-        //     case VisualElement cardContainer:
-        //         cardContainer.Add(view.CardRootUIToolkit;);
-        //         break;
-        //     case Transform cardContainer:
-        //         view.CardRootGameObject.transform.SetParent(cardContainer, false);
-        //         break;
-        // }
-
-        switch (container)
+        switch (cardsContainer)
         {
-            case VisualElement ve:
+            case VisualElement cardContainer:
                 if (view is ICollectionCardView collectionView)
-                {
-                    ve.Add(collectionView.CardRootUIToolkit);
-                }
+                    cardContainer.Add(collectionView.CardRootUIToolkit);
                 break;
 
-            case Transform parent:
+            case Transform handContainer:
                 if (view is IBattleCardView battleView)
                 {
-                    battleView.CardRootGameObject.transform.SetParent(parent, false);
+                    battleView.CardRootGameObject.transform.SetParent(handContainer, false);
                 }
                 break;
         }
-
-        // cardsContainer.Add(controller.CardView.CardRootUIToolkit);
     }
 
     public void Clear()
     {
         foreach (var controller in activeCardControllers)
         {
-            V view = controller.GetView<V>();
+            ICardView view = controller.CardView;
 
-            switch (container)
+            switch (cardsContainer)
             {
                 case VisualElement:
                     view.CardRootUIToolkit?.RemoveFromHierarchy();
@@ -97,6 +75,4 @@ public class CardsListController<T, V> : ICardsListContainer where T : BaseCardC
         }
         activeCardControllers.Clear();
     }
-
-    // public List<T> GetAllControllers() => cardControllers;
 }

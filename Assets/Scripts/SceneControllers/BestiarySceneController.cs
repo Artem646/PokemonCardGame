@@ -18,6 +18,8 @@ public class BestiarySceneController : MonoBehaviour
 
     private async void Start()
     {
+        CardControllerFactory.Init(template: cardTemplate);
+
         root = uiDocument.rootVisualElement;
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
         VisualElement overlay = root.Q<VisualElement>("overlay");

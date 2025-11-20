@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class BattleCardsListController : CardsListController<BattleCardController, IBattleCardView>
+public class BattleCardsListController : CardsListController<BattleCardController>
 {
     public BattleCardsListController(Transform container)
         : base(container) { }

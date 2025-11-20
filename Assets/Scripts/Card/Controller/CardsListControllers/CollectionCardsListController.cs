@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CollectionCardsListController : CardsListController<CollectionCardController, ICollectionCardView>, IFilterableCardsListContainer
+public class CollectionCardsListController : CardsListController<CollectionCardController>, IFilterableCardsListContainer
 {
     public CollectionCardsListController(VisualElement container)
         : base(container) { }

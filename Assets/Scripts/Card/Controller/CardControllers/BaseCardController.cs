@@ -13,9 +13,4 @@ public abstract class BaseCardController
 
     public abstract void RegisterEvents();
     public virtual void UnregisterEvents() { }
-
-    public V GetView<V>() where V : class, ICardView
-    {
-        return cardView as V;
-    }
 }

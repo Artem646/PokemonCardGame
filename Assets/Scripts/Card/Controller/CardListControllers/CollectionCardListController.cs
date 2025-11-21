@@ -4,15 +4,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CollectionCardsListController : CardsListController<CollectionCardController>, IFilterableCardsListContainer
+public class CollectionCardListController : CardListController<CollectionCardController>, IFilterableCardListController
 {
-    public CollectionCardsListController(VisualElement container)
+    public CollectionCardListController(VisualElement container)
         : base(container) { }
 
     public async Task LoadUserCardsToScrollView()
     {
         Clear();
-        UserCardsModelList userCards = CardRepository.Instance.GetUserCards();
+        UserCardModelList userCards = CardRepository.Instance.GetUserCards();
         if (userCards == null || userCards.cards.Count == 0)
         {
             Debug.Log("[P][CardsCollectionController] Коллекция пуста.");
@@ -26,20 +26,20 @@ public class CollectionCardsListController : CardsListController<CollectionCardC
     public async Task LoadGameCardsToScrollView()
     {
         Clear();
-        GameCardsModelList gameCards = CardRepository.Instance.GetGameCards();
+        GameCardModelList gameCards = CardRepository.Instance.GetGameCards();
         await LoadCardsToContainer(gameCards.cards);
     }
 
     public void ApplyElementFilter(List<PokemonElement> activeFilters)
     {
-        foreach (CollectionCardController cardController in activeCardControllers)
+        foreach (CollectionCardController controller in CardControllers)
         {
-            PokemonElement mainElement = cardController.CardModel.mainElement;
-            PokemonElement? secondaryElement = cardController.CardModel.secondaryElement;
+            PokemonElement mainElement = controller.CardModel.mainElement;
+            PokemonElement? secondaryElement = controller.CardModel.secondaryElement;
 
             bool IsFilterElement = activeFilters.Count == 0 || activeFilters.Any(filter => filter == mainElement || filter == secondaryElement);
 
-            cardController.CollectionCardView.SetOpacity(IsFilterElement);
+            controller.CollectionCardView.SetOpacity(IsFilterElement);
         }
     }
 }

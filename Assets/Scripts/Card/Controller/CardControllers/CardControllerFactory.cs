@@ -1,43 +1,61 @@
 using UnityEngine.UIElements;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CardControllerFactory
 {
     private static VisualTreeAsset uxmlTemplate;
     private static GameObject uguiPrefab;
-    private static Transform uguiParent;
+    // private static Transform uguiParent;
+    private static readonly Dictionary<Type, Func<CardModel, Transform, bool, BaseCardController>> registry = new();
 
-    public static void Init(VisualTreeAsset template = null, GameObject prefab = null, Transform parent = null)
+    // public static void Init(VisualTreeAsset template = null, GameObject prefab = null, Transform parent = null)
+    public static void Init(VisualTreeAsset template = null, GameObject prefab = null)
+
     {
         uxmlTemplate = template;
         uguiPrefab = prefab;
-        uguiParent = parent;
+        // uguiParent = parent;
+
+        registry[typeof(CollectionCardController)] = (model, parent, faceDown) => CreateCollection(model);
+        registry[typeof(BattleCardController)] = (model, parent, faceDown) => CreateBattle(model, parent, faceDown);
     }
 
-    public static T Create<T>(CardModel model) where T : BaseCardController
+    public static T Create<T>(CardModel model, Transform parent = null, bool faceDown = false) where T : BaseCardController
     {
-        Type t = typeof(T);
+        if (registry.TryGetValue(typeof(T), out var factory))
+            return (T)factory(model, parent, faceDown);
 
-        if (t == typeof(CollectionCardController))
-            return (T)(BaseCardController)CreateCollection(model);
+        // Type t = typeof(T);
 
-        if (t == typeof(BattleCardController))
-            return (T)(BaseCardController)CreateBattle(model);
+        // if (t == typeof(CollectionCardController))
+        //     return (T)(BaseCardController)CreateCollection(model);
 
-        throw new NotSupportedException($"CardControllerFactory: Unknown controller type {t.Name}");
+        // if (t == typeof(BattleCardController))
+        //     return (T)(BaseCardController)CreateBattle(model);
+
+        throw new NotSupportedException($"CardControllerFactory: Unknown controller type {typeof(T).Name}");
     }
 
-    public static CollectionCardController CreateCollection(CardModel model)
+    private static CollectionCardController CreateCollection(CardModel model)
     {
         CardViewUIToolkit view = new(model, uxmlTemplate);
-        CollectionCardController controller = new(model, view);
-        return controller;
+        return new CollectionCardController(model, view);
     }
 
-    public static BattleCardController CreateBattle(CardModel model)
+    private static BattleCardController CreateBattle(CardModel model, Transform uguiParent, bool faceDown)
     {
-        CardViewUGUI view = new(model, uguiPrefab, uguiParent);
+        // bool faceDown = false;
+        // DropPlaceScript dropPlace = uguiParent.GetComponent<DropPlaceScript>();
+        // NotificationManager.ShowNotification(dropPlace.type.ToString());
+        // if (dropPlace.type == FieldType.ENEMY_HAND || dropPlace.type == FieldType.ENEMY_FIELD)
+        // {
+
+        // faceDown = true;
+        // }
+
+        CardViewUGUI view = new(model, uguiPrefab, uguiParent, faceDown);
         return new BattleCardController(model, view);
     }
 }

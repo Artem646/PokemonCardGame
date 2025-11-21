@@ -11,19 +11,35 @@ public class CardViewUGUI : IBattleCardView
 
     private TextMeshProUGUI titleLabel;
 
-    public CardViewUGUI(CardModel model, GameObject prefab, Transform parent)
+    private bool isFaceDown;
+    private GameObject backCover;
+
+    public CardViewUGUI(CardModel model, GameObject prefab, Transform parent, bool faceDown)
     {
         cardModel = model;
         cardPrefab = prefab;
         cardRoot = Object.Instantiate(cardPrefab, parent);
-        cardRoot.name = model.title;
+
+        cardRoot.name = faceDown ? $"{model.title}_Back" : model.title;
+        isFaceDown = faceDown;
+
         InitializeElements();
         BindViewWithData();
+        ApplyFaceDownState(isFaceDown);
+
+        if (cardRoot.TryGetComponent(out CardFlipScript flipScript))
+        {
+            flipScript.OnFlipStateChanged += (faceDown) =>
+            {
+                ApplyFaceDownState(faceDown);
+            };
+        }
     }
 
     private void InitializeElements()
     {
         titleLabel = cardRoot.transform.Find("Body/Title").GetComponent<TextMeshProUGUI>();
+        backCover = cardRoot.transform.Find("BackCover").gameObject;
     }
 
     private void BindViewWithData()
@@ -56,7 +72,6 @@ public class CardViewUGUI : IBattleCardView
 
             RectTransform recrElementArea = elementsArea.GetComponent<RectTransform>();
             recrElementArea.sizeDelta = new Vector2(37.8f, recrElementArea.sizeDelta.y);
-            // recrElementArea.anchoredPosition = new Vector2(201, recrElementArea.anchoredPosition.y);
 
             RectTransform main = cardRoot.transform.Find("Body/ElementsArea/MainElement").GetComponent<RectTransform>();
             main.anchoredPosition = new Vector2(2.7f, main.anchoredPosition.y);
@@ -105,6 +120,12 @@ public class CardViewUGUI : IBattleCardView
 
         if (stop2?.Attributes["stop-color"] != null)
             stop2.Attributes["stop-color"].Value = $"#{ColorUtility.ToHtmlStringRGB(color2)}";
+    }
+
+    public void ApplyFaceDownState(bool faceDown)
+    {
+        isFaceDown = faceDown;
+        backCover.SetActive(isFaceDown);
     }
 
     public GameObject CardRootGameObject => cardRoot;

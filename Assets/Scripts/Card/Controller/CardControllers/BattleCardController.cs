@@ -1,5 +1,3 @@
-using UnityEngine.EventSystems;
-
 public class BattleCardController : BaseCardController
 {
     private readonly IBattleCardView battleCardView;
@@ -9,35 +7,27 @@ public class BattleCardController : BaseCardController
     {
         battleCardView = view;
         RegisterEvents();
+
+        if (view.CardRootGameObject.TryGetComponent(out CardClickScript clickScript))
+        {
+            clickScript.OnCardClicked += OnCardElementClicked;
+        }
     }
 
     public override void RegisterEvents()
-    {
-        if (!battleCardView.CardRootGameObject.TryGetComponent<EventTrigger>(out var trigger))
-            trigger = battleCardView.CardRootGameObject.AddComponent<EventTrigger>();
-
-        var entry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
-        entry.callback.AddListener((data) => OnCardElementClicked());
-        trigger.triggers.Add(entry);
-    }
+    { }
 
     public override void UnregisterEvents()
-    {
-        if (battleCardView.CardRootGameObject.TryGetComponent<EventTrigger>(out var trigger))
-            trigger.triggers.Clear();
-    }
+    { }
 
-    private void OnCardElementClicked()
+    private void OnCardElementClicked(CardClickScript cardClick)
     {
-        if (!CardStateManager.IsCardRaised)
+        BattleCardController cloneController = CardControllerFactory.Create<BattleCardController>(CardModel, faceDown: false);
+        cloneController?.UnregisterEvents();
+        IBattleCardView cloneView = cloneController?.battleCardView;
+        if (cloneView != null)
         {
-            BattleCardController cloneController = CardControllerFactory.Create<BattleCardController>(CardModel);
-            cloneController?.UnregisterEvents();
-            IBattleCardView cloneView = cloneController?.battleCardView;
-            if (cloneView != null)
-            {
-                CardOverlayManager.Instance?.ShowBattleCard(battleCardView, cloneView);
-            }
+            CardOverlayManager.Instance?.ShowBattleCard(battleCardView, cloneView);
         }
     }
 }

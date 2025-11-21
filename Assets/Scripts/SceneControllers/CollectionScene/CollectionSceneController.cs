@@ -29,7 +29,7 @@ public class CollectionSceneController : MonoBehaviour
     [SerializeField] private VisualTreeAsset cardTemplate;
 
     private VisualElement root;
-    private CollectionCardsListController сollectionCardsListController;
+    private CollectionCardListController сollectionCardListController;
     private FilterPanelView filterPanelView;
 
     private async void Start()
@@ -39,7 +39,7 @@ public class CollectionSceneController : MonoBehaviour
         CardControllerFactory.Init(template: cardTemplate);
 
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
-        сollectionCardsListController = new CollectionCardsListController(cardsContainer);
+        сollectionCardListController = new CollectionCardListController(cardsContainer);
 
         VisualElement overlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.Init(overlay);
@@ -48,9 +48,9 @@ public class CollectionSceneController : MonoBehaviour
         UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
 
         filterPanelView = new FilterPanelView(root);
-        filterPanelView.OnFilterChanged += сollectionCardsListController.ApplyElementFilter;
+        filterPanelView.OnFilterChanged += сollectionCardListController.ApplyElementFilter;
 
-        await сollectionCardsListController.LoadUserCardsToScrollView();
+        await сollectionCardListController.LoadUserCardsToScrollView();
 
         // UserCardsModelList userCards = CardRepository.Instance.GetUserCards();
 

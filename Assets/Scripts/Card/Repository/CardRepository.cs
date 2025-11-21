@@ -29,16 +29,16 @@ public class CardRepository : MonoBehaviour
         service.OnProgressChanged += (p) => OnProgressChanged?.Invoke(p);
     }
 
-    public async Task<UserCardsModelList> GetUserCardsCollection(string userId)
+    public async Task<UserCardModelList> GetUserCardsCollection(string userId)
     {
         return await service.GetUserCardsCollection(userId);
     }
 
-    public async Task<GameCardsModelList> GetAllGameCards()
+    public async Task<GameCardModelList> GetAllGameCards()
     {
         return await service.GetGameCards();
     }
 
-    public UserCardsModelList GetUserCards() => service.GetUserCardsList();
-    public GameCardsModelList GetGameCards() => service.GetGameCardsList();
+    public UserCardModelList GetUserCards() => service.GetUserCardsList();
+    public GameCardModelList GetGameCards() => service.GetGameCardsList();
 }

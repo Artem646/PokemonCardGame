@@ -1,30 +1,28 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CardsListController<T> : ICardsListContainer where T : BaseCardController
+public class CardListController<T> : ICardListController where T : BaseCardController
 {
-    public readonly List<T> activeCardControllers = new();
-    private readonly object cardsContainer;
+    public List<T> CardControllers { get; set; } = new();
+    public List<CardModel> CardModels { get; set; } = new();
 
-    public CardsListController(object container)
+    private readonly object cardContainer;
+
+    public CardListController(object container)
     {
         if (container is VisualElement || container is Transform)
         {
-            cardsContainer = container;
-        }
-        else
-        {
-            throw new ArgumentException("Container must be VisualElement (UI Toolkit) or Transform (UGUI)");
+            cardContainer = container;
         }
     }
-
 
     public async Task LoadCardsToContainer(List<CardModel> cards)
     {
         Clear();
+
+        CardModels = cards;
 
         foreach (CardModel model in cards)
         {
@@ -35,34 +33,37 @@ public class CardsListController<T> : ICardsListContainer where T : BaseCardCont
 
     public void AddCardToContainer(CardModel model)
     {
-        T controller = CardControllerFactory.Create<T>(model);
-        activeCardControllers.Add(controller);
+        T controller;
 
-        ICardView view = controller.CardView;
-
-        switch (cardsContainer)
+        switch (cardContainer)
         {
             case VisualElement cardContainer:
-                if (view is ICollectionCardView collectionView)
-                    cardContainer.Add(collectionView.CardRootUIToolkit);
-                break;
+                controller = CardControllerFactory.Create<T>(model);
+                CardControllers.Add(controller);
 
+                if (controller.CardView is ICollectionCardView collectionView)
+                    cardContainer.Add(collectionView.CardRootUIToolkit);
+
+                break;
             case Transform handContainer:
-                if (view is IBattleCardView battleView)
-                {
+                bool faceDown = handContainer.name == "EnemyHand";
+
+                controller = CardControllerFactory.Create<T>(model, handContainer, faceDown);
+
+                if (controller.CardView is IBattleCardView battleView)
                     battleView.CardRootGameObject.transform.SetParent(handContainer, false);
-                }
+
                 break;
         }
     }
 
     public void Clear()
     {
-        foreach (var controller in activeCardControllers)
+        foreach (var controller in CardControllers)
         {
             ICardView view = controller.CardView;
 
-            switch (cardsContainer)
+            switch (cardContainer)
             {
                 case VisualElement:
                     view.CardRootUIToolkit?.RemoveFromHierarchy();
@@ -73,6 +74,6 @@ public class CardsListController<T> : ICardsListContainer where T : BaseCardCont
                     break;
             }
         }
-        activeCardControllers.Clear();
+        CardControllers.Clear();
     }
 }

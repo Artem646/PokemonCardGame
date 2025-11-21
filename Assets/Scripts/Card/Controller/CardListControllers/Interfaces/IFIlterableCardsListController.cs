@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public interface IFilterableCardsListContainer : ICardsListContainer
+public interface IFilterableCardListController : ICardListController
 {
     void ApplyElementFilter(List<PokemonElement> activeFilters);
 }

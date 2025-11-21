@@ -13,7 +13,7 @@ public class BestiarySceneController : MonoBehaviour
     [SerializeField] private VisualTreeAsset cardTemplate;
 
     private VisualElement root;
-    private CollectionCardsListController bestiaryCardsListController;
+    private CollectionCardListController bestiaryCardsListController;
     private FilterPanelView filterPanelView;
 
     private async void Start()
@@ -25,7 +25,7 @@ public class BestiarySceneController : MonoBehaviour
         VisualElement overlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.Init(overlay);
 
-        bestiaryCardsListController = new CollectionCardsListController(cardsContainer);
+        bestiaryCardsListController = new CollectionCardListController(cardsContainer);
 
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += bestiaryCardsListController.ApplyElementFilter;

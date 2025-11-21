@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class CardRepositoryService
 {
-    private GameCardsModelList gameCardsList = new();
-    private UserCardsModelList userCardsList = new();
+    private GameCardModelList gameCardsList = new();
+    private UserCardModelList userCardsList = new();
     private readonly TextAsset cardsJson;
 
     public event Action OnCardsLoaded;
@@ -18,7 +18,7 @@ public class CardRepositoryService
         this.cardsJson = cardsJson;
     }
 
-    public async Task<UserCardsModelList> GetUserCardsCollection(string userId)
+    public async Task<UserCardModelList> GetUserCardsCollection(string userId)
     {
         try
         {
@@ -40,7 +40,7 @@ public class CardRepositoryService
         catch (Exception e)
         {
             Debug.LogError($"[P] Ошибка при загрузке карт: {e}");
-            return new UserCardsModelList { cards = new List<CardModel>() };
+            return new UserCardModelList { cards = new List<CardModel>() };
         }
 
         OnCardsLoaded?.Invoke();
@@ -64,7 +64,7 @@ public class CardRepositoryService
             if (loaded?.cards == null || loaded.cards.Count == 0)
             {
                 Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
-                gameCardsList = new GameCardsModelList { cards = new List<CardModel>() };
+                gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
                 return;
             }
             gameCardsList = loaded;
@@ -73,11 +73,11 @@ public class CardRepositoryService
         catch (Exception e)
         {
             Debug.LogError($"[P] Ошибка при загрузке JSON карт: {e}");
-            gameCardsList = new GameCardsModelList { cards = new List<CardModel>() };
+            gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
         }
     }
 
-    public async Task<GameCardsModelList> GetGameCards()
+    public async Task<GameCardModelList> GetGameCards()
     {
         gameCardsList?.cards?.Clear();
 
@@ -88,7 +88,7 @@ public class CardRepositoryService
             if (loaded?.cards == null || loaded.cards.Count == 0)
             {
                 Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
-                gameCardsList = new GameCardsModelList { cards = new List<CardModel>() };
+                gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
             }
             gameCardsList = loaded;
             Debug.Log($"[P] Загружено {gameCardsList.cards.Count} карт из JSON.");
@@ -96,7 +96,7 @@ public class CardRepositoryService
         catch (Exception e)
         {
             Debug.LogError($"[P] Ошибка при загрузке JSON карт: {e}");
-            gameCardsList = new GameCardsModelList { cards = new List<CardModel>() };
+            gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
         }
 
         return gameCardsList;
@@ -144,6 +144,6 @@ public class CardRepositoryService
         }
     }
 
-    public UserCardsModelList GetUserCardsList() => userCardsList;
-    public GameCardsModelList GetGameCardsList() => gameCardsList;
+    public UserCardModelList GetUserCardsList() => userCardsList;
+    public GameCardModelList GetGameCardsList() => gameCardsList;
 }

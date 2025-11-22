@@ -29,7 +29,7 @@ public class AuthManager : MonoBehaviour
 
     public void Initialize()
     {
-        auth = FirebaseService.Instance.GetAuth();
+        auth = FirebaseAuthService.Instance.GetAuth();
 
         if (auth.CurrentUser != null && currentProvider == null && !IsRestored)
         {

@@ -9,7 +9,7 @@ public class AnonymousSingInController
 
     public AnonymousSingInController()
     {
-        auth = FirebaseService.Instance.GetAuth();
+        auth = FirebaseAuthService.Instance.GetAuth();
         Debug.Log("[P][AnonymousSingInController] AnonymousSingInController успешно создан.");
     }
 

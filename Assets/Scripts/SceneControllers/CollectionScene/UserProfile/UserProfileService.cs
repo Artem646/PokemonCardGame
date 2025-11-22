@@ -10,7 +10,7 @@ public class UserProfileService
 
     private UserProfileService() { }
 
-    public FirebaseUser CurrentUser => FirebaseService.Instance.GetAuth().CurrentUser;
+    public FirebaseUser CurrentUser => FirebaseAuthService.Instance.GetAuth().CurrentUser;
 
     public async Task<UserProfileData> GetUserProfile()
     {

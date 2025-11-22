@@ -28,7 +28,7 @@ public static class CardsLoader
     {
         try
         {
-            firebaseFirestore = FirebaseService.Instance.GetFirestore();
+            firebaseFirestore = FirebaseFirestoreService.Instance.GetFirestore();
             DocumentSnapshot snapshot = await firebaseFirestore.Collection("users").Document(userId).GetSnapshotAsync();
             if (!snapshot.Exists)
             {

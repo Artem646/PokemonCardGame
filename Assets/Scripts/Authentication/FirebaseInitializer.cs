@@ -36,8 +36,8 @@ public class FirebaseInitializer
             {
                 try
                 {
-                    FirebaseService.Instance.InitializeFirebaseAuth();
-                    FirebaseService.Instance.InitializeFirebaseFirestore();
+                    FirebaseAuthService.Instance.InitializeFirebaseAuth();
+                    FirebaseFirestoreService.Instance.InitializeFirebaseFirestore();
                     Debug.Log("[P][FirebaseInitializer] FirebaseInitializer initialized successfully.");
 
                     AuthManager.Instance.Initialize();

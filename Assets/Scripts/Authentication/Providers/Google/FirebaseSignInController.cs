@@ -9,7 +9,7 @@ public class FirebaseSignInController
 
     public FirebaseSignInController()
     {
-        auth = FirebaseService.Instance.GetAuth();
+        auth = FirebaseAuthService.Instance.GetAuth();
         Debug.Log("[P][FirebaseSingInController] FirebaseSingInController успешно создан.");
     }
 

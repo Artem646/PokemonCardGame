@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class CardListController<T> : ICardListController where T : BaseCardController
@@ -42,7 +43,15 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
                 CardControllers.Add(controller);
 
                 if (controller.CardView is ICollectionCardView collectionView)
+                {
+                    if (collectionView is CardViewUIToolkit uiToolkitView)
+                    {
+                        if (SceneManager.GetActiveScene().name == "BestiaryScene")
+                            uiToolkitView.DisableAddToDeckButton();
+                    }
+
                     cardContainer.Add(collectionView.CardRootUIToolkit);
+                }
 
                 break;
             case Transform handContainer:

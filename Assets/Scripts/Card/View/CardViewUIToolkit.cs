@@ -129,6 +129,11 @@ public class CardViewUIToolkit : ICollectionCardView
         addToCardDeckButton.style.unityBackgroundImageTintColor = isAdded ? Color.green : Color.gray;
     }
 
+    public void DisableAddToDeckButton()
+    {
+        addToCardDeckButton.style.display = DisplayStyle.None;
+    }
+
     public void SetOpacity(bool IsFilterElement)
     {
         cardElement.style.opacity = IsFilterElement ? 1f : 0.3f;

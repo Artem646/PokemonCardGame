@@ -4,37 +4,31 @@ using Firebase.Extensions;
 using Firebase.Auth;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Firebase.Firestore;
-using System.Threading.Tasks;
 
-public class FirebaseService
+public class FirebaseAuthService
 {
-    private static FirebaseService _instance;
-    public static FirebaseService Instance
+    private static FirebaseAuthService _instance;
+    public static FirebaseAuthService Instance
     {
         get
         {
-            _instance ??= new FirebaseService();
+            _instance ??= new FirebaseAuthService();
             return _instance;
         }
     }
 
     private FirebaseAuth auth;
-    private FirebaseFirestore firestore;
-
     public FirebaseAuth GetAuth() => auth;
-    public FirebaseFirestore GetFirestore() => firestore;
 
-    private Dictionary<string, FirebaseUser> userByAuth = new();
+    private readonly Dictionary<string, FirebaseUser> userByAuth = new();
     private bool isProcessingStateChange = false;
     private bool isAuthInitialized = false;
-    private bool isFirestoreInitialized = false;
     private string lastToken = null;
-    private HashSet<string> loggedProviderIds = new();
+    private readonly HashSet<string> loggedProviderIds = new();
     private string lastAnonymousUserId = null;
     private bool isAnonymous;
 
-    private FirebaseService() { }
+    private FirebaseAuthService() { }
 
     public void InitializeFirebaseAuth()
     {
@@ -54,22 +48,6 @@ public class FirebaseService
         isAuthInitialized = true;
 
         Debug.Log("[P][FirebaseService] Firebase Auth успешно инициализирован.");
-    }
-
-    public void InitializeFirebaseFirestore()
-    {
-        if (isFirestoreInitialized) return;
-
-        firestore = FirebaseFirestore.DefaultInstance;
-        if (firestore == null)
-        {
-            Debug.LogError("[P][FirebaseService] Ошибка: Firebase Firestore не проинициализирован.");
-            return;
-        }
-
-        isFirestoreInitialized = true;
-
-        Debug.Log("[P][FirebaseService] Firebase Firestore успешно инициализирован.");
     }
 
     private async void AuthStateChanged(object sender, EventArgs eventArgs)
@@ -94,7 +72,7 @@ public class FirebaseService
                 {
                     Debug.Log("[P][FirebaseService] Signed out " + lastAnonymousUserId);
 
-                    await DeleteAnonymousUserDocument(lastAnonymousUserId);
+                    await FirebaseFirestoreService.Instance.DeleteAnonymousUserDocument(lastAnonymousUserId);
                 }
 
                 userByAuth[senderAuth.App.Name] = null;
@@ -108,7 +86,7 @@ public class FirebaseService
             {
                 Debug.Log("[P][FirebaseService] Signed in " + previousUser.UserId);
                 DisplayDetailedUserInfo(previousUser, 1);
-                CreateUserDocumentInFirestore(previousUser.UserId);
+                await FirebaseFirestoreService.Instance.CreateUserDocument(previousUser.UserId);
                 if (previousUser.IsAnonymous)
                 {
                     lastAnonymousUserId = previousUser.UserId;
@@ -158,7 +136,7 @@ public class FirebaseService
 
     private void DisplayDetailedUserInfo(FirebaseUser user, int indentLevel)
     {
-        string indent = new string(' ', indentLevel * 2);
+        string indent = new(' ', indentLevel * 2);
 
         DisplayUserInfo(user, indentLevel);
 
@@ -186,7 +164,7 @@ public class FirebaseService
 
     private void DisplayUserInfo(IUserInfo userInfo, int indentLevel)
     {
-        string indent = new string(' ', indentLevel * 2);
+        string indent = new(' ', indentLevel * 2);
         var userProperties = new Dictionary<string, string>
         {
             {"Display Name", userInfo.DisplayName},
@@ -205,55 +183,6 @@ public class FirebaseService
         }
     }
 
-    private async void CreateUserDocumentInFirestore(string userId)
-    {
-        DocumentReference userDocument = firestore.Collection("users").Document(userId);
-        DocumentSnapshot snapshot = await userDocument.GetSnapshotAsync();
-        if (!snapshot.Exists)
-        {
-            Debug.Log($"[P][FirebaseService] Документ пользователя {userId} создан.");
-
-            Dictionary<string, object> userData = new()
-            {
-                { "cardsInCollection", new List<string>() },
-                { "createdAt", Timestamp.GetCurrentTimestamp() }
-            };
-
-            // Dictionary<string, object> userData = new()
-            // {
-            //     { "uid", user.UserId },
-            //     { "email", user.Email ?? "" },
-            //     { "displayName", user.DisplayName ?? "" },
-            //     { "authType", authType },
-            //     { "createdAt", Timestamp.GetCurrentTimestamp() }
-            // };
-
-            await userDocument.SetAsync(userData);
-        }
-        else
-        {
-            Debug.Log($"[P][FirebaseService] Документ пользователя {userId} уже существует");
-        }
-    }
-
-    private async Task DeleteAnonymousUserDocument(string userId)
-    {
-        try
-        {
-            DocumentReference userDoc = firestore.Collection("users").Document(userId);
-            DocumentSnapshot snapshot = await userDoc.GetSnapshotAsync();
-
-            if (snapshot.Exists)
-            {
-                await userDoc.DeleteAsync();
-                Debug.Log($"[P][FirebaseService] Документ анонимного пользователя {userId} удалён.");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[P][FirebaseService] Ошибка при удалении документа анонимного пользователя: {e.Message}");
-        }
-    }
     public void Dispose()
     {
         if (auth != null)
@@ -263,7 +192,6 @@ public class FirebaseService
             auth = null;
         }
 
-        firestore = null;
         _instance = null;
     }
 }

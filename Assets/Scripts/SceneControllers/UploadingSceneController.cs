@@ -11,7 +11,7 @@ public class UploadingSceneController : MonoBehaviour
 
     private async void Start()
     {
-        FirebaseAuth auth = FirebaseService.Instance.GetAuth();
+        FirebaseAuth auth = FirebaseAuthService.Instance.GetAuth();
         string userId = auth.CurrentUser.UserId;
 
         UserProfileData profile = await UserProfileService.Instance.GetUserProfile();

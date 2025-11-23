@@ -7,17 +7,6 @@ public class CardDeck
     private readonly HashSet<int> deckCardIds = new();
     private const int MAX_COUNT = 5;
 
-    // public void AddCardToDeck(int cardId)
-    // {
-    //     if (deckCardIds.Count >= MAX_COUNT)
-    //         return;
-
-    //     if (!deckCardIds.Contains(cardId))
-    //     {
-    //         deckCardIds.Add(cardId);
-    //     }
-    // }
-
     public bool AddCardToDeck(int id)
     {
         if (deckCardIds.Count >= MAX_COUNT)
@@ -29,10 +18,7 @@ public class CardDeck
 
     public void RemoveCardFromDeck(int cardId)
     {
-        // if (deckCardIds.Contains(cardId))
-        // {
         deckCardIds.Remove(cardId);
-        // }
     }
 
     public bool IsCardInDeck(int cardId) => deckCardIds.Contains(cardId);

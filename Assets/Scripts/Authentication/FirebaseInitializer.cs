@@ -8,10 +8,7 @@ public class FirebaseInitializer
     {
         get
         {
-            if (_instance == null)
-            {
-                _instance = new FirebaseInitializer();
-            }
+            _instance ??= new FirebaseInitializer();
             return _instance;
         }
     }
@@ -37,7 +34,6 @@ public class FirebaseInitializer
                 try
                 {
                     FirebaseAuthService.Instance.InitializeFirebaseAuth();
-                    FirebaseFirestoreService.Instance.InitializeFirebaseFirestore();
                     Debug.Log("[P][FirebaseInitializer] FirebaseInitializer initialized successfully.");
 
                     AuthManager.Instance.Initialize();

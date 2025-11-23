@@ -8,14 +8,7 @@ using UnityEngine.SceneManagement;
 public class FirebaseAuthService
 {
     private static FirebaseAuthService _instance;
-    public static FirebaseAuthService Instance
-    {
-        get
-        {
-            _instance ??= new FirebaseAuthService();
-            return _instance;
-        }
-    }
+    public static FirebaseAuthService Instance => _instance ??= new FirebaseAuthService();
 
     private FirebaseAuth auth;
     public FirebaseAuth GetAuth() => auth;
@@ -25,7 +18,6 @@ public class FirebaseAuthService
     private bool isAuthInitialized = false;
     private string lastToken = null;
     private readonly HashSet<string> loggedProviderIds = new();
-    private string lastAnonymousUserId = null;
     private bool isAnonymous;
 
     private FirebaseAuthService() { }
@@ -47,6 +39,8 @@ public class FirebaseAuthService
 
         isAuthInitialized = true;
 
+        FirebaseFirestoreService.Instance.InitializeFirebaseFirestore();
+
         Debug.Log("[P][FirebaseService] Firebase Auth успешно инициализирован.");
     }
 
@@ -65,14 +59,12 @@ public class FirebaseAuthService
 
             if (!signedIn && previousUser != null)
             {
-                Debug.Log("[P][FirebaseService] Signed out " + lastAnonymousUserId);
-                Debug.Log("[P][FirebaseService] Signed out " + isAnonymous.ToString());
+                Debug.Log("[P][FirebaseService] Signed out " + previousUser.UserId);
 
-                if (isAnonymous)
+                if (isAnonymous && UserSession.Instance.ActiveUser != null)
                 {
-                    Debug.Log("[P][FirebaseService] Signed out " + lastAnonymousUserId);
-
-                    await FirebaseFirestoreService.Instance.DeleteAnonymousUserDocument(lastAnonymousUserId);
+                    await FirebaseFirestoreService.Instance.DeleteAnonymousUserDocument(UserSession.Instance.ActiveUser);
+                    UserSession.Instance.ClearActiveUser();
                 }
 
                 userByAuth[senderAuth.App.Name] = null;
@@ -86,17 +78,11 @@ public class FirebaseAuthService
             {
                 Debug.Log("[P][FirebaseService] Signed in " + previousUser.UserId);
                 DisplayDetailedUserInfo(previousUser, 1);
-                await FirebaseFirestoreService.Instance.CreateUserDocument(previousUser.UserId);
-                if (previousUser.IsAnonymous)
-                {
-                    lastAnonymousUserId = previousUser.UserId;
-                    isAnonymous = true;
-                }
-                else
-                {
-                    isAnonymous = false;
-                }
 
+                User user = await FirebaseFirestoreService.Instance.CreateOrUpdateUserDocument(previousUser);
+                UserSession.Instance.ActiveUser = user;
+                Debug.Log($"[AuthService] Пользователь {user.userData.userName} загружен. Колод: {user.decks.Count}");
+                isAnonymous = previousUser.IsAnonymous;
                 SceneManager.LoadScene("UploadingScene");
             }
         }

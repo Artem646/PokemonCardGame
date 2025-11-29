@@ -18,13 +18,13 @@ public class CardRepositoryService
         this.cardsJson = cardsJson;
     }
 
-    public async Task<UserCardModelList> GetUserCardsCollection(string userId)
+    public async Task<UserCardModelList> GetUserCardsCollection()
     {
         try
         {
             userCardsList?.cards?.Clear();
 
-            List<int> cardIds = await GetUserCardIds(userId);
+            List<int> cardIds = UserSession.Instance.ActiveUser.cardsInCollection;
             if (cardIds.Count == 0)
             {
                 Debug.LogWarning("[P] У пользователя нет карт в коллекции.");
@@ -32,7 +32,7 @@ public class CardRepositoryService
                 return userCardsList;
             }
 
-            LoadAllCardsIfNeeded();
+            // LoadAllCardsIfNeeded();
             await AddCardsToCollectionByIds(cardIds);
 
             Debug.Log($"[P] Успешно загружено {userCardsList.cards.Count} карт.");
@@ -47,35 +47,35 @@ public class CardRepositoryService
         return userCardsList;
     }
 
-    private async Task<List<int>> GetUserCardIds(string userId)
-    {
-        return await CardsLoader.GetCardIdsFromFirestore(userId) ?? new List<int>();
-    }
+    // private async Task<List<int>> GetUserCardIds(string userId)
+    // {
+    //     return await CardsLoader.GetCardIdsFromFirestore(userId) ?? new List<int>();
+    // }
 
-    private void LoadAllCardsIfNeeded()
-    {
-        if (gameCardsList?.cards?.Count > 0)
-            return;
+    // private void LoadAllCardsIfNeeded()
+    // {
+    //     if (gameCardsList?.cards?.Count > 0)
+    //         return;
 
-        try
-        {
-            string cardsJsonText = cardsJson.text;
-            var loaded = CardsLoader.GetCardsListFromJson(cardsJsonText);
-            if (loaded?.cards == null || loaded.cards.Count == 0)
-            {
-                Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
-                gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
-                return;
-            }
-            gameCardsList = loaded;
-            Debug.Log($"[P] Загружено {gameCardsList.cards.Count} карт из JSON.");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[P] Ошибка при загрузке JSON карт: {e}");
-            gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
-        }
-    }
+    //     try
+    //     {
+    //         string cardsJsonText = cardsJson.text;
+    //         var loaded = CardsLoader.GetCardsListFromJson(cardsJsonText);
+    //         if (loaded?.cards == null || loaded.cards.Count == 0)
+    //         {
+    //             Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
+    //             gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
+    //             return;
+    //         }
+    //         gameCardsList = loaded;
+    //         Debug.Log($"[P] Загружено {gameCardsList.cards.Count} карт из JSON.");
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Debug.LogError($"[P] Ошибка при загрузке JSON карт: {e}");
+    //         gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
+    //     }
+    // }
 
     public async Task<GameCardModelList> GetGameCards()
     {

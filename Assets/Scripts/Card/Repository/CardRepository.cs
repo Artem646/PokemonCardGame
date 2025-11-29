@@ -29,9 +29,9 @@ public class CardRepository : MonoBehaviour
         service.OnProgressChanged += (p) => OnProgressChanged?.Invoke(p);
     }
 
-    public async Task<UserCardModelList> GetUserCardsCollection(string userId)
+    public async Task<UserCardModelList> GetUserCardsCollection()
     {
-        return await service.GetUserCardsCollection(userId);
+        return await service.GetUserCardsCollection();
     }
 
     public async Task<GameCardModelList> GetAllGameCards()

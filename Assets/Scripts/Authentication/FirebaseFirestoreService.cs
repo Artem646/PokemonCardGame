@@ -53,7 +53,7 @@ public class FirebaseFirestoreService
             Dictionary<string, object> userDataMap = new()
             {
                 { "userId", newUserData.userId },
-                { "username", newUserData.userName },
+                { "userName", newUserData.userName },
                 { "email", newUserData.email},
                 { "createdAt", Timestamp.FromDateTime(newUserData.createdAt) },
                 { "lastLoginAt", Timestamp.FromDateTime(newUserData.lastLoginAt) }
@@ -72,26 +72,18 @@ public class FirebaseFirestoreService
         {
             Debug.Log($"[P][FirebaseService] Документ пользователя {firebaseUser.UserId} уже существует");
             User loaderUser = await LoadUser(firebaseUser.UserId);
-            await UpdateUserData(loaderUser, firebaseUser, userDocument);
+            await UpdateLastLoginAt(loaderUser, userDocument);
             return loaderUser;
         }
     }
 
-    public async Task UpdateUserData(User user, FirebaseUser firebaseUser, DocumentReference userDocument)
+    public async Task UpdateLastLoginAt(User user, DocumentReference userDocument)
     {
-        user.userData.userId = firebaseUser.UserId;
-        user.userData.userName = firebaseUser.DisplayName;
-        user.userData.email = firebaseUser.Email ?? "";
         user.userData.lastLoginAt = DateTime.UtcNow;
-
         Dictionary<string, object> updateData = new()
         {
-            { "userData.userId", user.userData.userId },
-            { "userData.username", user.userData.userName },
-            { "userData.email", user.userData.email },
             { "userData.lastLoginAt", Timestamp.FromDateTime(user.userData.lastLoginAt) }
         };
-
         await userDocument.UpdateAsync(updateData);
         Debug.Log($"[FirestoreService] Данные пользователя {user.userData.userId} обновлены.");
     }
@@ -153,20 +145,15 @@ public class FirebaseFirestoreService
         Debug.Log($"[FirestoreService] Карта {cardId} удалена у пользователя {user.userData.userId}");
     }
 
-    public async Task SaveDeck(User user, Deck deck)
+    public async Task AddDeck(User user, Deck deck)
     {
-        Deck existingDeck = user.decks.Find(d => d.deckId == deck.deckId);
-        if (existingDeck != null)
-        {
-            existingDeck.name = deck.name;
-            existingDeck.cards = new List<int>(deck.cards);
-        }
-        else
-        {
-            user.decks.Add(deck);
-        }
+        string deckId = GenerateDeckId();
+        deck.deckId = deckId;
+        user.decks.Add(deck);
 
-        DocumentReference deckDoc = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
+        Debug.Log($"[DeckEditor] Новая колода '{deck.name}' добавлена локально. Карт: {deck.cards.Count}");
+
+        DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
 
         Dictionary<string, object> deckData = new()
         {
@@ -174,10 +161,56 @@ public class FirebaseFirestoreService
             { "cards", deck.cards }
         };
 
-        await deckDoc.SetAsync(deckData, SetOptions.Overwrite);
-        Debug.Log($"[FirestoreService] Колода '{deck.name}' сохранена для пользователя {user.userData.userId} (id: {deck.deckId}), карт: {deck.cards.Count}");
+        await deckDocument.SetAsync(deckData);
+        Debug.Log($"[FirestoreService] Новая колода '{deck.name}' сохранена для пользователя {user.userData.userId} (id: {deck.deckId})");
+        NotificationManager.ShowNotification($"Колода '{deck.name}' добавлена для пользователя {user.userData.userName}");
     }
 
+    public async Task UpdateDeck(User user, Deck deck)
+    {
+        Deck existingDeck = user.decks.Find(d => d.deckId == deck.deckId);
+        if (existingDeck != null)
+        {
+            existingDeck.name = deck.name;
+            existingDeck.cards = new List<int>(deck.cards);
+
+            Debug.Log($"[DeckEditor] Колода '{deck.name}' обновлена локально. Карт: {deck.cards.Count}");
+
+            DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
+
+            Dictionary<string, object> deckData = new()
+            {
+                { "name", deck.name },
+                { "cards", deck.cards }
+            };
+
+            await deckDocument.SetAsync(deckData, SetOptions.Overwrite);
+            Debug.Log($"[FirestoreService] Колода '{deck.name}' обновлена для пользователя {user.userData.userId} (id: {deck.deckId})");
+            NotificationManager.ShowNotification($"Колода '{deck.name}' обновлена для пользователя {user.userData.userName}");
+        }
+    }
+
+    public async Task DeleteDeck(User user, Deck deck)
+    {
+        Deck existingDeck = user.decks.Find(d => d.deckId == deck.deckId);
+        if (existingDeck != null)
+        {
+            user.decks.Remove(existingDeck);
+            Debug.Log($"[DeckEditor] Колода '{existingDeck.name}' удалена локально.");
+
+            DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
+            await deckDocument.DeleteAsync();
+
+            Debug.Log($"[FirestoreService] Колода '{deck.name}' удалена для пользователя {user.userData.userId} (id: {deck.deckId})");
+            NotificationManager.ShowNotification($"Колода '{deck.name}' удалена для пользователя {user.userData.userName} (id: {deck.deckId})");
+        }
+    }
+
+    private string GenerateDeckId()
+    {
+        string guid = Guid.NewGuid().ToString("N");
+        return new string(guid);
+    }
     public async Task<User> LoadUser(string userId)
     {
         DocumentReference userDocument = firestore.Collection("users").Document(userId);

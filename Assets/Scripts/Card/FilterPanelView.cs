@@ -8,9 +8,9 @@ public class FilterPanelView
     private readonly List<PokemonElement> activeFilters = new();
     private readonly VisualElement elementIconsContainer;
 
-    public event Action<List<PokemonElement>> OnFilterChanged;
+    public event Action<List<PokemonElement>, List<PokemonElement>> OnFilterChanged;
 
-    readonly List<PokemonElement> pokemonElements = new() {
+    public readonly List<PokemonElement> pokemonElements = new() {
             PokemonElement.Grass, PokemonElement.Fire, PokemonElement.Water,
             PokemonElement.Bug, PokemonElement.Psychic, PokemonElement.Fighting,
             PokemonElement.Flying, PokemonElement.electric, PokemonElement.Ground,
@@ -51,7 +51,7 @@ public class FilterPanelView
             SetIconActive(icon);
         }
 
-        OnFilterChanged?.Invoke(new List<PokemonElement>(activeFilters));
+        OnFilterChanged?.Invoke(new List<PokemonElement>(activeFilters), new List<PokemonElement>(pokemonElements));
     }
 
     private void SetIconActive(VisualElement icon) =>

@@ -10,7 +10,6 @@ public class CardViewUIToolkit : ICollectionCardView
     private readonly VisualTreeAsset cardTemplate;
 
     private VisualElement cardElement;
-    private Button addToCardDeckButton;
     private Label titleLabel;
 
     public CardViewUIToolkit(CardModel model, VisualTreeAsset template)
@@ -26,7 +25,6 @@ public class CardViewUIToolkit : ICollectionCardView
     private void InitializeElements()
     {
         cardElement = cardRoot.Q<VisualElement>("fullCard");
-        addToCardDeckButton = cardRoot.Q<Button>("addToCardDeck");
         titleLabel = cardRoot.Q<Label>("title");
     }
 
@@ -37,20 +35,16 @@ public class CardViewUIToolkit : ICollectionCardView
 
         SetBodyAndBorders();
         SetImages();
-
-        addToCardDeckButton.style.unityBackgroundImageTintColor = new Color(0.5f, 0.5f, 0.5f);
     }
 
-    public void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick, EventCallback<ClickEvent> onAddToCardDeckButtonClick)
+    public void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
     {
         cardElement?.RegisterCallback(onCardElementClick);
-        addToCardDeckButton?.RegisterCallback(onAddToCardDeckButtonClick);
     }
 
-    public void UnregisterClickHandlers(EventCallback<ClickEvent> onCardElementClick, EventCallback<ClickEvent> onAddToCardDeckButtonClick)
+    public void UnregisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
     {
         cardElement?.UnregisterCallback(onCardElementClick);
-        addToCardDeckButton?.UnregisterCallback(onAddToCardDeckButtonClick);
     }
 
     private void SetBodyAndBorders()
@@ -66,6 +60,16 @@ public class CardViewUIToolkit : ICollectionCardView
             borderBodyFileName = "borderWithLinearGradientForTwoElement";
             borderElementsFileName = "borderForTwoElements";
             bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
+
+            elementsArea.style.width = new StyleLength(61.7f);
+            elementsArea.style.height = new StyleLength(26);
+            elementsArea.style.left = new StyleLength(155);
+            elementsArea.style.top = new StyleLength(195);
+
+            cardRoot.Q<VisualElement>("mainElement").style.left = new StyleLength(14);
+            cardRoot.Q<VisualElement>("mainElement").style.top = new StyleLength(4);
+            cardRoot.Q<VisualElement>("secondaryElement").style.left = new StyleLength(38);
+            cardRoot.Q<VisualElement>("secondaryElement").style.top = new StyleLength(4);
         }
         else
         {
@@ -73,9 +77,12 @@ public class CardViewUIToolkit : ICollectionCardView
             borderElementsFileName = "borderForOneElement";
             bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
 
-            elementsArea.style.width = new StyleLength(59);
-            elementsArea.style.left = new StyleLength(201);
-            cardRoot.Q<VisualElement>("mainElement").style.left = new StyleLength(22);
+            elementsArea.style.width = new StyleLength(50);
+            elementsArea.style.height = new StyleLength(26);
+            elementsArea.style.left = new StyleLength(167);
+            elementsArea.style.top = new StyleLength(195);
+            cardRoot.Q<VisualElement>("mainElement").style.left = new StyleLength(19);
+            cardRoot.Q<VisualElement>("mainElement").style.top = new StyleLength(4);
         }
 
         elementsAreaBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderElementsFileName);
@@ -124,19 +131,14 @@ public class CardViewUIToolkit : ICollectionCardView
             stop2.Attributes["stop-color"].Value = $"#{ColorUtility.ToHtmlStringRGB(color2)}";
     }
 
-    public void SetAddedToDeck(bool isAdded)
+    public void SetActive(bool isActive)
     {
-        addToCardDeckButton.style.unityBackgroundImageTintColor = isAdded ? Color.green : Color.gray;
+        cardElement.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    public void DisableAddToDeckButton()
+    public void SetOpacity(bool isUserCard)
     {
-        addToCardDeckButton.style.display = DisplayStyle.None;
-    }
-
-    public void SetOpacity(bool IsFilterElement)
-    {
-        cardElement.style.opacity = IsFilterElement ? 1f : 0.3f;
+        cardElement.style.opacity = isUserCard ? 1f : 0.3f;
     }
 
     public VisualElement CardRoot => cardRoot;

@@ -1,27 +1,27 @@
-using System.Collections.Generic;
-using System.Linq;
+// using System.Collections.Generic;
+// using System.Linq;
 
-public class CardDeck
-{
-    public static CardDeck Instance { get; } = new CardDeck();
-    private readonly HashSet<int> deckCardIds = new();
-    private const int MAX_COUNT = 5;
+// public class CardDeck
+// {
+//     public static CardDeck Instance { get; } = new CardDeck();
+//     // private readonly HashSet<int> deckCardIds = new();
+//     private const int MAX_COUNT = 5;
 
-    public bool AddCardToDeck(int id)
-    {
-        if (deckCardIds.Count >= MAX_COUNT)
-            return false;
+//     // public bool AddCardToDeck(int id)
+//     // {
+//     //     if (deckCardIds.Count >= MAX_COUNT)
+//     //         return false;
 
-        deckCardIds.Add(id);
-        return true;
-    }
+//     //     deckCardIds.Add(id);
+//     //     return true;
+//     // }
 
-    public void RemoveCardFromDeck(int cardId)
-    {
-        deckCardIds.Remove(cardId);
-    }
+//     // public void RemoveCardFromDeck(int cardId)
+//     // {
+//     //     deckCardIds.Remove(cardId);
+//     // }
 
-    public bool IsCardInDeck(int cardId) => deckCardIds.Contains(cardId);
-    public List<int> GetDeckCards() => deckCardIds.ToList();
-}
+//     // public bool IsCardInDeck(int cardId) => deckCardIds.Contains(cardId);
+//     // public List<int> GetDeckCards() => deckCardIds.ToList();
+// }
 

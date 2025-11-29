@@ -19,7 +19,6 @@
 .player-name {
     font-size: 20px;
     color: var(--text-color);
-    -unity-font-style: bold;
 }
 
 .nav-buttons {
@@ -35,7 +34,7 @@
 .nav-button {
     background-color: transparent;
     color: var(--text-color);
-    font-size: 18px;
+    font-size: 20px;
     min-width: 100px;
     min-height: 40px;
     width: 10%;
@@ -70,17 +69,31 @@
 }
 
 .element-icon {
-    width: 80px;
-    height: 80px;
-    background-color: rgba(188, 188, 188, 0); 
+    width: 87px;
+    height: 87px;
+    background-color: rgba(188, 188, 188, 0);
     border-width: 0;
 }
 
 #unity-content-container {
     flex-wrap: wrap;
     flex-direction: row;
-    align-content: stretch;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+#deckScrollView #unity-content-container {
+    flex-wrap: wrap;
+    flex-direction: row;
     justify-content: space-evenly;
+    align-content: stretch;
+}
+
+#deckCardsScrollView #unity-content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-content: stretch;
 }
 
 .overlay-none {

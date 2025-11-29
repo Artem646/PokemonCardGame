@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using DG.Tweening;
+
 public static class CollectionCardScaleAnimator
 {
     private static VisualElement clone;
     private static Rect lastLocalRect;
     private static bool isAnimating = false;
-    private const float TARGET_SCALE = 1.6f;
-    private const float DURATION = 0.4f;
+    private const float TARGET_SCALE = 2.3f;
+    private const float DURATION = 0.35f;
 
     public static void ShowCard(VisualElement sourceCard, VisualElement cloneCard, VisualElement overlay, Vector2 clickPosition)
     {
@@ -107,4 +108,3 @@ public static class CollectionCardScaleAnimator
         return centerRect.Contains(clickPosition);
     }
 }
-

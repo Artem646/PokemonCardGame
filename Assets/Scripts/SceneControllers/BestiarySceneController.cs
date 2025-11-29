@@ -26,9 +26,12 @@ public class BestiarySceneController : MonoBehaviour
         CardOverlayManager.Instance.Init(overlay);
 
         bestiaryCardsListController = new CollectionCardListController(cardsContainer);
-
         filterPanelView = new FilterPanelView(root);
-        filterPanelView.OnFilterChanged += bestiaryCardsListController.ApplyElementFilter;
+
+        filterPanelView.OnFilterChanged += (activefilters, pokemonElements) =>
+        {
+            bestiaryCardsListController.ApplyElementFilter(activefilters, cardsContainer, pokemonElements);
+        };
 
         await bestiaryCardsListController.LoadGameCardsToScrollView();
 

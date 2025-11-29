@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(90, 90, 124);" />
+    <ui:VisualElement name="deckSelectionForm" style="flex-direction: column; padding: 16px; background-color: rgb(34, 34, 34); border-radius: 8px; border-width: 2px; border-color: rgb(85, 85, 85); width: 940px; position: absolute; top: 318px; left: 768px; height: 451px; align-items: center; justify-content: space-between; border-top-left-radius: 100px; border-top-right-radius: 100px; border-bottom-right-radius: 100px; border-bottom-left-radius: 100px;">
+        <ui:Label text="Выберите колоду" style="unity-font-style: bold; font-size: 40px; color: white; margin-bottom: 12px; align-self: auto; justify-content: center; align-items: center; margin-top: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+        <ui:DropdownField name="deckSelect" label="Колода" style="width: 512px; margin-bottom: 0; color: white; unity-font-style: normal; background-color: rgb(51, 51, 51); border-radius: 4px; height: 82px; margin-top: 0; margin-right: 0; margin-left: 0; font-size: 30px; -unity-text-align: middle-center;" />
+        <ui:Button name="confirmDeckButton" text="Выбрать" style="width: 262px; align-self: center; background-color: rgb(113, 20, 107); color: white; unity-font-style: bold; border-radius: 4px; font-size: 30px; margin-bottom: 15px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -22,7 +22,7 @@ public static class SvgRenderer
         canvas.DrawPicture(svg.Picture);
         canvas.Flush();
 
-        Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        Texture2D texture = new(width, height, TextureFormat.RGBA32, false);
         texture.LoadRawTextureData(bitmap.Bytes);
         texture.Apply();
 

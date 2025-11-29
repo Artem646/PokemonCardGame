@@ -11,14 +11,13 @@ public class UploadingSceneController : MonoBehaviour
 
     private async void Start()
     {
-        FirebaseAuth auth = FirebaseAuthService.Instance.GetAuth();
-        string userId = auth.CurrentUser.UserId;
+        User user = await FirebaseFirestoreService.Instance.CreateOrUpdateUserDocument(FirebaseAuthService.Instance.GetAuth().CurrentUser);
+        UserSession.Instance.ActiveUser = user;
 
         UserProfileData profile = await UserProfileService.Instance.GetUserProfile();
         UserProfileView.Instance.PreloadData(profile);
 
-        await CardRepository.Instance.GetUserCardsCollection(userId);
-
+        await CardRepository.Instance.GetUserCardsCollection();
     }
 
     private void OnEnable()

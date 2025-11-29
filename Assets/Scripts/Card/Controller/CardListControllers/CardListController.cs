@@ -9,62 +9,94 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
     public List<T> CardControllers { get; set; } = new();
     public List<CardModel> CardModels { get; set; } = new();
 
-    private readonly object cardContainer;
+    protected readonly object cardContainer;
 
     public CardListController(object container)
     {
         if (container is VisualElement || container is Transform)
-        {
             cardContainer = container;
-        }
     }
 
     public async Task LoadCardsToContainer(List<CardModel> cards)
     {
         Clear();
-
         CardModels = cards;
 
         foreach (CardModel model in cards)
         {
-            AddCardToContainer(model);
+            var controller = CreateController(model);
+            CardControllers.Add(controller);
+            OnCardAdded(controller);
             await Task.Yield();
         }
     }
 
-    public void AddCardToContainer(CardModel model)
-    {
-        T controller;
+    // public async Task LoadCardsToContainer(List<CardModel> cards)
+    // {
+    //     Clear();
+    //     CardModels = cards;
 
+    //     foreach (CardModel model in cards)
+    //     {
+    //         AddCardToContainer(model);
+    //         await Task.Yield();
+    //     }
+    // }
+
+    protected virtual T CreateController(CardModel model)
+    {
+        return CardControllerFactory.Create<T>(model);
+    }
+
+    protected virtual void OnCardAdded(T controller)
+    {
         switch (cardContainer)
         {
             case VisualElement cardContainer:
-                controller = CardControllerFactory.Create<T>(model);
-                CardControllers.Add(controller);
-
-                if (controller.CardView is ICollectionCardView collectionView)
-                {
-                    if (collectionView is CardViewUIToolkit uiToolkitView)
-                    {
-                        if (SceneManager.GetActiveScene().name == "BestiaryScene")
-                            uiToolkitView.DisableAddToDeckButton();
-                    }
-
-                    cardContainer.Add(collectionView.CardRootUIToolkit);
-                }
-
+                if (controller.CardView is CardViewUIToolkit uiToolkitView)
+                    cardContainer.Add(uiToolkitView.CardRootUIToolkit);
                 break;
+
             case Transform handContainer:
-                bool faceDown = handContainer.name == "EnemyHand";
-
-                controller = CardControllerFactory.Create<T>(model, handContainer, faceDown);
-
                 if (controller.CardView is IBattleCardView battleView)
                     battleView.CardRootGameObject.transform.SetParent(handContainer, false);
-
                 break;
         }
     }
+
+    // public void AddCardToContainer(CardModel model)
+    // {
+    //     T controller;
+
+    //     switch (cardContainer)
+    //     {
+    //         case VisualElement cardContainer:
+    //             controller = CardControllerFactory.Create<T>(model);
+    //             CardControllers.Add(controller);
+
+    //             if (controller.CardView is ICollectionCardView collectionView)
+    //             {
+    //                 if (collectionView is CardViewUIToolkit uiToolkitView)
+    //                 {
+    //                     if (SceneManager.GetActiveScene().name == "BestiaryScene")
+    //                         uiToolkitView.DisableAddToDeckButton();
+    //                 }
+
+    //                 cardContainer.Add(collectionView.CardRootUIToolkit);
+    //             }
+
+    //             break;
+    //         case Transform handContainer:
+    //             bool faceDown = handContainer.name == "EnemyHand";
+
+    //             controller = CardControllerFactory.Create<T>(model, handContainer, faceDown);
+
+    //             if (controller.CardView is IBattleCardView battleView)
+    //                 battleView.CardRootGameObject.transform.SetParent(handContainer, false);
+
+    //             break;
+    //     }
+    // }
 
     public void Clear()
     {
@@ -79,10 +111,15 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
                     break;
                 case Transform:
                     if (view.CardRootGameObject != null)
-                        UnityEngine.Object.Destroy(view.CardRootGameObject);
+                        Object.Destroy(view.CardRootGameObject);
                     break;
             }
         }
         CardControllers.Clear();
+    }
+
+    public void AddCardToContainer(CardModel model)
+    {
+        throw new System.NotImplementedException();
     }
 }

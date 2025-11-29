@@ -30,16 +30,63 @@ public class CollectionCardListController : CardListController<CollectionCardCon
         await LoadCardsToContainer(gameCards.cards);
     }
 
-    public void ApplyElementFilter(List<PokemonElement> activeFilters)
+    public void ApplyElementFilter(List<PokemonElement> activeFilters, VisualElement container, List<PokemonElement> pokemonElements)
     {
-        foreach (CollectionCardController controller in CardControllers)
+        if (activeFilters.Count == 0)
         {
-            PokemonElement mainElement = controller.CardModel.mainElement;
-            PokemonElement? secondaryElement = controller.CardModel.secondaryElement;
+            container.Clear();
+            foreach (var controller in CardControllers)
+            {
+                controller.CollectionCardView.SetActive(true);
+                container.Add(controller.CollectionCardView.CardRoot);
+            }
+            return;
+        }
 
-            bool IsFilterElement = activeFilters.Count == 0 || activeFilters.Any(filter => filter == mainElement || filter == secondaryElement);
+        var filteredCards = CardControllers.Where(controller => activeFilters.Contains(controller.CardModel.mainElement)
+        || (controller.CardModel.secondaryElement.HasValue && activeFilters.Contains(controller.CardModel.secondaryElement.Value)))
+        .ToList();
 
-            controller.CollectionCardView.SetOpacity(IsFilterElement);
+        var sortedCards = filteredCards.OrderBy(controller =>
+            {
+                var element = controller.CardModel.mainElement;
+                var secondary = controller.CardModel.secondaryElement;
+                int mainIndex = pokemonElements.IndexOf(element);
+                int secIndex = secondary.HasValue ? pokemonElements.IndexOf(secondary.Value) : int.MaxValue;
+                return Mathf.Min(mainIndex, secIndex);
+            })
+            .ToList();
+
+        container.Clear();
+        foreach (var controller in sortedCards)
+        {
+            controller.CollectionCardView.SetActive(true);
+            container.Add(controller.CollectionCardView.CardRoot);
+        }
+    }
+
+    protected override CollectionCardController CreateController(CardModel model)
+    {
+        var controller = CardControllerFactory.Create<CollectionCardController>(model);
+        var userCards = CardRepository.Instance.GetUserCards();
+        if (userCards != null)
+        {
+            var ownedIds = userCards.cards.Select(c => c.id).ToHashSet();
+            bool isOwned = ownedIds.Contains(model.id);
+            controller.CollectionCardView.SetOpacity(isOwned);
+        }
+        else
+        {
+            controller.CollectionCardView.SetOpacity(true);
+        }
+        return controller;
+    }
+
+    protected override void OnCardAdded(CollectionCardController controller)
+    {
+        if (cardContainer is VisualElement scrollView)
+        {
+            scrollView.Add(controller.CollectionCardView.CardRoot);
         }
     }
 }

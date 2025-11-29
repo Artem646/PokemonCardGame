@@ -10,13 +10,13 @@ public class CardControllerFactory
     private static readonly Dictionary<Type, Func<CardModel, Transform, bool, BaseCardController>> registry = new();
 
     public static void Init(VisualTreeAsset template = null, GameObject prefab = null)
-
     {
         uxmlTemplate = template;
         uguiPrefab = prefab;
 
         registry[typeof(CollectionCardController)] = (model, parent, faceDown) => CreateCollection(model);
         registry[typeof(BattleCardController)] = (model, parent, faceDown) => CreateBattle(model, parent, faceDown);
+        // registry[typeof(DeckCardController)] = (model, parent, facedown) => CreateDeck(model);
     }
 
     public static T Create<T>(CardModel model, Transform parent = null, bool faceDown = false) where T : BaseCardController
@@ -38,4 +38,10 @@ public class CardControllerFactory
         CardViewUGUI view = new(model, uguiPrefab, uguiParent, faceDown);
         return new BattleCardController(model, view);
     }
+
+    // private static DeckCardController CreateDeck(CardModel model)
+    // {
+    //     DeckCardViewUIToolkit view = new(model, uxmlTemplate);
+    //     return new DeckCardController(model, view);
+    // }
 }

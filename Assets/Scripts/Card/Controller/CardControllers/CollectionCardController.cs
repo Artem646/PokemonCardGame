@@ -2,28 +2,28 @@ using UnityEngine.UIElements;
 
 public class CollectionCardController : BaseCardController
 {
-    private bool isAddedToDeck;
     private readonly ICollectionCardView collectionCardView;
+    // private bool isAddedToDeck;
 
     public CollectionCardController(CardModel model, ICollectionCardView view)
         : base(model, view)
     {
         collectionCardView = view;
 
-        isAddedToDeck = CardDeck.Instance.IsCardInDeck(model.id);
-        collectionCardView.SetAddedToDeck(isAddedToDeck);
+        // isAddedToDeck = CardDeck.Instance.IsCardInDeck(model.id);
+        // collectionCardView.SetAddedToDeck(isAddedToDeck);
 
         RegisterEvents();
     }
 
     public override void RegisterEvents()
     {
-        collectionCardView.RegisterClickHandlers(OnCardElementClicked, OnAddToCardDeckButtonClicked);
+        collectionCardView.RegisterClickHandlers(OnCardElementClicked);
     }
 
     public override void UnregisterEvents()
     {
-        collectionCardView.UnregisterClickHandlers(OnCardElementClicked, OnAddToCardDeckButtonClicked);
+        collectionCardView.UnregisterClickHandlers(OnCardElementClicked);
     }
 
     private void OnCardElementClicked(ClickEvent evt)
@@ -33,30 +33,30 @@ public class CollectionCardController : BaseCardController
         ICollectionCardView cloneView = cloneController?.collectionCardView;
         if (cloneView != null)
         {
-            if (cloneView is CardViewUIToolkit uiToolkitView)
-                uiToolkitView.DisableAddToDeckButton();
+            // if (cloneView is CardViewUIToolkit uiToolkitView)
+            //     uiToolkitView.DisableAddToDeckButton();
 
             CardOverlayManager.Instance?.ShowCollectionCard(collectionCardView, cloneView, evt);
         }
     }
 
-    private void OnAddToCardDeckButtonClicked(ClickEvent evt)
-    {
-        if (!isAddedToDeck)
-        {
-            if (CardDeck.Instance.AddCardToDeck(CardModel.id))
-            {
-                isAddedToDeck = true;
-                collectionCardView.SetAddedToDeck(true);
-            }
-        }
-        else
-        {
-            CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
-            isAddedToDeck = false;
-            collectionCardView.SetAddedToDeck(false);
-        }
-    }
+    // private void OnAddToCardDeckButtonClicked(ClickEvent evt)
+    // {
+    //     if (!isAddedToDeck)
+    //     {
+    //         if (CardDeck.Instance.AddCardToDeck(CardModel.id))
+    //         {
+    //             isAddedToDeck = true;
+    //             collectionCardView.SetAddedToDeck(true);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
+    //         isAddedToDeck = false;
+    //         collectionCardView.SetAddedToDeck(false);
+    //     }
+    // }
 
     public ICollectionCardView CollectionCardView => collectionCardView;
 }

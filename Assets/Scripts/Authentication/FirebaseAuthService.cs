@@ -4,6 +4,7 @@ using Firebase.Extensions;
 using Firebase.Auth;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class FirebaseAuthService
 {
@@ -33,9 +34,8 @@ public class FirebaseAuthService
             return;
         }
 
-        auth.StateChanged += AuthStateChanged;
+        auth.StateChanged += async (s, e) => await AuthStateChanged(s, e);
         auth.IdTokenChanged += IdTokenChanged;
-        AuthStateChanged(this, null);
 
         isAuthInitialized = true;
 
@@ -44,7 +44,7 @@ public class FirebaseAuthService
         Debug.Log("[P][FirebaseService] Firebase Auth успешно инициализирован.");
     }
 
-    private async void AuthStateChanged(object sender, EventArgs eventArgs)
+    private async Task AuthStateChanged(object sender, EventArgs eventArgs)
     {
         if (isProcessingStateChange) return;
 
@@ -78,12 +78,8 @@ public class FirebaseAuthService
             {
                 Debug.Log("[P][FirebaseService] Signed in " + previousUser.UserId);
                 DisplayDetailedUserInfo(previousUser, 1);
-
-                User user = await FirebaseFirestoreService.Instance.CreateOrUpdateUserDocument(previousUser);
-                UserSession.Instance.ActiveUser = user;
-                Debug.Log($"[AuthService] Пользователь {user.userData.userName} загружен. Колод: {user.decks.Count}");
-                isAnonymous = previousUser.IsAnonymous;
                 SceneManager.LoadScene("UploadingScene");
+                isAnonymous = previousUser.IsAnonymous;
             }
         }
         else
@@ -173,7 +169,7 @@ public class FirebaseAuthService
     {
         if (auth != null)
         {
-            auth.StateChanged -= AuthStateChanged;
+            auth.StateChanged -= async (s, e) => await AuthStateChanged(s, e);
             auth.IdTokenChanged -= IdTokenChanged;
             auth = null;
         }

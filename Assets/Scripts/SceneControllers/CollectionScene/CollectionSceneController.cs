@@ -29,7 +29,7 @@ public class CollectionSceneController : MonoBehaviour
     [SerializeField] private VisualTreeAsset cardTemplate;
 
     private VisualElement root;
-    private CollectionCardListController сollectionCardListController;
+    private CollectionCardListController collectionCardListController;
     private FilterPanelView filterPanelView;
 
     private async void Start()
@@ -39,7 +39,7 @@ public class CollectionSceneController : MonoBehaviour
         CardControllerFactory.Init(template: cardTemplate);
 
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
-        сollectionCardListController = new CollectionCardListController(cardsContainer);
+        collectionCardListController = new CollectionCardListController(cardsContainer);
 
         VisualElement overlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.Init(overlay);
@@ -48,11 +48,12 @@ public class CollectionSceneController : MonoBehaviour
         UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
 
         filterPanelView = new FilterPanelView(root);
-        filterPanelView.OnFilterChanged += сollectionCardListController.ApplyElementFilter;
+        filterPanelView.OnFilterChanged += (activeFilters, pokemonElements) =>
+        {
+            collectionCardListController.ApplyElementFilter(activeFilters, cardsContainer, pokemonElements);
+        };
 
-        await сollectionCardListController.LoadUserCardsToScrollView();
-
-        // UserCardsModelList userCards = CardRepository.Instance.GetUserCards();
+        await collectionCardListController.LoadUserCardsToScrollView();
 
         RegisterCallbacks();
     }
@@ -61,7 +62,7 @@ public class CollectionSceneController : MonoBehaviour
     {
         root.Q<Button>("playButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneManager.LoadScene("PlayingScene");
+            SceneManager.LoadScene("DeckSelectionScene");
         });
 
         root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>

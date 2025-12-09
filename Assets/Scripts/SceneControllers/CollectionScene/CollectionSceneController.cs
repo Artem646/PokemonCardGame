@@ -42,7 +42,7 @@ public class CollectionSceneController : MonoBehaviour
         collectionCardListController = new CollectionCardListController(cardsContainer);
 
         VisualElement overlay = root.Q<VisualElement>("overlay");
-        CardOverlayManager.Instance.Init(overlay);
+        CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, overlay);
 
         UserProfileView.Instance.SetUIDocument(uiDocument);
         UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
@@ -62,13 +62,13 @@ public class CollectionSceneController : MonoBehaviour
     {
         root.Q<Button>("playButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneManager.LoadScene("DeckSelectionScene");
+            SceneSwitcher.SwitchScene("DeckSelectionScene", root);
         });
 
         root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
         {
             SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene("BestiaryScene");
+            SceneSwitcher.SwitchScene("BestiaryScene", root);
         });
     }
 }

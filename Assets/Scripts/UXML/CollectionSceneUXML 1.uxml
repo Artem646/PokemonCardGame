@@ -10,7 +10,7 @@
             <ParallelogramButton text="COLLECTION" class="nav-button selected" />
             <ParallelogramButton text="BESTIARY" name="bestiaryButton" class="nav-button" />
             <ParallelogramButton text="PACKS" class="nav-button" />
-            <ParallelogramButton text="SIGN OUT" name="signOutButton" enabled="false" class="nav-button" />
+            <ParallelogramButton text="SIGN OUT" name="signOutButton" enabled="true" class="nav-button" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">

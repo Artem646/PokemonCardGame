@@ -10,6 +10,8 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Transform DefaultTempCardParent { get; set; }
     private GameObject tempCard;
 
+    public int CardId { get; set; }
+
     private Canvas canvas;
     private CanvasGroup canvasGroup;
 
@@ -102,15 +104,11 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         if (DefaultParent.TryGetComponent<DropPlaceScript>(out var dropPlace))
         {
-            if (TryGetComponent<CardFlipScript>(out var cardFlip))
+            if (prevFieldType != dropPlace.type)
             {
-                if (prevFieldType != dropPlace.type)
-                {
-                    if (dropPlace.type == FieldType.SELF_FIELD)
-                        cardFlip.FlipToFaceDown();
-                    else if (dropPlace.type == FieldType.SELF_HAND)
-                        cardFlip.FlipToFaceUp();
-                }
+                int siblingIndex = transform.GetSiblingIndex();
+                bool toField = dropPlace.type == FieldType.SELF_FIELD;
+                FindAnyObjectByType<GameManagerScript>().RequestPlayCard(CardId, siblingIndex, toField);
             }
         }
 

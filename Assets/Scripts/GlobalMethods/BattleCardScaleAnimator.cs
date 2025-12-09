@@ -8,7 +8,7 @@ public static class BattleCardScaleAnimator
     private static Vector2 lastLocalPos;
     private static bool isAnimating = false;
     private const float TARGET_SCALE = 2.5f;
-    private const float DURATION = 0.7f;
+    private const float DURATION = 0.5f;
 
     public static void ShowCard(RectTransform sourceCard, RectTransform cloneCard, GameObject overlay, Canvas canvas)
     {

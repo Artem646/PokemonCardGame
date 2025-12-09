@@ -22,6 +22,7 @@
   <Project Path="Unity.2D.Tilemap.Editor.csproj" />
   <Project Path="Unity.Burst.csproj" />
   <Project Path="Unity.Services.Core.Environments.Editor.csproj" />
+  <Project Path="Fusion.Unity.Editor.csproj" />
   <Project Path="Unity.2D.SpriteShape.Editor.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.Services.Authentication.csproj" />
@@ -61,6 +62,7 @@
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="Unity.Services.Core.Environments.Internal.csproj" />
   <Project Path="Unity.InputSystem.ForUI.csproj" />
+  <Project Path="Fusion.Unity.csproj" />
   <Project Path="Unity.Services.Core.Scheduler.csproj" />
   <Project Path="Unity.Collections.CodeGen.csproj" />
   <Project Path="Unity.Services.Core.Telemetry.csproj" />
@@ -87,6 +89,7 @@
   <Project Path="Unity.2D.Sprite.AIIntegration.Editor.csproj" />
   <Project Path="Unity.Services.Core.Networking.csproj" />
   <Project Path="Nobi.UiRoundedCorners.csproj" />
+  <Project Path="Unity.Fusion.CodeGen.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass-testable.csproj" />
   <Project Path="Unity.Services.Core.Environments.csproj" />
   <Project Path="Unity.Collections.Editor.csproj" />

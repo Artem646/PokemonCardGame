@@ -51,7 +51,7 @@ public class DeckSelectionSceneController : MonoBehaviour
             {
                 NotificationManager.ShowNotification($"Выбрана колода: {selectedDeck.name}, id: {selectedDeck.deckId}");
                 SelectedDeckManager.SetSelectedDeck(selectedDeck);
-                SceneManager.LoadScene("PlayingScene");
+                SceneManager.LoadScene("TestConnScene");
             }
         });
 
@@ -69,19 +69,19 @@ public class DeckSelectionSceneController : MonoBehaviour
             editorController.OnDeckMaked += makedDeck =>
             {
                 SelectedDeckManager.SetSelectedDeck(makedDeck);
-                SceneManager.LoadScene("PlayingScene");
+                SceneManager.LoadScene("TestConnScene");
             };
         });
 
         root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
         {
             SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene("BestiaryScene");
+            SceneSwitcher.SwitchScene("BestiaryScene", root);
         });
 
         root.Q<Button>("collectionButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneManager.LoadScene("CollectionScene");
+            SceneSwitcher.SwitchScene("CollectionScene", root);
         });
     }
 }

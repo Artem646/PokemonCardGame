@@ -22,8 +22,9 @@ public class BestiarySceneController : MonoBehaviour
 
         root = uiDocument.rootVisualElement;
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
+
         VisualElement overlay = root.Q<VisualElement>("overlay");
-        CardOverlayManager.Instance.Init(overlay);
+        CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, overlay);
 
         bestiaryCardsListController = new CollectionCardListController(cardsContainer);
         filterPanelView = new FilterPanelView(root);
@@ -42,7 +43,10 @@ public class BestiarySceneController : MonoBehaviour
     {
         root.Q<Button>("exitButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneManager.LoadScene(SceneContext.PreviousSceneName);
+            if (SceneContext.PreviousSceneName == "LoadingScene")
+                SceneManager.LoadScene(SceneContext.PreviousSceneName);
+            else
+                SceneSwitcher.SwitchScene(SceneContext.PreviousSceneName, root);
         });
     }
 }

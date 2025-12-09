@@ -18,19 +18,39 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler, IPointerEnterHandler
     {
         if (type == FieldType.SELF_FIELD || type == FieldType.SELF_HAND)
         {
-            CardMovemantScript card = eventData.pointerDrag.GetComponent<CardMovemantScript>();
-            if (card)
+            if (eventData.pointerDrag.TryGetComponent<CardMovemantScript>(out var card))
+            {
+                int effectiveCountCard = transform.childCount;
+                if (card.DefaultTempCardParent == transform)
+                    effectiveCountCard--;
+
+                if (type == FieldType.SELF_FIELD && effectiveCountCard >= 3)
+                {
+                    if (card.DefaultTempCardParent == transform)
+                        card.DefaultTempCardParent = card.DefaultParent;
+                    return;
+                }
+
                 card.DefaultParent = transform;
+            }
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (eventData.pointerDrag != null && type != FieldType.ENEMY_FIELD && type != FieldType.ENEMY_HAND)
+        if (eventData.pointerDrag != null && (type == FieldType.SELF_FIELD || type == FieldType.SELF_HAND))
         {
-            CardMovemantScript card = eventData.pointerDrag.GetComponent<CardMovemantScript>();
-            if (card)
+            if (eventData.pointerDrag.TryGetComponent<CardMovemantScript>(out var card))
             {
+                int effectiveCountCard = transform.childCount;
+                if (card.DefaultTempCardParent == transform)
+                    effectiveCountCard--;
+
+                if (type == FieldType.SELF_FIELD && effectiveCountCard >= 3)
+                {
+                    return;
+                }
+
                 card.DefaultTempCardParent = transform;
             }
         }
@@ -40,10 +60,10 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler, IPointerEnterHandler
     {
         if (eventData.pointerDrag != null)
         {
-            CardMovemantScript card = eventData.pointerDrag.GetComponent<CardMovemantScript>();
-            if (card && card.DefaultTempCardParent == transform)
+            if (eventData.pointerDrag.TryGetComponent<CardMovemantScript>(out var card))
             {
-                card.DefaultTempCardParent = card.DefaultParent;
+                if (card.DefaultTempCardParent == transform)
+                    card.DefaultTempCardParent = card.DefaultParent;
             }
         }
     }

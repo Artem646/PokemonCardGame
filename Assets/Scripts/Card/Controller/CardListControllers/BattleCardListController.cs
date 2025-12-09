@@ -8,29 +8,28 @@ public class BattleCardListController : CardListController<BattleCardController>
     public BattleCardListController(Transform container)
         : base(container) { }
 
-    public async Task LoadEnemyCards()
+    public async Task LoadCardsByIds(List<int> ids)
     {
         Clear();
-        UserCardModelList userCards = CardRepository.Instance.GetUserCards();
-        List<int> deckCardIds = SelectedDeckManager.SelectedDeck.cards;
-        var deckCards = userCards.cards.Where(card => deckCardIds.Contains(card.id)).ToList();
-        await LoadCardsToContainer(deckCards);
-    }
-
-    public async Task LoadPlayerCards()
-    {
-        Clear();
-        UserCardModelList userCards = CardRepository.Instance.GetUserCards();
-        List<int> deckCardIds = SelectedDeckManager.SelectedDeck.cards;
-        var deckCards = userCards.cards.Where(card => deckCardIds.Contains(card.id)).ToList();
-        await LoadCardsToContainer(deckCards);
+        if (ids == null || ids.Count == 0)
+        {
+            await Task.Yield();
+            return;
+        }
+        GameCardModelList gameCards = CardRepository.Instance.GetGameCards();
+        List<int> idList = new(ids);
+        List<CardModel> cards = gameCards.cards.Where(card => idList.Contains(card.id)).ToList();
+        await LoadCardsToContainer(cards);
     }
 
     protected override BattleCardController CreateController(CardModel model)
     {
         Transform handContainer = cardContainer as Transform;
-        bool faceDown = handContainer.name == "EnemyHand";
-        return CardControllerFactory.Create<BattleCardController>(model, handContainer, faceDown);
+        bool faceDown = handContainer.name == "EnemyHand" || handContainer.name == "EnemyBattleField";
+        BattleCardController controller = CardControllerFactory.Create<BattleCardController>(model, handContainer, faceDown);
+        if (controller.CardView.CardRootGameObject.TryGetComponent<CardMovemantScript>(out var movement))
+            movement.CardId = controller.CardModel.id;
+        return controller;
     }
 
     protected override void OnCardAdded(BattleCardController controller)

@@ -1,35 +1,50 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game
 {
     public List<CardModel> PlayerDeck { get; set; }
     public List<CardModel> EnemyDeck { get; set; }
 
-    public List<BattleCardController> enemyHand, playerHand, enemyField, playerField;
-
-    public Game() { }
+    public BattleCardListController PlayerHandListController { get; set; }
+    public BattleCardListController EnemyHandListController { get; set; }
+    public BattleCardListController PlayerFieldListController { get; set; }
+    public BattleCardListController EnemyFieldListController { get; set; }
 }
 
 public class GameManagerScript : MonoBehaviour
 {
-    [SerializeField] private Transform enemyHand, playerHand;
-    [SerializeField] private Transform enemyField, playerField;
+    [SerializeField] private Transform enemyHandContainer, playerHandContainer;
+    [SerializeField] private Transform enemyFieldContainer, playerFieldContainer;
     [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private TextMeshProUGUI turnTimeTxt;
+    [SerializeField] private Button endTurnButton;
+    public TypeChart typeChart;
 
-    private BattleCardListController playerCardListController, enemyCardListController;
-    public Game currentGame;
-
+    public Game CurrentGame { get; private set; }
     private NetworkGameState networkGameState;
+    public bool IsMyTurn =>
+       (networkGameState.IsFirstPlayer && networkGameState.IsFirstPlayerTurn) ||
+       (networkGameState.IsSecondPlayer && networkGameState.IsSecondPlayerTurn);
 
     public void Init(NetworkGameState state)
     {
         networkGameState = state;
-        currentGame = new Game();
+        CurrentGame = new Game();
         CardControllerFactory.Init(prefab: cardPrefab);
 
-        Debug.Log($"[GameManager] PlayerDeckCsv={networkGameState.FirstPlayerDeckCsv}, EnemyDeckCsv={networkGameState.SecondPlayerDeckCsv}");
+        CurrentGame.PlayerHandListController = new(playerHandContainer);
+        CurrentGame.EnemyHandListController = new(enemyHandContainer);
+
+        CurrentGame.PlayerFieldListController = new(playerFieldContainer);
+        CurrentGame.EnemyFieldListController = new(enemyFieldContainer);
+
+        CurrentGame.PlayerDeck = CurrentGame.PlayerHandListController.CardModels;
+        CurrentGame.EnemyDeck = CurrentGame.EnemyHandListController.CardModels;
 
         if (networkGameState != null)
         {
@@ -44,94 +59,173 @@ public class GameManagerScript : MonoBehaviour
                 LoadCardsToEnemyHand(networkGameState.GetPlayerDeckIds());
             }
         }
+
+        // foreach (var card in CurrentGame.PlayerHandListController.CardControllers)
+        // {
+        //     card.CardView.CardRootGameObject.GetComponent<AttackedCardScript>().enabled = false;
+        // }
+
+        if (networkGameState.IsFirstPlayer)
+        {
+            networkGameState.IsFirstPlayerTurn = true;
+            networkGameState.IsSecondPlayerTurn = false;
+        }
+
+        UpdateTurnUI();
+        StartCoroutine(TurnFunc());
+
+        endTurnButton.onClick.AddListener(OnEndTurnButtonClicked);
+    }
+
+    private void OnEndTurnButtonClicked()
+    {
+        foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
+        {
+            card.ChangeAttackState(false);
+            card.DeHighlightCard();
+        }
+
+        if (IsMyTurn)
+        {
+            if (networkGameState.IsFirstPlayer)
+            {
+                networkGameState.SwitchTurn();
+            }
+            else if (networkGameState.IsSecondPlayer)
+            {
+                networkGameState.RpcRequestEndTurn();
+            }
+        }
+    }
+
+    public void OnTurnChanged(bool firstTurn, bool secondTurn)
+    {
+        StopAllCoroutines();
+        UpdateTurnUI();
+        StartCoroutine(TurnFunc());
+
+        EnableAttackForCurrentPlayer();
+    }
+
+    private void EnableAttackForCurrentPlayer()
+    {
+        List<BattleCardController> fieldCards = IsMyTurn
+            ? CurrentGame.PlayerFieldListController.CardControllers
+            : CurrentGame.EnemyFieldListController.CardControllers;
+
+        if (IsMyTurn)
+        {
+            foreach (var card in fieldCards)
+            {
+                card.ChangeAttackState(true);
+                card.HighlightCard();
+            }
+        }
+    }
+
+    private void UpdateTurnUI()
+    {
+        endTurnButton.interactable = IsMyTurn;
+    }
+
+    IEnumerator TurnFunc()
+    {
+        float duration = 30f;
+        float endTime = Time.time + duration;
+
+        while (Time.time < endTime)
+        {
+            int remaining = Mathf.CeilToInt(endTime - Time.time);
+            turnTimeTxt.text = remaining.ToString();
+            yield return null;
+        }
+
+        foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
+        {
+            card.ChangeAttackState(false);
+            card.DeHighlightCard();
+        }
+
+        if (networkGameState.IsFirstPlayer)
+            networkGameState.SwitchTurn();
     }
 
     public async void LoadCardsToPlayerHand(List<int> playerIds)
     {
-        Debug.Log($"[GameManager] LoadCardsToPlayerHands → ids={string.Join(",", playerIds)}");
-        await LoadPlayerCardsByIds(playerIds);
-        currentGame.PlayerDeck = playerCardListController.CardModels;
-        Debug.Log($"[GameManager] PlayerDeck count={currentGame.PlayerDeck.Count}");
+        await CurrentGame.PlayerHandListController.LoadCardsByIds(playerIds);
     }
 
     public async void LoadCardsToEnemyHand(List<int> enemyIds)
     {
-        Debug.Log($"[GameManager] LoadCardsToEnemyHands → ids={string.Join(",", enemyIds)}");
-        await LoadEnemyCardsByIds(enemyIds);
-        currentGame.EnemyDeck = enemyCardListController.CardModels;
-        Debug.Log($"[GameManager] EnemyDeck count={currentGame.EnemyDeck.Count}");
-    }
-
-    public async Task LoadPlayerCardsByIds(List<int> ids)
-    {
-        playerCardListController ??= new(playerHand);
-        await playerCardListController.LoadCardsByIds(ids);
-        Debug.Log($"[GameManager] PlayerHand загружен: {string.Join(",", ids)}");
-    }
-
-    public async Task LoadEnemyCardsByIds(List<int> ids)
-    {
-        enemyCardListController ??= new(enemyHand);
-        await enemyCardListController.LoadCardsByIds(ids);
-        Debug.Log($"[GameManager] EnemyHand загружен: {string.Join(",", ids)}");
+        await CurrentGame.EnemyHandListController.LoadCardsByIds(enemyIds);
     }
 
     public async void OnCardPlayed(int cardId, int siblingIndex, bool isFirstPlayer, bool toField)
     {
-        Debug.Log(cardId + " " + siblingIndex + " " + isFirstPlayer + " " + toField);
         bool firstPlayer = networkGameState.Runner.IsServer;
-
         if (firstPlayer != isFirstPlayer)
         {
             Transform containerTo, containerFrom;
+            List<BattleCardController> listFrom;
 
             if (toField)
             {
-                containerTo = enemyField;
-                containerFrom = enemyHand;
+                containerTo = enemyFieldContainer;
+                containerFrom = enemyHandContainer;
+                listFrom = CurrentGame.EnemyHandListController.CardControllers;
             }
             else
             {
-                containerTo = enemyHand;
-                containerFrom = enemyField;
+                containerTo = enemyHandContainer;
+                containerFrom = enemyFieldContainer;
+                listFrom = CurrentGame.EnemyFieldListController.CardControllers;
             }
 
-            Debug.Log($"containerTo: {containerTo}, containerFrom: {containerFrom}");
-            RemoveCardFromContainer(cardId, containerFrom);
+            RemoveCardFromContainer(cardId, containerFrom, listFrom);
 
-            var controller = new BattleCardListController(containerTo);
-            await controller.LoadCardsByIds(new List<int> { cardId });
+            BattleCardListController newController = new(containerTo);
+            await newController.LoadCardsByIds(new List<int> { cardId });
 
-            var newCard = containerTo.GetChild(containerTo.childCount - 1);
+            Transform newCard = containerTo.GetChild(containerTo.childCount - 1);
             newCard.SetSiblingIndex(siblingIndex);
 
             if (toField)
             {
                 newCard.GetComponent<CardFlipScript>().FlipToFaceUp();
+                BattleCardController lastController = newController.CardControllers[0];
+                lastController.ChangeAttackState(false);
+                CurrentGame.EnemyFieldListController.CardControllers.Add(lastController);
             }
             else
             {
                 newCard.GetComponent<CardFlipScript>().FlipToFaceDown();
+                CurrentGame.EnemyHandListController.CardControllers.Add(newController.CardControllers[0]);
             }
         }
     }
 
-    private void RemoveCardFromContainer(int cardId, Transform container)
+    private void RemoveCardFromContainer(int cardId, Transform container, List<BattleCardController> list)
     {
-        Debug.Log("Remove");
         foreach (Transform child in container)
         {
             var cardScript = child.GetComponent<CardMovemantScript>();
             if (cardScript != null && cardScript.CardId == cardId)
             {
                 Destroy(child.gameObject);
-                Debug.Log($"[GameManager] Карта {cardId} удалена из контейнера");
                 break;
             }
         }
+
+        RemoveCardFromList(cardId, list);
     }
 
-    // Вызов из UI при клике/перетаскивании
+    public void RemoveCardFromList(int cardId, List<BattleCardController> list)
+    {
+        var cardRemove = list.FirstOrDefault(c => c.CardModel.id == cardId);
+        if (cardRemove != null)
+            list.Remove(cardRemove);
+    }
+
     public void RequestPlayCard(int cardId, int siblingIndex, bool toField)
     {
         networkGameState.RpcRequestPlayCard(cardId, siblingIndex, toField);

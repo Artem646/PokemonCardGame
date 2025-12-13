@@ -5,7 +5,6 @@ public interface ICollectionCardView : ICardView
     VisualTreeAsset CardTemplate { get; }
     VisualElement CardRoot { get; }
 
-    // void SetAddedToDeck(bool isAdded);
     void SetOpacity(bool isUserCard);
     void SetActive(bool isActive);
     void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick);

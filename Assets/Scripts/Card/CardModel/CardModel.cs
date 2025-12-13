@@ -45,7 +45,8 @@ public enum PokemonElement
     Flying,
     Fighting,
     Normal,
-    Psychic
+    Psychic,
+    Fairy
 }
 
 [Serializable]

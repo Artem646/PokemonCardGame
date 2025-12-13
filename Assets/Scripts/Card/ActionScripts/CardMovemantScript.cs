@@ -1,42 +1,39 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using System.Linq;
 
-[RequireComponent(typeof(CanvasGroup))]
-[RequireComponent(typeof(RectTransform))]
 public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Transform DefaultParent { get; set; }
     public Transform DefaultTempCardParent { get; set; }
+
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private RectTransform rectTransform;
+
     private GameObject tempCard;
+    private Canvas canvas;
+    private Vector3 originalScale;
+    private GameManagerScript gameManager;
+    private static CardMovemantScript draggingCard = null;
+    private bool isDraggable;
+    private FieldType prevFieldType;
 
     public int CardId { get; set; }
 
-    private Canvas canvas;
-    private CanvasGroup canvasGroup;
-
-    private RectTransform rectTransform;
-    private Vector3 originalScale;
-
-    private static CardMovemantScript draggingCard = null;
-
-    public bool isDraggable;
-
-    private FieldType prevFieldType;
-
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
 
         originalScale = rectTransform.localScale;
 
         tempCard = GameObject.Find("TempSlot");
+        gameManager = FindAnyObjectByType<GameManagerScript>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // if (!CardStateManager.IsCardRaised && (draggingCard == null || draggingCard == this))
         if (!CardStateManager.IsCardRaised)
         {
             if (draggingCard != null && draggingCard != this) return;
@@ -49,7 +46,7 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
                 prevFieldType = FieldType.NONE;
 
             FieldType fieldType = DefaultParent.GetComponent<DropPlaceScript>().type;
-            isDraggable = fieldType == FieldType.SELF_HAND || fieldType == FieldType.SELF_FIELD;
+            isDraggable = gameManager.IsMyTurn && (fieldType == FieldType.SELF_HAND || fieldType == FieldType.SELF_FIELD);
             if (isDraggable)
             {
                 draggingCard = this;
@@ -61,22 +58,27 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
                 canvasGroup.blocksRaycasts = false;
 
                 rectTransform.DOScale(originalScale * 1.1f, 0.15f);
+
+                BattleCardController cardController = gameManager.CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == CardId);
+                if (cardController != null)
+                {
+                    foreach (BattleCardController enemyCard in gameManager.CurrentGame.EnemyFieldListController.CardControllers)
+                        enemyCard.ShowAttackTargets(gameManager.typeChart, cardController.CardModel.mainElement);
+                }
             }
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        // if (!CardStateManager.IsCardRaised && (draggingCard == null || draggingCard == this))
         if (!CardStateManager.IsCardRaised)
         {
             if (!isDraggable) return;
             if (draggingCard != this) return;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                eventData.position,
-                canvas.worldCamera,
-                out Vector2 localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position,
+                canvas.worldCamera, out Vector2 localPoint);
 
             rectTransform.localPosition = localPoint;
 
@@ -92,6 +94,8 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (!isDraggable) return;
         if (draggingCard != this) return;
 
+        // if (isDraggable && draggingCard == this)
+        // {
         transform.SetParent(DefaultParent, true);
         canvasGroup.blocksRaycasts = true;
 
@@ -108,11 +112,30 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 int siblingIndex = transform.GetSiblingIndex();
                 bool toField = dropPlace.type == FieldType.SELF_FIELD;
-                FindAnyObjectByType<GameManagerScript>().RequestPlayCard(CardId, siblingIndex, toField);
+                gameManager.RequestPlayCard(CardId, siblingIndex, toField);
+
+                if (toField)
+                {
+                    BattleCardController cardController = gameManager.CurrentGame.PlayerHandListController.CardControllers.FirstOrDefault(c => c.CardModel.id == CardId);
+                    gameManager.CurrentGame.PlayerHandListController.CardControllers.Remove(cardController);
+                    gameManager.CurrentGame.PlayerFieldListController.CardControllers.Add(cardController);
+                }
+                else
+                {
+                    BattleCardController cardController = gameManager.CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == CardId);
+                    gameManager.CurrentGame.PlayerFieldListController.CardControllers.Remove(cardController);
+                    gameManager.CurrentGame.PlayerHandListController.CardControllers.Add(cardController);
+                }
             }
         }
 
+        foreach (var enemyCard in gameManager.CurrentGame.EnemyFieldListController.CardControllers)
+        {
+            enemyCard.ClearAttackTargets();
+        }
+
         draggingCard = null;
+        // }
     }
 
     void CheckPosition()

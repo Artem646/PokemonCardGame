@@ -47,36 +47,6 @@ public class CardRepositoryService
         return userCardsList;
     }
 
-    // private async Task<List<int>> GetUserCardIds(string userId)
-    // {
-    //     return await CardsLoader.GetCardIdsFromFirestore(userId) ?? new List<int>();
-    // }
-
-    // private void LoadAllCardsIfNeeded()
-    // {
-    //     if (gameCardsList?.cards?.Count > 0)
-    //         return;
-
-    //     try
-    //     {
-    //         string cardsJsonText = cardsJson.text;
-    //         var loaded = CardsLoader.GetCardsListFromJson(cardsJsonText);
-    //         if (loaded?.cards == null || loaded.cards.Count == 0)
-    //         {
-    //             Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
-    //             gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
-    //             return;
-    //         }
-    //         gameCardsList = loaded;
-    //         Debug.Log($"[P] Загружено {gameCardsList.cards.Count} карт из JSON.");
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Debug.LogError($"[P] Ошибка при загрузке JSON карт: {e}");
-    //         gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
-    //     }
-    // }
-
     public async Task<GameCardModelList> GetGameCards()
     {
         gameCardsList?.cards?.Clear();

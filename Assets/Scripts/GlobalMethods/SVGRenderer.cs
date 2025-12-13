@@ -22,6 +22,10 @@ public static class SvgRenderer
         canvas.DrawPicture(svg.Picture);
         canvas.Flush();
 
+        int byteCount = bitmap.ByteCount;
+        byte[] raw = new byte[byteCount];
+        System.Runtime.InteropServices.Marshal.Copy(bitmap.GetPixels(), raw, 0, byteCount);
+
         Texture2D texture = new(width, height, TextureFormat.RGBA32, false);
         texture.LoadRawTextureData(bitmap.Bytes);
         texture.Apply();

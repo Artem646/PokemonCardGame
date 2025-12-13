@@ -17,8 +17,7 @@ public class BattleCardListController : CardListController<BattleCardController>
             return;
         }
         GameCardModelList gameCards = CardRepository.Instance.GetGameCards();
-        List<int> idList = new(ids);
-        List<CardModel> cards = gameCards.cards.Where(card => idList.Contains(card.id)).ToList();
+        List<CardModel> cards = gameCards.cards.Where(card => ids.Contains(card.id)).ToList();
         await LoadCardsToContainer(cards);
     }
 

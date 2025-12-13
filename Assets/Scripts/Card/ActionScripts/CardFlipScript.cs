@@ -4,13 +4,8 @@ using DG.Tweening;
 
 public class CardFlipScript : MonoBehaviour
 {
-    private RectTransform rectTransform;
+    [SerializeField] private RectTransform rectTransform;
     public event Action<bool> OnFlipStateChanged;
-
-    void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
-    }
 
     public void FlipToFaceDown()
     {

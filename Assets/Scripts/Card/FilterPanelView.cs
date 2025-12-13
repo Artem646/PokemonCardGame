@@ -14,7 +14,7 @@ public class FilterPanelView
             PokemonElement.Grass, PokemonElement.Fire, PokemonElement.Water,
             PokemonElement.Bug, PokemonElement.Psychic, PokemonElement.Fighting,
             PokemonElement.Flying, PokemonElement.electric, PokemonElement.Ground,
-            PokemonElement.Normal, PokemonElement.Poison};
+            PokemonElement.Fairy, PokemonElement.Normal, PokemonElement.Poison};
 
     public FilterPanelView(VisualElement root)
     {

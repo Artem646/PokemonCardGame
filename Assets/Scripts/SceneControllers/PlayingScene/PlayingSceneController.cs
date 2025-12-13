@@ -17,6 +17,14 @@ public class PlayingSceneController : MonoBehaviour
     {
         backButton.onClick.AddListener(() =>
         {
+            // var handler = FindAnyObjectByType<NetworkRunnerHandler>();
+            // if (handler.Runner != null)
+            // {
+            //     await handler.Runner.Shutdown();
+            //     Destroy(handler.gameObject);
+            //     Debug.Log("[UI] Runner shutdown complete");
+            // }
+
             SceneManager.LoadScene("CollectionScene");
         });
     }

@@ -20,7 +20,6 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
     {
         Clear();
         CardModels = cards;
-
         foreach (CardModel model in cards)
         {
             var controller = CreateController(model);
@@ -29,18 +28,6 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
             await Task.Yield();
         }
     }
-
-    // public async Task LoadCardsToContainer(List<CardModel> cards)
-    // {
-    //     Clear();
-    //     CardModels = cards;
-
-    //     foreach (CardModel model in cards)
-    //     {
-    //         AddCardToContainer(model);
-    //         await Task.Yield();
-    //     }
-    // }
 
     protected virtual T CreateController(CardModel model)
     {
@@ -63,40 +50,6 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
         }
     }
 
-    // public void AddCardToContainer(CardModel model)
-    // {
-    //     T controller;
-
-    //     switch (cardContainer)
-    //     {
-    //         case VisualElement cardContainer:
-    //             controller = CardControllerFactory.Create<T>(model);
-    //             CardControllers.Add(controller);
-
-    //             if (controller.CardView is ICollectionCardView collectionView)
-    //             {
-    //                 if (collectionView is CardViewUIToolkit uiToolkitView)
-    //                 {
-    //                     if (SceneManager.GetActiveScene().name == "BestiaryScene")
-    //                         uiToolkitView.DisableAddToDeckButton();
-    //                 }
-
-    //                 cardContainer.Add(collectionView.CardRootUIToolkit);
-    //             }
-
-    //             break;
-    //         case Transform handContainer:
-    //             bool faceDown = handContainer.name == "EnemyHand";
-
-    //             controller = CardControllerFactory.Create<T>(model, handContainer, faceDown);
-
-    //             if (controller.CardView is IBattleCardView battleView)
-    //                 battleView.CardRootGameObject.transform.SetParent(handContainer, false);
-
-    //             break;
-    //     }
-    // }
-
     public void Clear()
     {
         foreach (var controller in CardControllers)
@@ -115,10 +68,5 @@ public class CardListController<T> : ICardListController where T : BaseCardContr
             }
         }
         CardControllers.Clear();
-    }
-
-    public void AddCardToContainer(CardModel model)
-    {
-        throw new System.NotImplementedException();
     }
 }

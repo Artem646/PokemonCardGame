@@ -3,15 +3,11 @@ using UnityEngine.UIElements;
 public class CollectionCardController : BaseCardController
 {
     private readonly ICollectionCardView collectionCardView;
-    // private bool isAddedToDeck;
 
     public CollectionCardController(CardModel model, ICollectionCardView view)
         : base(model, view)
     {
         collectionCardView = view;
-
-        // isAddedToDeck = CardDeck.Instance.IsCardInDeck(model.id);
-        // collectionCardView.SetAddedToDeck(isAddedToDeck);
 
         RegisterEvents();
     }
@@ -33,30 +29,9 @@ public class CollectionCardController : BaseCardController
         ICollectionCardView cloneView = cloneController?.collectionCardView;
         if (cloneView != null)
         {
-            // if (cloneView is CardViewUIToolkit uiToolkitView)
-            //     uiToolkitView.DisableAddToDeckButton();
-
             CardOverlayManager.Instance?.ShowCollectionCard(collectionCardView, cloneView, evt);
         }
     }
-
-    // private void OnAddToCardDeckButtonClicked(ClickEvent evt)
-    // {
-    //     if (!isAddedToDeck)
-    //     {
-    //         if (CardDeck.Instance.AddCardToDeck(CardModel.id))
-    //         {
-    //             isAddedToDeck = true;
-    //             collectionCardView.SetAddedToDeck(true);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         CardDeck.Instance.RemoveCardFromDeck(CardModel.id);
-    //         isAddedToDeck = false;
-    //         collectionCardView.SetAddedToDeck(false);
-    //     }
-    // }
 
     public ICollectionCardView CollectionCardView => collectionCardView;
 }

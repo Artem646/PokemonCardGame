@@ -107,6 +107,10 @@ Assets/Firebase/
 Assets/GoogleSignIn/Editor/m2repository/
 
 Assets/Photon/
+Assets/Editor/
+Assets/Plugins/UniTask
+Assets/Plugins/Demigiant/DOTween
+Assets/NuGet
 
 Assets/Editor Default Resources/
 Assets/ExternalDependencyManager/

@@ -31,25 +31,9 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer && networkGameState == null)
         {
-            Debug.Log("[RunnerHandler] Server spawning NetworkGameState prefab");
+            // Debug.Log("[RunnerHandler] Server spawning NetworkGameState prefab");
             NetworkObject obj = runner.Spawn(networkGameStatePrefab);
             networkGameState = obj.GetComponent<NetworkGameState>();
-        }
-    }
-
-    public void OnObjectSpawned(NetworkRunner runner, NetworkObject obj)
-    {
-        if (obj.TryGetComponent(out NetworkGameState state))
-        {
-            networkGameState = state;
-            Debug.Log($"[RunnerHandler] Captured NetworkGameState (IsServer={runner.IsServer})");
-
-            if (!runner.IsServer)
-            {
-                string csv = SelectedDeckManager.GetSelectedDeckCsv();
-                Debug.Log("[RunnerHandler] Client sending deck via RPC");
-                networkGameState.RpcSubmitDeck(csv);
-            }
         }
     }
 
@@ -76,6 +60,8 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log($"OnPlayerLeft: PlayerId={player.PlayerId}");
     }
+
+    public NetworkRunner Runner => networkRunner;
 
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }

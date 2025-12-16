@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/CardTemplateUSS.uss?fileID=7433441132597879392&amp;guid=766bbc765c6b1c84cb06ae4a24170877&amp;type=3#CardTemplateUSS" />
+    <ui:VisualElement name="fullCard" style="margin-bottom: 0; bottom: auto; scale: 0.9 0.9; margin-right: 0; margin-left: 0; padding-bottom: 0;">
+        <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 430px; flex-grow: 1; flex-shrink: 0;" />
+        <ui:VisualElement name="body">
+            <ui:Label name="title" text="Label" />
+            <ui:Button name="addToCardDeck" />
+            <ui:VisualElement name="pokemonImage" />
+            <ui:VisualElement name="elementsArea" style="top: 233px;">
+                <ui:VisualElement name="mainElement" />
+                <ui:VisualElement name="secondaryElement" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="footer" />
+        <ui:VisualElement name="footerTexture" style="-unity-background-image-tint-color: rgb(26, 24, 24);" />
+    </ui:VisualElement>
+</ui:UXML>

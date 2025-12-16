@@ -1,0 +1,300 @@
+.card-zoom {
+    scale: 1.75;
+    transition: scale 150ms ease;
+    transform-origin: center center;
+    transition: scale 2.3s ease, translate 2.3s ease;
+    translate: 0 0;
+}
+
+#fullCard {
+    flex-grow: 0;
+    width: 300px;
+    position: relative;
+    height: 430px;
+    left: auto;
+    top: auto;
+    background-color: rgb(125, 145, 125);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-image: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: auto;
+    align-content: auto;
+    flex-wrap: nowrap;
+    right: auto;
+    bottom: auto;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    display: flex;
+}
+
+#texture {
+    flex-grow: 1;
+    position: absolute;
+    width: 300px;
+    min-height: 430px;
+    background-image: resource('Sprites/texture');
+    height: 430px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    opacity: 1;
+    visibility: visible;
+    overflow: visible;
+}
+
+#body {
+    flex-grow: 0;
+    margin-top: 0;
+    background-color: rgba(0, 0, 0, 0.09);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    width: 265px;
+    position: relative;
+    top: 15px;
+    left: 0;
+    height: 270px;
+    right: 17px;
+    bottom: 0;
+    justify-content: flex-start;
+    align-items: center;
+    align-self: auto;
+    align-content: auto;
+    flex-direction: column;
+    background-image: resource('Sprites/borderWithLinearGradientForTwoElement');
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+#title {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    text-overflow: clip;
+    top: 13px;
+    font-size: 18px;
+    -unity-font-definition: url("project://database/Assets/UI Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=8f6d9f2bd90592a4f92b01e088dfc619&type=3#NotInter-Regular");
+    width: 265px;
+    justify-content: center;
+    align-items: center;
+    align-self: auto;
+    white-space: nowrap;
+    -unity-text-align: upper-center;
+    background-size: 265px 100%;
+    right: 0;
+    left: 0;
+    bottom: auto;
+}
+
+#addToCardDeck {
+    flex-grow: 0;
+    width: 50px;
+    align-self: stretch;
+    justify-content: flex-start;
+    align-items: auto;
+    align-content: auto;
+    height: 50px;
+    position: absolute;
+    top: -11px;
+    left: 220px;
+    background-color: rgb(0, 0, 0);
+    background-image: resource('Sprites/plus');
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    -unity-slice-type: sliced;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+#pokemonImage {
+    flex-grow: 1;
+    width: 190px;
+    height: 190px;
+    background-color: rgba(0, 0, 0, 0);
+    align-items: center;
+    justify-content: center;
+    bottom: 42px;
+    top: 45px;
+    position: absolute;
+    left: 36px;
+    background-image: resource('Sprites/PokemonImages/Wartortle');
+    right: 36px;
+}
+
+#elementsArea {
+    flex-grow: 1;
+    width: 74px;
+    background-position-x: right 0;
+    background-position-y: center;
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgba(58, 112, 187, 0);
+    align-self: flex-end;
+    align-items: auto;
+    justify-content: flex-start;
+    align-content: auto;
+    height: 32px;
+    position: absolute;
+    top: 233px;
+    left: 186px;
+    background-image: resource('Sprites/Area for element icons');
+    background-size: 100% 100%;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(0, 0, 0, 0.52);
+    border-right-color: rgba(0, 0, 0, 0.52);
+    border-top-color: rgba(0, 0, 0, 0.52);
+    border-bottom-color: rgba(0, 0, 0, 0.52);
+}
+
+#mainElement {
+    flex-grow: 0;
+    width: 23px;
+    align-self: stretch;
+    justify-content: flex-start;
+    align-items: auto;
+    align-content: auto;
+    height: 23px;
+    position: absolute;
+    top: 6px;
+    left: 16px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource('Sprites/Elements/bug');
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+#secondaryElement {
+    flex-grow: 0;
+    width: 23px;
+    align-self: stretch;
+    justify-content: flex-start;
+    align-items: auto;
+    align-content: auto;
+    height: 23px;
+    position: absolute;
+    top: 6px;
+    left: 45px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource('Sprites/Elements/poison');
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+#footer {
+    flex-grow: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    width: 265px;
+    height: 118px;
+    position: relative;
+    top: 25px;
+    left: 0;
+    bottom: 17px;
+    right: 0;
+    align-items: auto;
+    align-self: auto;
+    align-content: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    background-color: rgb(250, 243, 183);
+    background-image: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#footerTexture {
+    flex-grow: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-size: 1257px 536px;
+    width: 265px;
+    height: 118px;
+    position: absolute;
+    top: 295px;
+    left: 18px;
+    bottom: 17px;
+    right: 18px;
+    align-items: auto;
+    align-self: auto;
+    align-content: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    background-color: rgba(250, 243, 183, 0);
+    background-image: resource('Sprites/textureFooter');
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -unity-slice-type: sliced;
+    background-position-y: top 0;
+    -unity-background-scale-mode: scale-and-crop;
+    background-position-x: left 0;
+    opacity: 0.34;
+}

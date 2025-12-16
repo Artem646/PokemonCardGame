@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/ConfirmDialogUSS.uss?fileID=7433441132597879392&amp;guid=83f80203888950f468bdee08bcc862af&amp;type=3#ConfirmDialogUSS" />
+    <ui:VisualElement name="dialogRoot" class="dialog-root" style="height: 438px; display: none; position: absolute; top: 322px; left: 771px; width: 760px;">
+        <ui:Label name="dialogMessage" class="dialog-message" style="-unity-text-align: upper-center; white-space: normal; font-size: 30px; width: 329px;" />
+        <ui:VisualElement class="dialog-button-row">
+            <ui:Button name="retryButton" text="Повторить соединение" class="dialog-button-yes" style="height: 71px; width: 193px; font-size: 25px; white-space: normal;" />
+            <ui:Button name="bestiaryButton" text="Перейти в Бестриарий" class="dialog-button-no" style="height: 71px; width: 197px; font-size: 25px; flex-wrap: nowrap; white-space: normal; background-color: rgb(14, 121, 27);" />
+            <ui:Button name="cancelButton" text="Выйти&#10;" class="dialog-button-no" style="height: 71px; width: 197px; font-size: 25px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/UploadingSceneUSS.uss?fileID=7433441132597879392&amp;guid=4ec9121381bf4974d9c22fdb70bb4be4&amp;type=3#UploadingSceneUSS" />
+    <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: center; background-color: rgb(151, 188, 187);">
+        <ui:Label name="statusLabel" text="Загрузка карт..." class="status-label" />
+        <ui:ProgressBar name="progressBar" low-value="0" high-value="100" value="0" enabled="true" class="progress-bar" style="display: flex; width: 1300px; height: 50px; bottom: 0; right: 0; top: 0; left: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,17 @@
+.deck-element {
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    background-color: rgb(70, 70, 70);
+    width: 100px;
+    padding: 0;
+}
+
+.deck-element:hover {
+    border-width: 5px;
+    border-color: rgb(14, 152, 115);
+    scale: 1 1;
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+}

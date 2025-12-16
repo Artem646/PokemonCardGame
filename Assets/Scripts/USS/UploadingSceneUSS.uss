@@ -1,0 +1,31 @@
+.status-label {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    transition: width 0.3s ease-in-out; 
+}
+
+.unity-progress-bar__background {
+    background-color: #fce38a;
+    border-width: 3px;
+    border-color: #e32636;
+    border-radius: 22px;
+}
+
+.unity-progress-bar__progress {
+    background-color: #fbceb1;
+    height: 44px;
+    margin: 0;
+    border-radius: 18px;   
+}
+
+.unity-progress-bar__container {
+    min-height: 50px;
+    height: 55px;
+    max-height: 60px;
+}
+
+
+

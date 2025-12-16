@@ -1,0 +1,3 @@
+[*.{cs,vb}]
+
+dotnet_diagnostic.IDE0044.severity = silent

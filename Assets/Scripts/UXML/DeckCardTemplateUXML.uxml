@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/CardTemplateUSS.uss?fileID=7433441132597879392&amp;guid=766bbc765c6b1c84cb06ae4a24170877&amp;type=3#CardTemplateUSS" />
+    <ui:VisualElement name="fullCard" style="margin-bottom: 15px; bottom: auto; scale: 1 1; margin-right: 0; margin-left: 0; padding-bottom: 0; height: 300px; width: 300px; flex-grow: 0; justify-content: center; top: 0; margin-top: 10px;">
+        <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 300px; flex-grow: 1; flex-shrink: 0; min-height: auto; width: 300px; top: 0; left: 0;" />
+        <ui:VisualElement name="body" style="height: 270px; width: 270px; right: 10px; top: 0; justify-content: center; flex-grow: 0; bottom: 0; border-top-right-radius: 9px; border-top-left-radius: 9px; border-bottom-right-radius: 9px; border-bottom-left-radius: 9px; opacity: 1; visibility: visible; overflow: visible; display: flex; background-image: resource(&apos;Sprites/borderWithLinearGradientForTwoElement&apos;);">
+            <ui:VisualElement name="elementsArea" enabled="true" style="position: absolute; top: 235px; left: 195px; flex-grow: 0; flex-shrink: 0; width: 70px; height: 30px; -unity-slice-type: sliced; align-self: auto; background-image: resource(&apos;Sprites/Area for element icons&apos;);">
+                <ui:VisualElement name="secondaryElement" style="width: 24px; height: 24px; top: 4px; left: 41px; display: flex;" />
+                <ui:VisualElement name="mainElement" style="width: 24px; height: 24px; top: 4px; left: 13px;" />
+            </ui:VisualElement>
+            <ui:Label name="title" text="Label" style="top: 8px; right: auto; left: 0; width: 100%; background-size: 100% 100%; font-size: 20px; flex-direction: column; align-content: auto; align-items: center; justify-content: flex-end; position: absolute;" />
+            <ui:VisualElement name="pokemonImage" style="top: 41px; right: auto; bottom: auto; left: 40px; position: absolute; width: 190px; height: 190px; flex-grow: 0; flex-basis: initial;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

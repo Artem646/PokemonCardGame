@@ -1,0 +1,146 @@
+/* PlayingSceneUSS.uss */
+
+/* root */
+.playing-root {
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(30, 30, 30);
+    padding: 10px;
+}
+
+/* hand row (верх/низ) */
+.hand-row {
+    position: relative;
+    /* flex-grow: 0; */
+    width: 100%;
+    height: 20%;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* поле битвы */
+.battle-zone {
+    flex-grow: 1;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.field-row {
+    flex-grow: 0;
+    width: 100%;
+    height: 40%;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+/* слот для карт */
+.battle-slot {
+    width: 150px;
+    height: 215px;
+    border-radius: 8px;
+    background-color: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.03);
+    border-width: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* droppable marker (по умолчанию) */
+.droppable {
+    /* просто маркер — стиль выше */
+}
+
+/* droppable при наведении валидного дропа */
+.droppable--can-drop {
+    border-color: rgba(100, 200, 100, 0.9);
+    background-color: rgba(100, 200, 100, 0.06);
+    transition: all 0.12s ease;
+}
+
+.hand-slots-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.hand-cards-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.hand-slot {
+    position: relative;
+    width: 150px;
+    height: 215px;
+    border-radius: 6px;
+    border-color: rgba(255,255,255,0.08);
+    border-width: 2px;
+    background-color: rgba(255,255,255,0.03);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-right: 40px;
+}
+
+.hand-card {
+    width: 150px;
+    height: 215px;
+    border-radius: 6px;
+    background-color: rgba(255,255,255,0.02);
+    border-color:rgba(255,255,255,0.05) ;
+    border-width: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Перетаскиваемая карточка */
+.draggable {
+    /* базовый стиль */
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+/* При перетаскивании */
+.draggable--dragging {
+    opacity: 0.95;
+    transition: none;
+}
+
+/* Когда можно бросить на цель */
+.draggable--can-drop {
+    unity-box-shadow: 0 6px 18px 0 rgba(0,0,0,0.35);
+}
+
+/* transitions класс — демонстрация того, что может быть удалено при drag */
+.transitions {
+    transition: all 0.2s ease;
+}
+
+/* кнопка назад */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 200px;
+    height: 60px;
+    font-size: 24px;
+}

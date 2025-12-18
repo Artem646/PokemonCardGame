@@ -1,17 +1,16 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/USS/CardTemplateUSS.uss?fileID=7433441132597879392&amp;guid=766bbc765c6b1c84cb06ae4a24170877&amp;type=3#CardTemplateUSS" />
-    <ui:VisualElement name="fullCard" style="margin-bottom: 0; bottom: auto; scale: 0.9 0.9; margin-right: 0; margin-left: 0; padding-bottom: 0;">
-        <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 430px; flex-grow: 1; flex-shrink: 0;" />
-        <ui:VisualElement name="body">
-            <ui:Label name="title" text="Label" />
-            <ui:Button name="addToCardDeck" />
-            <ui:VisualElement name="pokemonImage" />
-            <ui:VisualElement name="elementsArea" style="top: 233px;">
-                <ui:VisualElement name="mainElement" />
-                <ui:VisualElement name="secondaryElement" />
+    <ui:VisualElement name="fullCard" style="margin-bottom: 0; bottom: auto; scale: 0.9 0.9; margin-right: 0; margin-left: 10px; padding-bottom: 0; width: 250px; height: 358.3px; margin-top: 10px;">
+        <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 358.3px; flex-grow: 1; flex-shrink: 0; width: 250px; min-height: auto;" />
+        <ui:VisualElement name="body" style="width: 220.8px; height: 225px; border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px;">
+            <ui:VisualElement name="elementsArea" style="top: 195px; width: 62px; height: 26px; left: 155px; background-image: resource(&apos;Sprites/Area for element icons&apos;);">
+                <ui:VisualElement name="mainElement" style="width: 19px; height: 19px; top: 4px; left: 14px;" />
+                <ui:VisualElement name="secondaryElement" style="width: 19px; height: 19px; top: 4px; left: 38px; display: flex;" />
             </ui:VisualElement>
+            <ui:Label name="title" text="Label" style="top: 11px; right: -49px; width: 100%;" />
+            <ui:VisualElement name="pokemonImage" style="width: 155px; height: 155px; top: 42px; bottom: 29px; right: 39px; left: 29px; background-image: resource(&apos;Sprites/PokemonImages/Metapod&apos;);" />
         </ui:VisualElement>
-        <ui:VisualElement name="footer" />
-        <ui:VisualElement name="footerTexture" style="-unity-background-image-tint-color: rgb(26, 24, 24);" />
+        <ui:VisualElement name="footer" style="width: 220.8px; height: 98.3px;" />
+        <ui:VisualElement name="footerTexture" style="-unity-background-image-tint-color: rgb(26, 24, 24); height: 98.3px; width: 220.8px; top: 250px; bottom: 11px; right: 16px; left: 15px;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -49,9 +49,8 @@ public class DeckSelectionSceneController : MonoBehaviour
 
             if (selectedDeck != null)
             {
-                NotificationManager.ShowNotification($"Выбрана колода: {selectedDeck.name}, id: {selectedDeck.deckId}");
                 SelectedDeckManager.SetSelectedDeck(selectedDeck);
-                SceneManager.LoadScene("TestConnScene");
+                SceneManager.LoadScene("RoomSelectionScene");
             }
         });
 
@@ -69,7 +68,7 @@ public class DeckSelectionSceneController : MonoBehaviour
             editorController.OnDeckMaked += makedDeck =>
             {
                 SelectedDeckManager.SetSelectedDeck(makedDeck);
-                SceneManager.LoadScene("TestConnScene");
+                SceneManager.LoadScene("RoomSelectionScene");
             };
         });
 

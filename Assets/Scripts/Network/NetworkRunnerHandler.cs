@@ -15,13 +15,12 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         networkRunner = gameObject.AddComponent<NetworkRunner>();
         networkRunner.AddCallbacks(this);
-
         DontDestroyOnLoad(gameObject);
 
         await networkRunner.StartGame(new StartGameArgs
         {
-            GameMode = GameMode.AutoHostOrClient,
-            SessionName = "Room",
+            GameMode = ConnectionConfig.Mode,
+            SessionName = ConnectionConfig.RoomName,
             Scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex),
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
         });
@@ -31,7 +30,6 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer && networkGameState == null)
         {
-            // Debug.Log("[RunnerHandler] Server spawning NetworkGameState prefab");
             NetworkObject obj = runner.Spawn(networkGameStatePrefab);
             networkGameState = obj.GetComponent<NetworkGameState>();
         }

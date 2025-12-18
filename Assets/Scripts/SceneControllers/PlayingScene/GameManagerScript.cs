@@ -22,6 +22,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private Transform enemyFieldContainer, playerFieldContainer;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TextMeshProUGUI turnTimeTxt;
+    [SerializeField] private TextMeshProUGUI turnNumberTxt;
     [SerializeField] private Button endTurnButton;
     public TypeChart typeChart;
 
@@ -83,11 +84,11 @@ public class GameManagerScript : MonoBehaviour
     {
         cardIsThrown = false;
 
-        foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
-        {
-            card.ChangeAttackState(false);
-            card.DeHighlightCard();
-        }
+        // foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
+        // {
+        //     card.ChangeAttackState(false);
+        //     card.DeHighlightCard();
+        // }
 
         if (IsMyTurn)
         {
@@ -102,30 +103,32 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-    public void OnTurnChanged(bool firstTurn, bool secondTurn)
+    public void OnTurnChanged(int turnNumber)
     {
         StopAllCoroutines();
         UpdateTurnUI();
         StartCoroutine(TurnFunc());
 
-        EnableAttackForCurrentPlayer();
+        turnNumberTxt.text = $"Тур {turnNumber}";
+
+        // EnableAttackForCurrentPlayer();
     }
 
-    private void EnableAttackForCurrentPlayer()
-    {
-        List<BattleCardController> fieldCards = IsMyTurn
-            ? CurrentGame.PlayerFieldListController.CardControllers
-            : CurrentGame.EnemyFieldListController.CardControllers;
+    // private void EnableAttackForCurrentPlayer()
+    // {
+    //     List<BattleCardController> fieldCards = IsMyTurn
+    //         ? CurrentGame.PlayerFieldListController.CardControllers
+    //         : CurrentGame.EnemyFieldListController.CardControllers;
 
-        if (IsMyTurn)
-        {
-            foreach (var card in fieldCards)
-            {
-                card.ChangeAttackState(true);
-                card.HighlightCard();
-            }
-        }
-    }
+    //     if (IsMyTurn)
+    //     {
+    //         foreach (var card in fieldCards)
+    //         {
+    //             card.ChangeAttackState(true);
+    //             card.HighlightCard();
+    //         }
+    //     }
+    // }
 
     private void UpdateTurnUI()
     {
@@ -144,11 +147,11 @@ public class GameManagerScript : MonoBehaviour
             yield return null;
         }
 
-        foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
-        {
-            card.ChangeAttackState(false);
-            card.DeHighlightCard();
-        }
+        // foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
+        // {
+        //     card.ChangeAttackState(false);
+        //     card.DeHighlightCard();
+        // }
 
         cardIsThrown = false;
 
@@ -166,27 +169,59 @@ public class GameManagerScript : MonoBehaviour
         await CurrentGame.EnemyHandListController.LoadCardsByIds(enemyIds);
     }
 
-    public async void OnCardPlayed(int cardId, int siblingIndex, bool isFirstPlayer, bool toField)
+    // public async void OnCardPlayed(int cardId, int siblingIndex, bool isFirstPlayer, bool toField)
+    // {
+    //     bool firstPlayer = networkGameState.Runner.IsServer;
+    //     if (firstPlayer != isFirstPlayer)
+    //     {
+    //         Transform containerTo, containerFrom;
+    //         List<BattleCardController> listFrom;
+
+    //         if (toField)
+    //         {
+    //             containerTo = enemyFieldContainer;
+    //             containerFrom = enemyHandContainer;
+    //             listFrom = CurrentGame.EnemyHandListController.CardControllers;
+    //         }
+    //         else
+    //         {
+    //             containerTo = enemyHandContainer;
+    //             containerFrom = enemyFieldContainer;
+    //             listFrom = CurrentGame.EnemyFieldListController.CardControllers;
+    //         }
+
+    //         RemoveCardFromContainer(cardId, containerFrom, listFrom);
+
+    //         BattleCardListController newController = new(containerTo);
+    //         await newController.LoadCardsByIds(new List<int> { cardId });
+
+    //         Transform newCard = containerTo.GetChild(containerTo.childCount - 1);
+    //         newCard.SetSiblingIndex(siblingIndex);
+
+    //         if (toField)
+    //         {
+    //             newCard.GetComponent<CardFlipScript>().FlipToFaceUp();
+    //             BattleCardController lastController = newController.CardControllers[0];
+    //             // lastController.ChangeAttackState(false);
+    //             networkGameState.CheckForBattle();
+    //             CurrentGame.EnemyFieldListController.CardControllers.Add(lastController);
+    //         }
+    //         else
+    //         {
+    //             newCard.GetComponent<CardFlipScript>().FlipToFaceDown();
+    //             CurrentGame.EnemyHandListController.CardControllers.Add(newController.CardControllers[0]);
+    //         }
+    //     }
+    // }
+
+    public async void OnCardPlayed(int cardId, int siblingIndex, bool isFirstPlayer)
     {
         bool firstPlayer = networkGameState.Runner.IsServer;
         if (firstPlayer != isFirstPlayer)
         {
-            Transform containerTo, containerFrom;
-            List<BattleCardController> listFrom;
-
-            if (toField)
-            {
-                containerTo = enemyFieldContainer;
-                containerFrom = enemyHandContainer;
-                listFrom = CurrentGame.EnemyHandListController.CardControllers;
-            }
-            else
-            {
-                containerTo = enemyHandContainer;
-                containerFrom = enemyFieldContainer;
-                listFrom = CurrentGame.EnemyFieldListController.CardControllers;
-            }
-
+            Transform containerTo = enemyFieldContainer;
+            Transform containerFrom = enemyHandContainer;
+            List<BattleCardController> listFrom = CurrentGame.EnemyHandListController.CardControllers;
             RemoveCardFromContainer(cardId, containerFrom, listFrom);
 
             BattleCardListController newController = new(containerTo);
@@ -195,17 +230,17 @@ public class GameManagerScript : MonoBehaviour
             Transform newCard = containerTo.GetChild(containerTo.childCount - 1);
             newCard.SetSiblingIndex(siblingIndex);
 
-            if (toField)
+            newCard.GetComponent<CardFlipScript>().FlipToFaceUp();
+            // networkGameState.CheckForBattle();
+            CurrentGame.EnemyFieldListController.CardControllers.Add(newController.CardControllers[0]);
+
+            var playerCard = CurrentGame.PlayerFieldListController.CardControllers.LastOrDefault();
+            var enemyCard = CurrentGame.EnemyFieldListController.CardControllers.LastOrDefault();
+
+            if (playerCard != null && enemyCard != null)
             {
-                newCard.GetComponent<CardFlipScript>().FlipToFaceUp();
-                BattleCardController lastController = newController.CardControllers[0];
-                lastController.ChangeAttackState(false);
-                CurrentGame.EnemyFieldListController.CardControllers.Add(lastController);
-            }
-            else
-            {
-                newCard.GetComponent<CardFlipScript>().FlipToFaceDown();
-                CurrentGame.EnemyHandListController.CardControllers.Add(newController.CardControllers[0]);
+                Debug.Log("Боооой");
+                RequestCardsFight(playerCard.CardModel.id, enemyCard.CardModel.id);
             }
         }
     }
@@ -214,7 +249,7 @@ public class GameManagerScript : MonoBehaviour
     {
         foreach (Transform child in container)
         {
-            var cardScript = child.GetComponent<CardMovemantScript>();
+            CardMovemantScript cardScript = child.GetComponent<CardMovemantScript>();
             if (cardScript != null && cardScript.CardId == cardId)
             {
                 Destroy(child.gameObject);
@@ -227,13 +262,55 @@ public class GameManagerScript : MonoBehaviour
 
     public void RemoveCardFromList(int cardId, List<BattleCardController> list)
     {
-        var cardRemove = list.FirstOrDefault(c => c.CardModel.id == cardId);
+        BattleCardController cardRemove = list.FirstOrDefault(c => c.CardModel.id == cardId);
         if (cardRemove != null)
             list.Remove(cardRemove);
     }
 
-    public void RequestPlayCard(int cardId, int siblingIndex, bool toField)
+    public void RequestPlayCard(int cardId, int siblingIndex)
     {
-        networkGameState.RpcRequestPlayCard(cardId, siblingIndex, toField);
+        networkGameState.RpcRequestPlayCard(cardId, siblingIndex);
     }
+
+
+
+
+    public void RequestCardsFight(int attackerId, int defenderId)
+    {
+        if (IsMyTurn)
+        {
+            networkGameState.RpcRequestCardsFight(attackerId, defenderId);
+        }
+    }
+
+    public void DestroyCardById(int cardId)
+    {
+        BattleCardController card = CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == cardId);
+        card ??= CurrentGame.EnemyFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == cardId);
+
+        if (card != null)
+        {
+            Destroy(card.BattleCardView.CardRoot);
+            CurrentGame.PlayerFieldListController.CardControllers.Remove(card);
+            CurrentGame.EnemyFieldListController.CardControllers.Remove(card);
+        }
+    }
+
+    // public void CardsFight(BattleCardController playerCard, BattleCardController enemyCard)
+    // {
+    //     DestoyCard(enemyCard);
+    // }
+
+    // private void DestoyCard(BattleCardController card)
+    // {
+    //     card.BattleCardView.CardRoot.GetComponent<CardMovemantScript>().OnEndDrag(null);
+
+    //     if (CurrentGame.EnemyFieldListController.CardControllers.Exists(c => c.CardModel.id == card.CardModel.id))
+    //         CurrentGame.EnemyFieldListController.CardControllers.Remove(card);
+
+    //     if (CurrentGame.PlayerFieldListController.CardControllers.Exists(c => c.CardModel.id == card.CardModel.id))
+    //         CurrentGame.PlayerFieldListController.CardControllers.Remove(card);
+
+    //     Destroy(card.BattleCardView.CardRoot);
+    // }
 }

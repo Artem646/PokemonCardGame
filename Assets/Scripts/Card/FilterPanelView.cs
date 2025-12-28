@@ -18,7 +18,7 @@ public class FilterPanelView
 
     public FilterPanelView(VisualElement root)
     {
-        elementIconsContainer = root.Q<VisualElement>("elementsIconsContainer");
+        elementIconsContainer = root.Q<VisualElement>("elementsFilterPanel");
         var icons = elementIconsContainer.Children().ToList();
 
         for (int i = 0; i < icons.Count && i < pokemonElements.Count; i++)

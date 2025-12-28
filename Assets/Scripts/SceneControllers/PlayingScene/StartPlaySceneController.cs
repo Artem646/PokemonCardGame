@@ -12,16 +12,16 @@ public class StartPlaySceneController : MonoBehaviour
     [SerializeField] private UIDocument uiDocument;
 
     private VisualElement root;
-    private ParallelogramButton2 singlePlayerButton;
-    private ParallelogramButton2 multyPlayerButton;
-    private ParallelogramButton2 decksButton;
+    private СustomizableButton singlePlayerButton;
+    private СustomizableButton multyPlayerButton;
+    private СustomizableButton decksButton;
 
     private void Start()
     {
         root = uiDocument.rootVisualElement;
-        singlePlayerButton = root.Q<ParallelogramButton2>("singlePlayerButton");
-        multyPlayerButton = root.Q<ParallelogramButton2>("multyPlayerButton");
-        decksButton = root.Q<ParallelogramButton2>("decksButton");
+        singlePlayerButton = root.Q<СustomizableButton>("singlePlayerButton");
+        multyPlayerButton = root.Q<СustomizableButton>("multyPlayerButton");
+        decksButton = root.Q<СustomizableButton>("decksButton");
 
         UserProfileView.Instance.SetUIDocument(uiDocument);
         UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());

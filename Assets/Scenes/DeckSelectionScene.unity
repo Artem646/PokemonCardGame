@@ -337,7 +337,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1717614869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e591e6c08df11e74cb3921715f74ce9a, type: 3}
+  m_Script: {fileID: 11500000, guid: e6bf917d47c32de4db7633600d356cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeckEditorController
   uiDocument: {fileID: 1790227332}
@@ -438,7 +438,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2074317151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b94820ddd0fc542b123574d3e7a3e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 899d02e7b12eff340ac77ab08354eb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeckSelectionSceneController
   uiDocument: {fileID: 1013946959}

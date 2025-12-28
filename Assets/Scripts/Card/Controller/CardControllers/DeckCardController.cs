@@ -3,34 +3,26 @@ using UnityEngine.UIElements;
 public class DeckCardController : BaseCardController
 {
     public IDeckCardView DeckCardView { get; set; }
-    private bool isSelected;
-    public event System.Action<int, bool> OnCardSelectionChanged;
 
-    public DeckCardController(CardModel model, IDeckCardView view, bool selected)
+    public DeckCardController(CardModel model, IDeckCardView view)
         : base(model, view)
     {
         DeckCardView = view;
-        isSelected = selected;
-        DeckCardView.SetSelected(isSelected);
         RegisterEvents();
     }
 
     public override void RegisterEvents()
     {
-        DeckCardView.RegisterClickHandlers(OnCardElementClicked);
+        // DeckCardView.RegisterClickHandlers(OnCardElementClicked);
     }
 
     public override void UnregisterEvents()
     {
-        DeckCardView.UnregisterClickHandlers(OnCardElementClicked);
+        // DeckCardView.UnregisterClickHandlers(OnCardElementClicked);
     }
 
-    private void OnCardElementClicked(ClickEvent evt)
-    {
-        isSelected = !isSelected;
-        DeckCardView.SetSelected(isSelected);
-        OnCardSelectionChanged?.Invoke(CardModel.id, isSelected);
-    }
+    // private void OnCardElementClicked(ClickEvent evt)
+    // { }
 
     public override void AddToContainer(object container)
     {

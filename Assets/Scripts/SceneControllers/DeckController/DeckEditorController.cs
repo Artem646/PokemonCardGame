@@ -8,7 +8,7 @@ public class DeckEditorController : MonoBehaviour
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private VisualTreeAsset cardTemplate;
     private VisualElement root;
-    private DeckCardListController deckCardListController;
+    private DeckEditorCardListController deckCardListController;
     private TextField deckTitleTextField;
     private ScrollView deckCardsScrollView;
     private Button performActionButton;
@@ -31,7 +31,7 @@ public class DeckEditorController : MonoBehaviour
         closeDeckEditorButton = root.Q<Button>("closeDeckEditorButton");
         performActionButton = root.Q<Button>("performActionButton");
 
-        deckCardListController = new DeckCardListController(deckCardsScrollView, cardTemplate, selectedCards, this);
+        deckCardListController = new DeckEditorCardListController(deckCardsScrollView, cardTemplate, selectedCards, this);
         _ = deckCardListController.LoadUserCardsToDeckScrollView();
 
         closeDeckEditorButton.clicked += OnCloseDeckEditor;
@@ -44,10 +44,10 @@ public class DeckEditorController : MonoBehaviour
         selectedCards = new List<int>(deck.cards);
         deckTitleTextField.value = deck.name;
 
-        foreach (DeckCardController controller in deckCardListController.CardControllers)
+        foreach (DeckEditorCardController controller in deckCardListController.CardControllers)
         {
             bool inDeck = selectedCards.Contains(controller.CardModel.id);
-            controller.DeckCardView.SetSelected(inDeck);
+            controller.SetSelected(inDeck);
         }
 
         root.style.display = DisplayStyle.Flex;
@@ -55,15 +55,10 @@ public class DeckEditorController : MonoBehaviour
 
     public void HandleCardSelectionChanged(int cardId, bool isSelected)
     {
+        DeckEditorCardController controller = deckCardListController.CardControllers.Find(card => card.CardModel.id == cardId);
+
         if (isSelected)
         {
-            if (selectedCards.Count >= MAX_CARDS_COUNT)
-            {
-                DeckCardController controller = deckCardListController.CardControllers.Find(card => card.CardModel.id == cardId);
-                controller?.DeckCardView.SetSelected(false);
-                return;
-            }
-
             if (!selectedCards.Contains(cardId))
                 selectedCards.Add(cardId);
         }
@@ -71,7 +66,17 @@ public class DeckEditorController : MonoBehaviour
         {
             selectedCards.Remove(cardId);
         }
+
+        if (selectedCards.Count > MAX_CARDS_COUNT)
+        {
+            controller?.SetSelected(false);
+            selectedCards.Remove(cardId);
+            return;
+        }
+
+        controller?.SetSelected(isSelected);
     }
+
 
     private void OnCloseDeckEditor()
     {
@@ -84,20 +89,23 @@ public class DeckEditorController : MonoBehaviour
     {
         if (currentDeck == null) return;
 
+        if (selectedCards.Count != MAX_CARDS_COUNT)
+            return;
+
         currentDeck.name = deckTitleTextField.value;
         currentDeck.cards = new List<int>(selectedCards);
 
         if (performActionButton.text == "Сохранить изменения")
         {
-            await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
             root.style.display = DisplayStyle.None;
+            await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
             OnDeckUpdate?.Invoke(currentDeck);
         }
 
         if (performActionButton.text == "Сохранить колоду")
         {
-            await FirebaseFirestoreService.Instance.AddDeck(UserSession.Instance.ActiveUser, currentDeck);
             root.style.display = DisplayStyle.None;
+            await FirebaseFirestoreService.Instance.AddDeck(UserSession.Instance.ActiveUser, currentDeck);
             OnDeckAdded?.Invoke(currentDeck);
         }
 

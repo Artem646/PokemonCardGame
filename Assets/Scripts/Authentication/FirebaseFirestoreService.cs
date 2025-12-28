@@ -4,6 +4,7 @@ using Firebase.Auth;
 using UnityEngine;
 using Firebase.Firestore;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class FirebaseFirestoreService
 {
@@ -41,10 +42,13 @@ public class FirebaseFirestoreService
         {
             Debug.Log($"[P][FirebaseService] Документ пользователя {firebaseUser.UserId} создан.");
 
+            string userName = firebaseUser.IsAnonymous
+                ? "Anonim" + firebaseUser.UserId[..3] : firebaseUser.DisplayName;
+
             UserData newUserData = new()
             {
                 userId = firebaseUser.UserId,
-                userName = firebaseUser.DisplayName,
+                userName = userName,
                 email = firebaseUser.Email,
                 createdAt = DateTime.UtcNow,
                 lastLoginAt = DateTime.UtcNow
@@ -59,14 +63,16 @@ public class FirebaseFirestoreService
                 { "lastLoginAt", Timestamp.FromDateTime(newUserData.lastLoginAt) }
             };
 
+            List<int> startCollection = await GenerateStartCollection();
+
             Dictionary<string, object> newUserDocument = new()
             {
                 { "userData", userDataMap },
-                { "cardsInCollection", new List<int>() }
+                { "cardsInCollection", startCollection }
             };
 
             await userDocument.SetAsync(newUserDocument);
-            return new User { userData = newUserData };
+            return new User { userData = newUserData, cardsInCollection = startCollection };
         }
         else
         {
@@ -75,6 +81,20 @@ public class FirebaseFirestoreService
             await UpdateLastLoginAt(loaderUser, userDocument);
             return loaderUser;
         }
+    }
+
+    private async Task<List<int>> GenerateStartCollection()
+    {
+        GameCardModelList allGameCards = await CardRepository.Instance.GetAllGameCards();
+        System.Random random = new();
+
+        HashSet<int> userStartCards = new();
+        while (userStartCards.Count < 6)
+        {
+            int randomIndex = random.Next(allGameCards.cards.Count);
+            userStartCards.Add(allGameCards.cards[randomIndex].id);
+        }
+        return userStartCards.ToList();
     }
 
     public async Task UpdateLastLoginAt(User user, DocumentReference userDocument)

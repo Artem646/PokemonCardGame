@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -18,15 +19,18 @@ public class BestiarySceneController : MonoBehaviour
 
     private async void Start()
     {
+        root = uiDocument.rootVisualElement;
+
+        root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.Flex;
+
         CardControllerFactory.Init(template: cardTemplate);
 
-        root = uiDocument.rootVisualElement;
         ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
+        bestiaryCardsListController = new CollectionCardListController(cardsContainer);
 
         VisualElement overlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, overlay);
 
-        bestiaryCardsListController = new CollectionCardListController(cardsContainer);
         filterPanelView = new FilterPanelView(root);
 
         filterPanelView.OnFilterChanged += (activefilters, pokemonElements) =>
@@ -36,7 +40,19 @@ public class BestiarySceneController : MonoBehaviour
 
         await bestiaryCardsListController.AddGameCardsToScrollView();
 
+        await WaitUntilCardsLoaded(cardsContainer, CardRepository.Instance.GetGameCards().cards.Count);
+
+        root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.None;
+
         RegisterCallbacks();
+    }
+
+    private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)
+    {
+        while (cardsContainer.childCount < expectedCount)
+        {
+            await Task.Yield();
+        }
     }
 
     private void RegisterCallbacks()

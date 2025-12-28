@@ -1,0 +1,18 @@
+:root {
+    --bg-color: rgb(33, 35, 61);
+}
+
+.main-content {
+    flex-direction: row;
+    flex-grow: 1;
+    background-color: var(--bg-color);
+    padding: 15px;
+    display: flex;
+    visibility: visible;
+    height: 100%;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: auto;
+    align-self: auto;
+}

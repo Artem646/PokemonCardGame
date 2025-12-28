@@ -1,7 +1,10 @@
 using Fusion;
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NetworkGameState : NetworkBehaviour
 {
@@ -11,32 +14,37 @@ public class NetworkGameState : NetworkBehaviour
     [Networked] public bool FirstPlayerReady { get; set; }
     [Networked] public bool SecondPlayerReady { get; set; }
 
+    [Networked] public PlayerRef FirstPlayerRef { get; set; }
+    [Networked] public PlayerRef SecondPlayerRef { get; set; }
+
     [Networked] public bool IsFirstPlayerTurn { get; set; }
     [Networked] public bool IsSecondPlayerTurn { get; set; }
+    [Networked] public int RoundNumber { get; set; }
+    [Networked] public float RoundPhaseEndTime { get; set; }
+    [Networked] public int MovesInRound { get; set; }
 
-    [Networked] public int TurnNumber { get; set; }
+    public bool IsFirstPlayer => Runner.LocalPlayer == FirstPlayerRef;
+    public bool IsSecondPlayer => Runner.LocalPlayer == SecondPlayerRef;
 
-    public bool IsFirstPlayer => Runner.IsServer;
-    public bool IsSecondPlayer => !Runner.IsServer;
-
-    private bool initialized = false;
     private GameManagerScript gameManager;
+    private bool initialized = false;
+
+    public void BindGameManager(GameManagerScript gameManager) => this.gameManager = gameManager;
 
     public override void Spawned()
     {
         NotificationManager.ShowNotification("Готов");
-
-        gameManager = FindAnyObjectByType<GameManagerScript>();
-
-        if (Runner.IsServer)
+        if (HasStateAuthority)
         {
             List<int> ids = SelectedDeckManager.GetSelectedDeckIds();
-            SetDeckCsv(true, ids);
+            if (ids != null && ids.Count > 0)
+                SetDeckCsv(true, ids);
         }
         else
         {
             string csv = SelectedDeckManager.GetSelectedDeckCsv();
-            RpcSubmitDeck(csv);
+            if (!string.IsNullOrEmpty(csv))
+                RpcSubmitDeck(csv);
         }
     }
 
@@ -47,7 +55,35 @@ public class NetworkGameState : NetworkBehaviour
         if (FirstPlayerReady && SecondPlayerReady && !initialized)
         {
             initialized = true;
-            gameManager.Init(this);
+
+            if (HasStateAuthority)
+            {
+                StartTurnTimer(30f);
+                int index = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/PlayingScene.unity");
+                Runner.LoadScene(SceneRef.FromIndex(index));
+                Debug.Log("[NetworkGameState] Both ready → LoadScene('PlayingScene')");
+            }
+        }
+    }
+
+    public void StartTurnTimer(float durationSeconds)
+    {
+        if (!HasStateAuthority) return;
+
+        RoundPhaseEndTime = Runner.SimulationTime + durationSeconds;
+        IsFirstPlayerTurn = true;
+        IsSecondPlayerTurn = false;
+        RoundNumber = 1;
+        MovesInRound = 0;
+        RpcNotifyRoundPhaseChanged(RoundNumber);
+    }
+
+    public void AssignPlayerRole(PlayerRef player)
+    {
+        if (HasStateAuthority)
+        {
+            if (FirstPlayerRef == default) FirstPlayerRef = player;
+            else if (SecondPlayerRef == default) SecondPlayerRef = player;
         }
     }
 
@@ -68,114 +104,148 @@ public class NetworkGameState : NetworkBehaviour
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RpcSubmitDeck(string csv)
+    public void RpcSubmitDeck(string csv, RpcInfo info = default)
     {
         List<int> ids = SelectedDeckManager.ParseCsv(csv);
-        SetDeckCsv(false, ids);
+        if (info.Source == SecondPlayerRef)
+            SetDeckCsv(false, ids);
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RpcRequestEndTurn(RpcInfo info = default)
+    public void RpcRequestEndRoundPhase(RpcInfo info = default)
     {
-        SwitchTurn();
+        if (!IsValidTurnRequest(info.Source)) return;
+        if (MovesInRound == 2)
+            EndRound();
     }
 
-    public void SwitchTurn()
+    public void SwitchRoundPhase()
     {
         IsFirstPlayerTurn = !IsFirstPlayerTurn;
         IsSecondPlayerTurn = !IsSecondPlayerTurn;
+        RoundPhaseEndTime = Runner.SimulationTime + 30f;
+        RpcNotifyRoundPhaseChanged(RoundNumber);
+    }
 
-        if (IsFirstPlayerTurn)
-            TurnNumber++;
-
-        RpcNotifyTurnChanged(TurnNumber);
+    private async void EndRound()
+    {
+        RoundNumber++;
+        MovesInRound = 0;
+        SwitchRoundPhase();
+        await Task.Delay(500);
+        RpcRequestCardsFight();
+        CheckGameEnd();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RpcNotifyTurnChanged(int turnNumber)
+    private void RpcNotifyRoundPhaseChanged(int turnNumber)
     {
-        FindAnyObjectByType<GameManagerScript>().OnTurnChanged(turnNumber);
+        if (gameManager != null)
+            gameManager.OnTurnChanged(turnNumber);
     }
 
-    // Клиент -> Сервер
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RpcRequestPlayCard(int cardId, int siblingIndex, RpcInfo info = default)
     {
-        bool isFirstPlayer = info.Source.RawEncoded == 0;
+        if (!IsValidTurnRequest(info.Source)) return;
+        bool isFirstPlayer = info.Source == FirstPlayerRef;
         RpcPlayCard(cardId, siblingIndex, isFirstPlayer);
+        MovesInRound++;
     }
 
-    // Сервер -> Всем
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RpcPlayCard(int playedCardId, int siblingIndex, bool isFirstPlayer)
     {
-        FindAnyObjectByType<GameManagerScript>().OnCardPlayed(playedCardId, siblingIndex, isFirstPlayer);
+        if (gameManager != null)
+            gameManager.OnCardPlayed(playedCardId, siblingIndex, isFirstPlayer);
     }
 
-
-
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RpcRequestCardsFight(int attackerId, int defenderId)
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RpcRequestCardsFight()
     {
-        GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-        TypeChart chart = gameManager.typeChart;
-
-        BattleCardController attacker = gameManager.CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == attackerId)
-            ?? gameManager.CurrentGame.EnemyFieldListController.CardControllers
-            .FirstOrDefault(c => c.CardModel.id == attackerId);
-
-        BattleCardController defender = gameManager.CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == defenderId)
-            ?? gameManager.CurrentGame.EnemyFieldListController.CardControllers
-            .FirstOrDefault(c => c.CardModel.id == defenderId);
-
-        ResolveBattle(attacker, defender, chart);
+        if (gameManager != null)
+        {
+            TypeChart chart = gameManager.typeChart;
+            BattleCardController attacker = gameManager.CurrentGame.PlayerFieldListController.CardControllers.LastOrDefault();
+            BattleCardController defender = gameManager.CurrentGame.EnemyFieldListController.CardControllers.LastOrDefault();
+            ResolveBattle(attacker, defender, chart);
+        }
     }
-
-    // public void CheckForBattle()
-    // {
-    //     GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-    //     TypeChart chart = gameManager.typeChart;
-
-    //     BattleCardController playerCard = gameManager.CurrentGame.PlayerFieldListController.CardControllers.LastOrDefault();
-    //     BattleCardController enemyCard = gameManager.CurrentGame.EnemyFieldListController.CardControllers.LastOrDefault();
-
-    //     ResolveBattle(playerCard, enemyCard, chart);
-    // }
-
 
     private void ResolveBattle(BattleCardController attacker, BattleCardController defender, TypeChart chart)
     {
         if (attacker == null || defender == null) return;
 
-        // float attackerMultiplier = chart.GetMultiplier(attacker.CardModel.mainElement, defender.CardModel.mainElement);
-        // float defenderMultiplier = chart.GetMultiplier(defender.CardModel.mainElement, attacker.CardModel.mainElement);
+        float attackerMultiplier = chart.GetMultiplier(attacker.CardModel.mainElement, defender.CardModel.mainElement);
+        float defenderMultiplier = chart.GetMultiplier(defender.CardModel.mainElement, attacker.CardModel.mainElement);
 
-        // if (attackerMultiplier > defenderMultiplier)
-        // {
-        //     RpcDestroyCard(defender.CardModel.id);
-        // }
-        // else if (attackerMultiplier < defenderMultiplier)
-        // {
-        //     RpcDestroyCard(attacker.CardModel.id);
-        // }
-        // else
-        // {
-        RpcDestroyCard(attacker.CardModel.id);
-        RpcDestroyCard(defender.CardModel.id);
-        // }
+        if (attackerMultiplier > defenderMultiplier)
+        {
+            gameManager.MoveCardToReset(defender, false);
+
+        }
+        else if (attackerMultiplier < defenderMultiplier)
+        {
+            gameManager.MoveCardToReset(attacker, true);
+        }
+        else
+        {
+            gameManager.MoveCardToReset(attacker, true);
+            gameManager.MoveCardToReset(defender, false);
+        }
     }
 
+    private bool IsValidTurnRequest(PlayerRef player)
+    {
+        if (player == FirstPlayerRef) return IsFirstPlayerTurn;
+        if (player == SecondPlayerRef) return IsSecondPlayerTurn;
+        return false;
+    }
+
+    public List<int> GetPlayerDeckIds()
+    {
+        return IsFirstPlayer
+            ? SelectedDeckManager.ParseCsv(FirstPlayerDeckCsv.Value)
+            : SelectedDeckManager.ParseCsv(SecondPlayerDeckCsv.Value);
+    }
+
+    public List<int> GetEnemyDeckIds()
+    {
+        return IsFirstPlayer
+            ? SelectedDeckManager.ParseCsv(SecondPlayerDeckCsv.Value)
+            : SelectedDeckManager.ParseCsv(FirstPlayerDeckCsv.Value);
+    }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RpcDestroyCard(int cardId)
+    public void RpcGameOver()
     {
-        GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-        gameManager.DestroyCardById(cardId);
+        if (gameManager != null)
+        {
+            gameManager.ShowGameOverOverlay();
+            StartCoroutine(LoadMainMenuAfterDelay(3f));
+        }
     }
 
+    private IEnumerator LoadMainMenuAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene("CollectionScene");
 
+        NetworkRunnerHandler networkRunnerHandler = FindAnyObjectByType<NetworkRunnerHandler>();
+        if (networkRunnerHandler != null)
+            networkRunnerHandler.ShutdownRunner();
+    }
 
-    public List<int> GetPlayerDeckIds() => SelectedDeckManager.ParseCsv(FirstPlayerDeckCsv.Value);
-    public List<int> GetEnemyDeckIds() => SelectedDeckManager.ParseCsv(SecondPlayerDeckCsv.Value);
+    private void CheckGameEnd()
+    {
+        int playerFieldCount = gameManager.CurrentGame.PlayerFieldListController.CardControllers.Count;
+        int enemyFieldCount = gameManager.CurrentGame.EnemyFieldListController.CardControllers.Count;
+        int playerHandCount = gameManager.CurrentGame.PlayerHandListController.CardControllers.Count;
+        int enemyHandCount = gameManager.CurrentGame.EnemyHandListController.CardControllers.Count;
+
+        if (playerFieldCount == 3 || enemyFieldCount == 3 || playerHandCount == 0 || enemyHandCount == 0)
+        {
+            RpcGameOver();
+        }
+    }
 }

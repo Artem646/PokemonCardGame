@@ -1,5 +1,6 @@
 using Fusion;
 using Fusion.Sockets;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,6 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkObject networkGameStatePrefab;
     private NetworkRunner networkRunner;
     private NetworkGameState networkGameState;
-    private bool sceneLoaded = false;
 
     async void Start()
     {
@@ -17,41 +17,47 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         networkRunner.AddCallbacks(this);
         DontDestroyOnLoad(gameObject);
 
+        await networkRunner.JoinSessionLobby(SessionLobby.ClientServer);
+
+        Debug.Log($"[NetworkRunnerHandler] Starting game: Mode={ConnectionConfig.Mode}, Room={ConnectionConfig.RoomName}");
+
         await networkRunner.StartGame(new StartGameArgs
         {
             GameMode = ConnectionConfig.Mode,
             SessionName = ConnectionConfig.RoomName,
             Scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex),
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
+            PlayerCount = 2,
+            IsVisible = true,
+            IsOpen = true
         });
     }
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        if (runner.IsServer && networkGameState == null)
+        if (networkGameState == null && runner.IsSharedModeMasterClient)
         {
-            NetworkObject obj = runner.Spawn(networkGameStatePrefab);
+            NetworkObject obj = runner.Spawn(networkGameStatePrefab, flags: NetworkSpawnFlags.DontDestroyOnLoad);
             networkGameState = obj.GetComponent<NetworkGameState>();
         }
-    }
 
-    void Update()
-    {
-        if (networkRunner != null && networkRunner.IsServer && networkGameState != null)
+        if (networkGameState == null)
+            networkGameState = FindAnyObjectByType<NetworkGameState>();
+
+        GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
+        if (gameManager != null && networkGameState != null)
         {
-            if (networkGameState.FirstPlayerReady && networkGameState.SecondPlayerReady && !sceneLoaded)
-            {
-                sceneLoaded = true;
-                Debug.Log("[Handler] Both ready → LoadScene('PlayingScene')");
-                int index = SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/PlayingScene.unity");
-                networkRunner.LoadScene(SceneRef.FromIndex(index));
-            }
+            networkGameState.BindGameManager(gameManager);
+            gameManager.Init(networkGameState);
         }
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"OnPlayerJoined: PlayerId={player.PlayerId}, IsServer={runner.IsServer}");
+        Debug.Log($"OnPlayerJoined: PlayerId={player.PlayerId}");
+
+        if (runner.IsSharedModeMasterClient && networkGameState != null)
+            networkGameState.AssignPlayerRole(player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -59,7 +65,22 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log($"OnPlayerLeft: PlayerId={player.PlayerId}");
     }
 
-    public NetworkRunner Runner => networkRunner;
+    public async void ShutdownRunner() // Команата не удаляется !!!!!!!
+    {
+        if (networkRunner != null)
+        {
+            Debug.Log("[NetworkRunnerHandler] Shutting down runner...");
+
+            if (networkRunner.IsSharedModeMasterClient)
+                await networkRunner.Shutdown(true);
+            else
+                await networkRunner.Shutdown();
+
+            networkGameState = null;
+            Destroy(networkRunner);
+        }
+    }
+
 
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }

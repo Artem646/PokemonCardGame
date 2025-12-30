@@ -98,8 +98,6 @@ public class GoogleProvider : IAuthProvider
     private void ShowError(string message) => NotificationManager.ShowNotification(message, true);
     private void ShowSuccess(string message) => NotificationManager.ShowNotification(message, false);
 
-    public void SignUp() { }
-
     public bool IsSignedIn() => firebaseController.IsSignedIn;
     public string GetUserId() => firebaseController.CurrentUser?.UserId;
 }

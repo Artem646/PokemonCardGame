@@ -45,13 +45,16 @@ public class FirebaseFirestoreService
             string userName = firebaseUser.IsAnonymous
                 ? "Anonim" + firebaseUser.UserId[..3] : firebaseUser.DisplayName;
 
+            string profilePhotoUrl = "https://i.pinimg.com/736x/b9/de/23/b9de239ab4d2c61b8516f36e6d392aa8.jpg";
+
             UserData newUserData = new()
             {
                 userId = firebaseUser.UserId,
                 userName = userName,
                 email = firebaseUser.Email,
                 createdAt = DateTime.UtcNow,
-                lastLoginAt = DateTime.UtcNow
+                lastLoginAt = DateTime.UtcNow,
+                profilePhotoUrl = profilePhotoUrl
             };
 
             Dictionary<string, object> userDataMap = new()
@@ -60,10 +63,11 @@ public class FirebaseFirestoreService
                 { "userName", newUserData.userName },
                 { "email", newUserData.email},
                 { "createdAt", Timestamp.FromDateTime(newUserData.createdAt) },
-                { "lastLoginAt", Timestamp.FromDateTime(newUserData.lastLoginAt) }
+                { "lastLoginAt", Timestamp.FromDateTime(newUserData.lastLoginAt) },
+                { "profilePhotoUrl", newUserData.profilePhotoUrl }
             };
 
-            List<int> startCollection = await GenerateStartCollection();
+            List<int> startCollection = GenerateStartCollection();
 
             Dictionary<string, object> newUserDocument = new()
             {
@@ -83,9 +87,16 @@ public class FirebaseFirestoreService
         }
     }
 
-    private async Task<List<int>> GenerateStartCollection()
+    // public async Task<bool> UserDocumentExists(string userId)
+    // {
+    //     DocumentReference userDocument = firestore.Collection("users").Document(userId);
+    //     DocumentSnapshot snapshot = await userDocument.GetSnapshotAsync();
+    //     return snapshot.Exists;
+    // }
+
+    private List<int> GenerateStartCollection()
     {
-        GameCardModelList allGameCards = await CardRepository.Instance.GetAllGameCards();
+        GameCardModelList allGameCards = CardRepository.Instance.GetGameCards();
         System.Random random = new();
 
         HashSet<int> userStartCards = new();
@@ -105,18 +116,45 @@ public class FirebaseFirestoreService
             { "userData.lastLoginAt", Timestamp.FromDateTime(user.userData.lastLoginAt) }
         };
         await userDocument.UpdateAsync(updateData);
-        Debug.Log($"[FirestoreService] Данные пользователя {user.userData.userId} обновлены.");
+    }
+
+    public async Task UpdateUserProfile(User user, string newUserName, string newPhotoUrl)
+    {
+        Dictionary<string, object> updateData = new();
+
+        if (!string.IsNullOrWhiteSpace(newUserName))
+        {
+            user.userData.userName = newUserName;
+            updateData["userData.userName"] = newUserName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(newPhotoUrl))
+        {
+            user.userData.profilePhotoUrl = newPhotoUrl;
+            updateData["userData.profilePhotoUrl"] = newPhotoUrl;
+        }
+
+        if (updateData.Count == 0)
+        {
+            Debug.Log("[FirestoreService] Нет изменений для обновления профиля.");
+            return;
+        }
+
+        DocumentReference userDocument = firestore.Collection("users").Document(user.userData.userId);
+        await userDocument.UpdateAsync(updateData);
+
+        NotificationManager.ShowNotification("Настройки профиля сохранены!");
     }
 
     public async Task DeleteAnonymousUserDocument(User user)
     {
         try
         {
-            DocumentReference userDoc = firestore.Collection("users").Document(user.userData.userId);
-            DocumentSnapshot snapshot = await userDoc.GetSnapshotAsync();
+            DocumentReference userDocument = firestore.Collection("users").Document(user.userData.userId);
+            DocumentSnapshot snapshot = await userDocument.GetSnapshotAsync();
             if (snapshot.Exists)
             {
-                await userDoc.DeleteAsync();
+                await userDocument.DeleteAsync();
                 Debug.Log($"[FirestoreService] Документ анонимного пользователя {user.userData.userId} удалён.");
             }
 
@@ -231,6 +269,7 @@ public class FirebaseFirestoreService
         string guid = Guid.NewGuid().ToString("N");
         return new string(guid);
     }
+
     public async Task<User> LoadUser(string userId)
     {
         DocumentReference userDocument = firestore.Collection("users").Document(userId);
@@ -251,7 +290,8 @@ public class FirebaseFirestoreService
             userName = userDataMap["userName"].ToString(),
             email = userDataMap["email"].ToString(),
             createdAt = ((Timestamp)userDataMap["createdAt"]).ToDateTime(),
-            lastLoginAt = ((Timestamp)userDataMap["lastLoginAt"]).ToDateTime()
+            lastLoginAt = ((Timestamp)userDataMap["lastLoginAt"]).ToDateTime(),
+            profilePhotoUrl = userDataMap.ContainsKey("profilePhotoUrl") ? userDataMap["profilePhotoUrl"].ToString() : null
         };
 
         List<int> cards = new();

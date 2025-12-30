@@ -5,6 +5,7 @@ using Firebase.Auth;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using Google;
 
 public class FirebaseAuthService
 {
@@ -164,6 +165,41 @@ public class FirebaseAuthService
             }
         }
     }
+
+    // public async Task LinkAnonymousToGoogle(string idToken)
+    // {
+    //     if (auth.CurrentUser == null || !auth.CurrentUser.IsAnonymous)
+    //     {
+    //         Debug.LogError("[AuthService] Текущий пользователь не анонимный, линк невозможен.");
+    //         NotificationManager.ShowNotification("Привязка доступна только для анонимных аккаунтов.");
+    //         return;
+    //     }
+
+    //     try
+    //     {
+    //         Credential credential = GoogleAuthProvider.GetCredential(idToken, null);
+    //         AuthResult result = await auth.CurrentUser.LinkWithCredentialAsync(credential);
+    //         FirebaseUser linkedUser = result.User;
+
+    //         await linkedUser.ReloadAsync();
+
+    //         bool exists = await FirebaseFirestoreService.Instance.UserDocumentExists(linkedUser.UserId);
+    //         if (exists)
+    //         {
+    //             Debug.LogError("[AuthService] У Google-аккаунта уже есть запись, линк запрещён.");
+    //             NotificationManager.ShowNotification("Этот Google-аккаунт уже зарегистрирован. Привязка невозможна."); return;
+    //         }
+
+    //         Debug.Log($"[AuthService] Анонимный аккаунт {auth.CurrentUser.UserId} привязан к Google {linkedUser.UserId}");
+
+    //         await FirebaseFirestoreService.Instance.CreateOrUpdateUserDocument(linkedUser);
+    //         NotificationManager.ShowNotification("Аккаунт успешно привязан к Google.");
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Debug.LogError($"[AuthService] Ошибка линка анонимного аккаунта: {e.Message}");
+    //     }
+    // }
 
     public void Dispose()
     {

@@ -33,15 +33,13 @@ public class AnonymousProvider : IAuthProvider
     private void OnAnonymousSuccess(AuthResult result)
     {
         FirebaseUser user = result.User;
-        ShowSuccess($"Добро пожаловать, {user.DisplayName}!");
+        ShowSuccess($"Добро пожаловать, Anonim!");
     }
 
     public void SignOut() => anonymousController.SignOut();
 
     private void ShowError(string message) => NotificationManager.ShowNotification(message, true);
     private void ShowSuccess(string message) => NotificationManager.ShowNotification(message, false);
-
-    public void SignUp() { }
 
     public bool IsSignedIn() => anonymousController.IsSignedIn;
     public string GetUserId() => anonymousController.CurrentUser?.UserId;

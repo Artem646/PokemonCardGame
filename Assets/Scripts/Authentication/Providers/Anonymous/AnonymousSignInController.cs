@@ -22,8 +22,9 @@ public class AnonymousSingInController
     {
         try
         {
+            auth.CurrentUser.DeleteAsync();
             auth.SignOut();
-            Debug.Log("[P]AnonymousAuthService] Пользователь вышел из Firebase.");
+            Debug.Log("[P]AnonymousAuthService] Анонимный пользователь вышел из Firebase и удалил аккаунт.");
         }
         catch (Exception ex)
         {

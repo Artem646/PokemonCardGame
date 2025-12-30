@@ -8,21 +8,24 @@ public class DeckSelectionSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private DeckEditorController editorController;
+    [SerializeField] private SettingsController settingsController;
 
     private VisualElement root;
     private DropdownField deckDropdown;
     private Button confirmButton;
     private Button makeDeckButton;
+    private VisualElement profileField;
 
-    private void Start()
+    private async void Start()
     {
         root = uiDocument.rootVisualElement;
         deckDropdown = root.Q<DropdownField>("deckSelectField");
         confirmButton = root.Q<Button>("confirmDeckButton");
         makeDeckButton = root.Q<Button>("makeDeckButton");
+        profileField = root.Q<VisualElement>("profileField");
 
-        UserProfileView.Instance.SetUIDocument(uiDocument);
-        UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
+        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
+        await UserProfileView.Instance.LoadUserData();
 
         RefreshDeckDropdown();
         RegisterCallbacks();
@@ -99,6 +102,11 @@ public class DeckSelectionSceneController : MonoBehaviour
             SceneSwitcher.SwitchScene("DecksScene", root);
         });
 
+        profileField.RegisterCallback<ClickEvent>(evt =>
+        {
+            settingsController.OpenSettings();
+        });
+
         SceneManager.activeSceneChanged += (oldScene, newScene) =>
         {
             if (newScene.name == "DeckSelectionScene")
@@ -115,16 +123,20 @@ public class DeckSelectionSceneController : MonoBehaviour
         else
         {
             SceneManager.LoadScene("PlayingScene");
-            SceneManager.sceneLoaded += (scene, mode) =>
-            {
-                GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-                if (gameManager != null)
-                {
-                    BotGameState botState = new GameObject("BotGameState").AddComponent<BotGameState>();
-                    botState.BindGameManager(gameManager);
-                    _ = botState.StartGame();
-                }
-            };
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
+        if (gameManager != null)
+        {
+            BotGameState botState = new GameObject("BotGameState").AddComponent<BotGameState>();
+            botState.BindGameManager(gameManager);
+            botState.StartGame();
+        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

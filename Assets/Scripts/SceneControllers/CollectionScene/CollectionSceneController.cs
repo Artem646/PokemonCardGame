@@ -19,7 +19,6 @@
 //     //     Debug.Log("[P][ImageLoader] Изображение пользователя установлено.");
 //     // }
 
-using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -30,33 +29,36 @@ public class CollectionSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private VisualTreeAsset cardTemplate;
+    [SerializeField] private SettingsController settingsController;
 
     private VisualElement root;
+    private VisualElement loadingOverlay;
+    private VisualElement cardOverlay;
+    private ScrollView cardsContainer;
+    private VisualElement filterPanel;
+    private VisualElement openFilterPanelButton;
+    private VisualElement profileField;
+
     private CollectionCardListController collectionCardListController;
     private FilterPanelView filterPanelView;
 
-    private VisualElement filterPanel;
-    private VisualElement handle;
     private bool isOpen = false;
     private float hidden = 250f;
     private float shown = 0f;
 
     private async void Start()
     {
-        root = uiDocument.rootVisualElement;
+        InitializeUI();
 
-        root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.Flex;
+        loadingOverlay.style.display = DisplayStyle.Flex;
 
         CardControllerFactory.Init(template: cardTemplate);
 
-        ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
         collectionCardListController = new CollectionCardListController(cardsContainer);
-
-        VisualElement cardOverlay = root.Q<VisualElement>("overlay");
         CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, cardOverlay);
 
-        UserProfileView.Instance.SetUIDocument(uiDocument);
-        UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
+        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
+        await UserProfileView.Instance.LoadUserData();
 
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += (activeFilters, pokemonElements) =>
@@ -68,12 +70,20 @@ public class CollectionSceneController : MonoBehaviour
 
         await WaitUntilCardsLoaded(cardsContainer, CardRepository.Instance.GetUserCards().cards.Count);
 
-        filterPanel = root.Q<VisualElement>("elementsFilterPanel");
-        handle = root.Q<VisualElement>("handle");
-
-        root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.None;
+        loadingOverlay.style.display = DisplayStyle.None;
 
         RegisterCallbacks();
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        loadingOverlay = root.Q<VisualElement>("loadingOverlay");
+        cardsContainer = root.Q<ScrollView>("cardScrollView");
+        cardOverlay = root.Q<VisualElement>("overlay");
+        filterPanel = root.Q<VisualElement>("elementsFilterPanel");
+        openFilterPanelButton = root.Q<VisualElement>("handle");
+        profileField = root.Q<VisualElement>("profileField");
     }
 
     private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)
@@ -99,11 +109,10 @@ public class CollectionSceneController : MonoBehaviour
 
         root.Q<Button>("decksButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
             SceneSwitcher.SwitchScene("DecksScene", root);
         });
 
-        handle.RegisterCallback<ClickEvent>(evt =>
+        openFilterPanelButton.RegisterCallback<ClickEvent>(evt =>
         {
             isOpen = !isOpen;
             float targetWidth = isOpen ? hidden : shown;
@@ -113,6 +122,11 @@ public class CollectionSceneController : MonoBehaviour
                 w => filterPanel.style.width = w,
                 targetWidth,
                 0.3f).SetEase(Ease.InOutQuad);
+        });
+
+        profileField.RegisterCallback<ClickEvent>(evt =>
+        {
+            settingsController.OpenSettings();
         });
     }
 }

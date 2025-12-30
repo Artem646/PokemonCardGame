@@ -7,13 +7,15 @@ public class DeckEditorController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private VisualTreeAsset cardTemplate;
+
     private VisualElement root;
-    private DeckEditorCardListController deckCardListController;
+    private VisualElement overlay;
     private TextField deckTitleTextField;
     private ScrollView deckCardsScrollView;
     private Button performActionButton;
     private Button closeDeckEditorButton;
 
+    private DeckEditorCardListController deckCardListController;
     private Deck currentDeck;
     private List<int> selectedCards = new();
     private const int MAX_CARDS_COUNT = 5;
@@ -24,18 +26,23 @@ public class DeckEditorController : MonoBehaviour
 
     private void Start()
     {
-        root = uiDocument.rootVisualElement;
-        root.style.display = DisplayStyle.None;
-        deckTitleTextField = root.Q<TextField>("deckTitle");
-        deckCardsScrollView = root.Q<ScrollView>("deckCardsScrollView");
-        closeDeckEditorButton = root.Q<Button>("closeDeckEditorButton");
-        performActionButton = root.Q<Button>("performActionButton");
+        InitializeUI();
 
         deckCardListController = new DeckEditorCardListController(deckCardsScrollView, cardTemplate, selectedCards, this);
         _ = deckCardListController.LoadUserCardsToDeckScrollView();
 
         closeDeckEditorButton.clicked += OnCloseDeckEditor;
         performActionButton.clicked += OnPerformAction;
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        overlay = root.Q<VisualElement>("overlay");
+        deckTitleTextField = root.Q<TextField>("deckTitle");
+        deckCardsScrollView = root.Q<ScrollView>("deckCardsScrollView");
+        closeDeckEditorButton = root.Q<Button>("closeDeckEditorButton");
+        performActionButton = root.Q<Button>("performActionButton");
     }
 
     public void OpenDeckEditor(Deck deck)
@@ -50,7 +57,7 @@ public class DeckEditorController : MonoBehaviour
             controller.SetSelected(inDeck);
         }
 
-        root.style.display = DisplayStyle.Flex;
+        overlay.style.display = DisplayStyle.Flex;
     }
 
     public void HandleCardSelectionChanged(int cardId, bool isSelected)
@@ -77,12 +84,11 @@ public class DeckEditorController : MonoBehaviour
         controller?.SetSelected(isSelected);
     }
 
-
     private void OnCloseDeckEditor()
     {
         selectedCards.Clear();
         currentDeck = null;
-        root.style.display = DisplayStyle.None;
+        overlay.style.display = DisplayStyle.None;
     }
 
     private async void OnPerformAction()
@@ -97,14 +103,14 @@ public class DeckEditorController : MonoBehaviour
 
         if (performActionButton.text == "Сохранить изменения")
         {
-            root.style.display = DisplayStyle.None;
+            overlay.style.display = DisplayStyle.None;
             await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
             OnDeckUpdate?.Invoke(currentDeck);
         }
 
         if (performActionButton.text == "Сохранить колоду")
         {
-            root.style.display = DisplayStyle.None;
+            overlay.style.display = DisplayStyle.None;
             await FirebaseFirestoreService.Instance.AddDeck(UserSession.Instance.ActiveUser, currentDeck);
             OnDeckAdded?.Invoke(currentDeck);
         }

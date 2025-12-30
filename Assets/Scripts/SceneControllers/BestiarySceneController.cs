@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -14,25 +15,32 @@ public class BestiarySceneController : MonoBehaviour
     [SerializeField] private VisualTreeAsset cardTemplate;
 
     private VisualElement root;
+    private VisualElement loadingOverlay;
+    private VisualElement cardOverlay;
+    private ScrollView cardsContainer;
+    private VisualElement filterPanel;
+    private VisualElement openFilterPanelButton;
+    private VisualElement profileField;
+
     private CollectionCardListController bestiaryCardsListController;
     private FilterPanelView filterPanelView;
 
+    private bool isOpen = false;
+    private float hidden = 250f;
+    private float shown = 0f;
+
     private async void Start()
     {
-        root = uiDocument.rootVisualElement;
+        InitializeUI();
 
-        root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.Flex;
+        loadingOverlay.style.display = DisplayStyle.Flex;
 
         CardControllerFactory.Init(template: cardTemplate);
 
-        ScrollView cardsContainer = root.Q<ScrollView>("cardScrollView");
         bestiaryCardsListController = new CollectionCardListController(cardsContainer);
-
-        VisualElement overlay = root.Q<VisualElement>("overlay");
-        CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, overlay);
+        CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, cardOverlay);
 
         filterPanelView = new FilterPanelView(root);
-
         filterPanelView.OnFilterChanged += (activefilters, pokemonElements) =>
         {
             bestiaryCardsListController.ApplyElementFilter(activefilters, cardsContainer, pokemonElements);
@@ -42,9 +50,20 @@ public class BestiarySceneController : MonoBehaviour
 
         await WaitUntilCardsLoaded(cardsContainer, CardRepository.Instance.GetGameCards().cards.Count);
 
-        root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.None;
+        loadingOverlay.style.display = DisplayStyle.None;
 
         RegisterCallbacks();
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        loadingOverlay = root.Q<VisualElement>("loadingOverlay");
+        cardsContainer = root.Q<ScrollView>("cardScrollView");
+        cardOverlay = root.Q<VisualElement>("overlay");
+        filterPanel = root.Q<VisualElement>("elementsFilterPanel");
+        openFilterPanelButton = root.Q<VisualElement>("handle");
+        profileField = root.Q<VisualElement>("profileField");
     }
 
     private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)
@@ -64,5 +83,17 @@ public class BestiarySceneController : MonoBehaviour
             else
                 SceneSwitcher.SwitchScene(SceneContext.PreviousSceneName, root);
         });
+
+        openFilterPanelButton.RegisterCallback<ClickEvent>(evt =>
+       {
+           isOpen = !isOpen;
+           float targetWidth = isOpen ? hidden : shown;
+
+           DOTween.To(
+               () => filterPanel.resolvedStyle.width,
+               w => filterPanel.style.width = w,
+               targetWidth,
+               0.3f).SetEase(Ease.InOutQuad);
+       });
     }
 }

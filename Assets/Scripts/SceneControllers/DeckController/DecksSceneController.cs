@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -6,18 +5,20 @@ using UnityEngine.UIElements;
 public class DecksSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
+    [SerializeField] private SettingsController settingsController;
 
     private VisualElement root;
+    private VisualElement profileField;
 
-    // private async void Start()
-    private void Start()
+    private async void Start()
     {
         root = uiDocument.rootVisualElement;
+        profileField = root.Q<VisualElement>("profileField");
 
         // root.Q<VisualElement>("loadingOverlay").style.display = DisplayStyle.Flex;
 
-        UserProfileView.Instance.SetUIDocument(uiDocument);
-        UserProfileView.Instance.UpdateView(UserProfileView.Instance.GetCachedProfile());
+        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
+        await UserProfileView.Instance.LoadUserData();
 
         // await WaitUntilCardsLoaded(cardsContainer, CardRepository.Instance.GetUserCards().cards.Count);
 
@@ -50,6 +51,11 @@ public class DecksSceneController : MonoBehaviour
         root.Q<Button>("collectionButton").RegisterCallback<ClickEvent>(evt =>
         {
             SceneSwitcher.SwitchScene("CollectionScene", root);
+        });
+
+        profileField.RegisterCallback<ClickEvent>(evt =>
+        {
+            settingsController.OpenSettings();
         });
     }
 }

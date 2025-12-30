@@ -17,11 +17,15 @@ public class NetworkGameState : NetworkBehaviour
     [Networked] public PlayerRef FirstPlayerRef { get; set; }
     [Networked] public PlayerRef SecondPlayerRef { get; set; }
 
+    [Networked] public NetworkString<_32> FirstPlayerName { get; set; }
+    [Networked] public NetworkString<_32> SecondPlayerName { get; set; }
+
     [Networked] public bool IsFirstPlayerTurn { get; set; }
     [Networked] public bool IsSecondPlayerTurn { get; set; }
     [Networked] public int RoundNumber { get; set; }
     [Networked] public float RoundPhaseEndTime { get; set; }
     [Networked] public int MovesInRound { get; set; }
+
 
     public bool IsFirstPlayer => Runner.LocalPlayer == FirstPlayerRef;
     public bool IsSecondPlayer => Runner.LocalPlayer == SecondPlayerRef;
@@ -82,8 +86,16 @@ public class NetworkGameState : NetworkBehaviour
     {
         if (HasStateAuthority)
         {
-            if (FirstPlayerRef == default) FirstPlayerRef = player;
-            else if (SecondPlayerRef == default) SecondPlayerRef = player;
+            if (FirstPlayerRef == default)
+            {
+                FirstPlayerRef = player;
+                FirstPlayerName = UserSession.Instance.ActiveUser.userData.userName;
+            }
+            else if (SecondPlayerRef == default)
+            {
+                SecondPlayerRef = player;
+                SecondPlayerName = UserSession.Instance.ActiveUser.userData.userName;
+            }
         }
     }
 
@@ -179,20 +191,26 @@ public class NetworkGameState : NetworkBehaviour
         float attackerMultiplier = chart.GetMultiplier(attacker.CardModel.mainElement, defender.CardModel.mainElement);
         float defenderMultiplier = chart.GetMultiplier(defender.CardModel.mainElement, attacker.CardModel.mainElement);
 
+        string resultMessage;
+
         if (attackerMultiplier > defenderMultiplier)
         {
             gameManager.MoveCardToReset(defender, false);
-
+            resultMessage = $"{attacker.CardModel.title} победил {defender.CardModel.title}, потому что {attacker.CardModel.mainElement} сильнее {defender.CardModel.mainElement}";
         }
         else if (attackerMultiplier < defenderMultiplier)
         {
             gameManager.MoveCardToReset(attacker, true);
+            resultMessage = $"{defender.CardModel.title} победил {attacker.CardModel.title}, потому что {defender.CardModel.mainElement} сильнее {attacker.CardModel.mainElement}";
         }
         else
         {
             gameManager.MoveCardToReset(attacker, true);
             gameManager.MoveCardToReset(defender, false);
+            resultMessage = $"{attacker.CardModel.title} и {defender.CardModel.title} равны по силе, оба отправлены в сброс";
         }
+
+        NotificationManager.ShowNotification(resultMessage);
     }
 
     private bool IsValidTurnRequest(PlayerRef player)
@@ -222,11 +240,11 @@ public class NetworkGameState : NetworkBehaviour
         if (gameManager != null)
         {
             gameManager.ShowGameOverOverlay();
-            StartCoroutine(LoadMainMenuAfterDelay(3f));
+            StartCoroutine(LoadSceneAfterDelay(3f));
         }
     }
 
-    private IEnumerator LoadMainMenuAfterDelay(float seconds)
+    private IEnumerator LoadSceneAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         SceneManager.LoadScene("CollectionScene");

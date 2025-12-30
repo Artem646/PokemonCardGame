@@ -65,7 +65,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log($"OnPlayerLeft: PlayerId={player.PlayerId}");
     }
 
-    public async void ShutdownRunner() // Команата не удаляется !!!!!!!
+    public async void ShutdownRunner()
     {
         if (networkRunner != null)
         {

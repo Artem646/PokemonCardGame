@@ -22,12 +22,12 @@ public static class CardElementLayoutConfigForCollection
     {
         borderBodyFileName = "borderWithLinearGradientForOneElement",
         borderElementsFileName = "borderForOneElement",
-        Width = 50,
-        Height = 26,
-        Left = 167,
-        Top = 195,
-        MainLeft = 19,
-        MainTop = 4,
+        Width = 63,
+        Height = 32,
+        Left = 190,
+        Top = 224,
+        MainLeft = 24,
+        MainTop = 5,
         SecondaryLeft = 0,
         SecondaryTop = 0
     };
@@ -36,14 +36,14 @@ public static class CardElementLayoutConfigForCollection
     {
         borderBodyFileName = "borderWithLinearGradientForTwoElement",
         borderElementsFileName = "borderForTwoElements",
-        Width = 61.7f,
-        Height = 26,
-        Left = 155,
-        Top = 195,
-        MainLeft = 14,
-        MainTop = 4,
-        SecondaryLeft = 38,
-        SecondaryTop = 4
+        Width = 75,
+        Height = 32,
+        Left = 178,
+        Top = 223,
+        MainLeft = 16,
+        MainTop = 5,
+        SecondaryLeft = 43,
+        SecondaryTop = 5
     };
 }
 
@@ -161,6 +161,17 @@ public static class CardViewHelper
         BindGameObjectWithSvg(bodyContainer, bodyBorderXmlDocument.OuterXml);
         BindGameObjectWithSvg(elementsArea, elementsAreaBorderXmlDocument.OuterXml);
     }
+    public static void SetImagesUIToolkit(VisualElement root, CardModel model)
+    {
+        root.Q<VisualElement>("pokemonImage").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{model.imageName}"));
+
+        root.Q<VisualElement>("mainElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{model.mainElement.ToString().ToLowerInvariant()}"));
+
+        root.Q<VisualElement>("secondaryElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{model.secondaryElement?.ToString().ToLowerInvariant()}"));
+    }
 
     public static void SetImagesUGUI(GameObject root, CardModel model)
     {
@@ -174,29 +185,16 @@ public static class CardViewHelper
         secondaryElementImage.sprite = Resources.Load<Sprite>($"Sprites/Elements/{model.secondaryElement?.ToString().ToLowerInvariant()}");
     }
 
-    public static void SetImagesUIToolkit(VisualElement root, CardModel model)
+    public static void BindVisualElementWithSvg(VisualElement visualElement, string xmlCode)
     {
-        root.Q<VisualElement>("pokemonImage").style.backgroundImage =
-            new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{model.imageName}"));
-
-        root.Q<VisualElement>("mainElement").style.backgroundImage =
-            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{model.mainElement.ToString().ToLowerInvariant()}"));
-
-        root.Q<VisualElement>("secondaryElement").style.backgroundImage =
-            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{model.secondaryElement?.ToString().ToLowerInvariant()}"));
+        Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
+        visualElement.style.backgroundImage = new StyleBackground(texture);
     }
-
     public static void BindGameObjectWithSvg(GameObject gameObject, string xmlCode)
     {
         Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
         gameObject.GetComponent<UnityEngine.UI.Image>().sprite =
             Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
-    public static void BindVisualElementWithSvg(VisualElement visualElement, string xmlCode)
-    {
-        Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
-        visualElement.style.backgroundImage = new StyleBackground(texture);
     }
 
     public static void UpdateGradientStops(XmlDocument document, Color color1, Color color2)

@@ -14,19 +14,17 @@ public class UserProfileService
 
     public async Task<UserProfileData> GetUserProfile()
     {
-        var user = CurrentUser;
-        if (user == null) return null;
+        User user = UserSession.Instance.ActiveUser;
 
         Texture2D photoTexture = null;
-        string photoUrl = user.PhotoUrl?.ToString();
+        string photoUrl = user.userData.profilePhotoUrl;
+
         if (!string.IsNullOrEmpty(photoUrl))
-        {
             photoTexture = await LoadUserImage(photoUrl);
-        }
 
         return new UserProfileData
         {
-            DisplayName = user.DisplayName,
+            DisplayName = user.userData.userName,
             PhotoTexture = photoTexture
         };
     }

@@ -2,9 +2,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [UxmlElement]
-public partial class СustomizableButton : Button
+public partial class CustomizableButton : Button
 {
     [UxmlAttribute] public Color FillColor { get; set; } = Color.clear;
+    [UxmlAttribute] public Color HoverColor { get; set; } = Color.chocolate;
+    [UxmlAttribute] public Color PressedColor { get; set; } = Color.chocolate;
     [UxmlAttribute] public Color BorderColor { get; set; } = Color.whiteSmoke;
     [UxmlAttribute] public float BorderWidth { get; set; } = 2f;
 
@@ -17,12 +19,14 @@ public partial class СustomizableButton : Button
     [UxmlAttribute] public float AngleLeftBottom { get; set; } = 0f;
     [UxmlAttribute] public float AngleRightTop { get; set; } = 0f;
     [UxmlAttribute] public float AngleRightBottom { get; set; } = 0f;
+    [UxmlAttribute] public string ButtonText { get; set; } = "PLAY";
 
     private Label textLabel;
 
-    [UxmlAttribute] public string ButtonText { get; set; } = "PLAY";
+    private bool isHovered = false;
+    private bool isPressed = false;
 
-    public СustomizableButton()
+    public CustomizableButton()
     {
         generateVisualContent += OnGenerateVisualContent;
 
@@ -31,7 +35,13 @@ public partial class СustomizableButton : Button
         textLabel.style.flexGrow = 1;
         textLabel.style.color = Color.white;
         Add(textLabel);
+
         RegisterCallback<GeometryChangedEvent>(evt => { textLabel.text = ButtonText; });
+
+        RegisterCallback<MouseEnterEvent>(evt => { isHovered = true; MarkDirtyRepaint(); });
+        RegisterCallback<MouseLeaveEvent>(evt => { isHovered = false; isPressed = false; MarkDirtyRepaint(); });
+        RegisterCallback<MouseDownEvent>(evt => { isPressed = true; MarkDirtyRepaint(); });
+        RegisterCallback<MouseUpEvent>(evt => { isPressed = false; MarkDirtyRepaint(); });
     }
 
     private void OnGenerateVisualContent(MeshGenerationContext ctx)
@@ -41,7 +51,11 @@ public partial class СustomizableButton : Button
         float h = resolvedStyle.height;
         float halfBorder = BorderWidth / 2f;
 
-        painter.fillColor = FillColor;
+        Color currentColor = FillColor;
+        if (isPressed) currentColor = PressedColor;
+        else if (isHovered) currentColor = HoverColor;
+
+        painter.fillColor = currentColor;
         painter.strokeColor = BorderColor;
         painter.lineWidth = BorderWidth;
 

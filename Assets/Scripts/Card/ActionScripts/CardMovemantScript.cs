@@ -31,7 +31,6 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // if (!CardStateManager.IsCardRaised && (draggingCard == null || draggingCard == this))
         if (!CardStateManager.IsCardRaised)
         {
             if (draggingCard != null && draggingCard != this) return;
@@ -56,20 +55,12 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
                 canvasGroup.blocksRaycasts = false;
 
                 rectTransform.DOScale(originalScale * 1.1f, 0.15f);
-
-                // BattleCardController cardController = gameManager.CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == CardId);
-                // if (cardController != null)
-                // {
-                //     foreach (BattleCardController enemyCard in gameManager.CurrentGame.EnemyFieldListController.CardControllers)
-                //         enemyCard.ShowAttackTargets(gameManager.typeChart, cardController.CardModel.mainElement);
-                // }
             }
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // if (!CardStateManager.IsCardRaised && (draggingCard == null || draggingCard == this))
         if (!CardStateManager.IsCardRaised)
         {
             if (!isDraggable && draggingCard != this) return;
@@ -90,8 +81,6 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (!isDraggable && draggingCard != this) return;
 
-        // if (isDraggable && draggingCard == this)
-        // {
         transform.SetParent(DefaultParent, true);
         canvasGroup.blocksRaycasts = true;
 
@@ -107,32 +96,16 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
             if (prevFieldType != dropPlace.type)
             {
                 int siblingIndex = transform.GetSiblingIndex();
-                // bool toField = dropPlace.type == FieldType.SELF_FIELD;
                 gameManager.RequestPlayCard(CardId, siblingIndex);
 
-                // if (toField)
-                // {
                 BattleCardController cardController = gameManager.CurrentGame.PlayerHandListController.CardControllers.FirstOrDefault(c => c.CardModel.id == CardId);
                 gameManager.CurrentGame.PlayerHandListController.CardControllers.Remove(cardController);
                 gameManager.CurrentGame.PlayerFieldListController.CardControllers.Add(cardController);
                 gameManager.cardIsThrown = true;
-                // }
-                // else
-                // {
-                //     BattleCardController cardController = gameManager.CurrentGame.PlayerFieldListController.CardControllers.FirstOrDefault(c => c.CardModel.id == CardId);
-                //     gameManager.CurrentGame.PlayerFieldListController.CardControllers.Remove(cardController);
-                //     gameManager.CurrentGame.PlayerHandListController.CardControllers.Add(cardController);
-                // }
             }
         }
 
-        // foreach (var enemyCard in gameManager.CurrentGame.EnemyFieldListController.CardControllers)
-        // {
-        //     enemyCard.ClearAttackTargets();
-        // }
-
         draggingCard = null;
-        // }
     }
 
     void CheckPosition()

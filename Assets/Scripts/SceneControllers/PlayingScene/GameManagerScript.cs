@@ -108,12 +108,6 @@ public class GameManagerScript : MonoBehaviour
         if (!cardIsThrown) AutoPlayFirstCard();
         cardIsThrown = false;
 
-        // foreach (var card in CurrentGame.PlayerFieldListController.CardControllers)
-        // {
-        //     card.ChangeAttackState(false);
-        //     card.DeHighlightCard();
-        // }
-
         if (IsMyTurn)
         {
             if (networkGameState != null)
@@ -285,7 +279,6 @@ public class GameManagerScript : MonoBehaviour
     {
         gameOverOverlay.SetActive(true);
         yield return new WaitForSeconds(seconds);
-        gameOverOverlay.SetActive(false);
     }
 
     public Transform EnemyFieldContainer => enemyFieldContainer;

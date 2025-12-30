@@ -8,4 +8,5 @@ public class UserData
     public string email;
     public DateTime createdAt;
     public DateTime lastLoginAt;
+    public string profilePhotoUrl;
 }

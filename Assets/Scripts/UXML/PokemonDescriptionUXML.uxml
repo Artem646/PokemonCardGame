@@ -1,5 +1,6 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Scripts/USS/CollectionScreenUSS.uss?fileID=7433441132597879392&amp;guid=ce0b88583c4266649b8cd3343dfdc85a&amp;type=3#CollectionScreenUSS" />
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="VisualElement" class="top-bar" style="width: auto; flex-grow: 0; padding-bottom: 10px; padding-top: 10px; padding-left: 60px; padding-right: 20px; height: 16%;">
         <ui:VisualElement class="nav-buttons" style="min-width: auto; max-width: none; max-height: none; min-height: auto; height: 80%;">
             <ParallelogramButton text="EXIT" name="exitButton" class="nav-button" style="font-size: 35px; width: 320px;" />

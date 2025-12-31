@@ -57,12 +57,6 @@ public class BotGameState : MonoBehaviour
         }
 
         TryResolveBattle();
-
-        // IsPlayerTurn = true;
-        // RoundNumber++;
-        // gameManager.OnTurnChanged(RoundNumber);
-
-        // CheckGameEnd();
     }
 
     private void TryResolveBattle()
@@ -128,7 +122,7 @@ public class BotGameState : MonoBehaviour
             resultMessage = $"{attackerOwner}: {attacker.CardModel.title} и {defenderOwner}: {defender.CardModel.title} равны по силе, оба отправлены в сброс";
         }
 
-        NotificationManager.ShowNotification(resultMessage);
+        NotificationManager.ShowNotification(resultMessage, NotificationType.Info);
     }
 
 

@@ -1,12 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// public interface ICardView
-// {
-//     GameObject CardRootGameObject { get; }
-//     VisualElement CardRootUIToolkit { get; }
-// }
-
 public interface ICardView
 {
     CardModel CardModel { get; }

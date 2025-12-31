@@ -1,24 +1,3 @@
-
-//         // string photoUrl = FirebaseService.Instance.GetAuth().CurrentUser.PhotoUrl?.ToString();
-//         // StartCoroutine(LoadUserImage(photoUrl));
-
-//     // private IEnumerator LoadUserImage(string url)
-//     // {
-//     //     UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
-//     //     yield return request.SendWebRequest();
-
-//     //     if (request.result != UnityWebRequest.Result.Success)
-//     //     {
-//     //         Debug.LogError("[P][ImageLoader] Ошибка загрузки изображения: " + request.error);
-//     //         yield break;
-//     //     }
-
-//     //     Texture2D texture = DownloadHandlerTexture.GetContent(request);
-//     //     userImage.style.backgroundImage = new StyleBackground(texture);
-
-//     //     Debug.Log("[P][ImageLoader] Изображение пользователя установлено.");
-//     // }
-
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;

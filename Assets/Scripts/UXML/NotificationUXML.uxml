@@ -1,6 +1,8 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/USS/NotificationUSS.uss?fileID=7433441132597879392&amp;guid=9510eb0deccc36241b702bbcc1c68266&amp;type=3#NotificationUSS"/>
-    <ui:VisualElement name="notification-container" class="notification-container">
-        <ui:Label name="notification-text" class="notification-text"/>
+    <ui:VisualElement name="notificationContainer" class="notification-container">
+        <ui:Label name="notificationText" class="notification-text"/>
     </ui:VisualElement>
 </ui:UXML>

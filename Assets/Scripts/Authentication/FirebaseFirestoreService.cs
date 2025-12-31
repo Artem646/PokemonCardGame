@@ -143,7 +143,7 @@ public class FirebaseFirestoreService
         DocumentReference userDocument = firestore.Collection("users").Document(user.userData.userId);
         await userDocument.UpdateAsync(updateData);
 
-        NotificationManager.ShowNotification("Настройки профиля сохранены!");
+        NotificationManager.ShowNotification("Настройки профиля сохранены!", NotificationType.Success);
     }
 
     public async Task DeleteAnonymousUserDocument(User user)
@@ -209,8 +209,6 @@ public class FirebaseFirestoreService
         deck.deckId = deckId;
         user.decks.Add(deck);
 
-        Debug.Log($"[DeckEditor] Новая колода '{deck.name}' добавлена локально. Карт: {deck.cards.Count}");
-
         DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
 
         Dictionary<string, object> deckData = new()
@@ -220,8 +218,7 @@ public class FirebaseFirestoreService
         };
 
         await deckDocument.SetAsync(deckData);
-        Debug.Log($"[FirestoreService] Новая колода '{deck.name}' сохранена для пользователя {user.userData.userId} (id: {deck.deckId})");
-        NotificationManager.ShowNotification($"Колода '{deck.name}' добавлена для пользователя {user.userData.userName}");
+        NotificationManager.ShowNotification($"Колода '{deck.name}' добавлена", NotificationType.Success);
     }
 
     public async Task UpdateDeck(User user, Deck deck)
@@ -232,8 +229,6 @@ public class FirebaseFirestoreService
             existingDeck.name = deck.name;
             existingDeck.cards = new List<int>(deck.cards);
 
-            Debug.Log($"[DeckEditor] Колода '{deck.name}' обновлена локально. Карт: {deck.cards.Count}");
-
             DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
 
             Dictionary<string, object> deckData = new()
@@ -243,8 +238,6 @@ public class FirebaseFirestoreService
             };
 
             await deckDocument.SetAsync(deckData, SetOptions.Overwrite);
-            Debug.Log($"[FirestoreService] Колода '{deck.name}' обновлена для пользователя {user.userData.userId} (id: {deck.deckId})");
-            NotificationManager.ShowNotification($"Колода '{deck.name}' обновлена для пользователя {user.userData.userName}");
         }
     }
 
@@ -254,13 +247,11 @@ public class FirebaseFirestoreService
         if (existingDeck != null)
         {
             user.decks.Remove(existingDeck);
-            Debug.Log($"[DeckEditor] Колода '{existingDeck.name}' удалена локально.");
 
             DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
             await deckDocument.DeleteAsync();
 
-            Debug.Log($"[FirestoreService] Колода '{deck.name}' удалена для пользователя {user.userData.userId} (id: {deck.deckId})");
-            NotificationManager.ShowNotification($"Колода '{deck.name}' удалена для пользователя {user.userData.userName} (id: {deck.deckId})");
+            NotificationManager.ShowNotification($"Колода '{deck.name}' удалена", NotificationType.Success);
         }
     }
 

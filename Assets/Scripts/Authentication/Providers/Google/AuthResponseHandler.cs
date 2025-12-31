@@ -172,6 +172,6 @@ public static class AuthResponseHandler
 
     private static void ShowError(string message)
     {
-        NotificationManager.ShowNotification(message, true);
+        NotificationManager.ShowNotification(message, NotificationType.Error);
     }
 }

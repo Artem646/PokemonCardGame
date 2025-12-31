@@ -95,8 +95,8 @@ public class GoogleProvider : IAuthProvider
         firebaseController.SignOut();
     }
 
-    private void ShowError(string message) => NotificationManager.ShowNotification(message, true);
-    private void ShowSuccess(string message) => NotificationManager.ShowNotification(message, false);
+    private void ShowError(string message) => NotificationManager.ShowNotification(message, NotificationType.Error);
+    private void ShowSuccess(string message) => NotificationManager.ShowNotification(message, NotificationType.Success);
 
     public bool IsSignedIn() => firebaseController.IsSignedIn;
     public string GetUserId() => firebaseController.CurrentUser?.UserId;

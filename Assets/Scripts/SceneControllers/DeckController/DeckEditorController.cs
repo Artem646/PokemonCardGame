@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class DeckEditorController : MonoBehaviour
 {
@@ -78,6 +79,9 @@ public class DeckEditorController : MonoBehaviour
         {
             controller?.SetSelected(false);
             selectedCards.Remove(cardId);
+
+            NotificationManager.ShowNotification($"В колоде должно быть ровно {MAX_CARDS_COUNT} карт!", NotificationType.Info);
+
             return;
         }
 
@@ -96,27 +100,52 @@ public class DeckEditorController : MonoBehaviour
         if (currentDeck == null) return;
 
         if (selectedCards.Count != MAX_CARDS_COUNT)
+        {
+            NotificationManager.ShowNotification($"В колоде должно быть ровно {MAX_CARDS_COUNT} карт!", NotificationType.Info);
             return;
+        }
 
-        currentDeck.name = deckTitleTextField.value;
-        currentDeck.cards = new List<int>(selectedCards);
+        string newName = deckTitleTextField.value;
+        List<int> newCards = new(selectedCards);
+
+        bool nameChanged = !string.Equals(currentDeck.name, newName, StringComparison.Ordinal);
+        bool cardsChanged = !currentDeck.cards.SequenceEqual(selectedCards);
 
         if (performActionButton.text == "Сохранить изменения")
         {
             overlay.style.display = DisplayStyle.None;
-            await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
-            OnDeckUpdate?.Invoke(currentDeck);
+
+            if (nameChanged || cardsChanged)
+            {
+                currentDeck.name = newName;
+                currentDeck.cards = newCards;
+
+                await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
+                OnDeckUpdate?.Invoke(currentDeck);
+                NotificationManager.ShowNotification("Изменения сохранены!", NotificationType.Success);
+            }
+            else
+            {
+                NotificationManager.ShowNotification("Нет изменений", NotificationType.Info);
+            }
         }
 
         if (performActionButton.text == "Сохранить колоду")
         {
             overlay.style.display = DisplayStyle.None;
+
+            currentDeck.name = newName;
+            currentDeck.cards = newCards;
+
             await FirebaseFirestoreService.Instance.AddDeck(UserSession.Instance.ActiveUser, currentDeck);
             OnDeckAdded?.Invoke(currentDeck);
         }
 
         if (performActionButton.text == "Играть")
         {
+            currentDeck.name = newName;
+            currentDeck.cards = newCards;
+
             OnDeckMaked?.Invoke(currentDeck);
         }
     }

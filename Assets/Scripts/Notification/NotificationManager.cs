@@ -1,12 +1,35 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using DG.Tweening;
+using System.Collections.Generic;
+
+public enum NotificationType
+{
+    Success,
+    Error,
+    Info
+}
 
 public class NotificationManager : MonoBehaviour
 {
     public static NotificationManager Instance { get; private set; }
+
     [SerializeField] private UIDocument uiDocument;
+
     private VisualElement notificationContainer;
     private Label notificationText;
+
+    private Tweener showTween;
+    private Tweener hideTween;
+    private Tween delayedHideTween;
+
+    private Dictionary<NotificationType, string> notificationMap =
+        new()
+        {
+            { NotificationType.Success, "success-notification" },
+            { NotificationType.Error, "error-notification" },
+            { NotificationType.Info, "info-notification" }
+        };
 
     private void Awake()
     {
@@ -19,46 +42,75 @@ public class NotificationManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         VisualElement root = uiDocument.rootVisualElement;
-        notificationContainer = root.Q<VisualElement>("notification-container");
-        notificationText = root.Q<Label>("notification-text");
+        notificationContainer = root.Q<VisualElement>("notificationContainer");
+        notificationText = root.Q<Label>("notificationText");
 
         notificationContainer.style.display = DisplayStyle.None;
+        notificationContainer.style.scale = new Scale(new Vector2(0f, 1f));
     }
 
-    public static void ShowNotification(string message, bool isError = false)
+    public static void ShowNotification(string message, NotificationType type, float durationSeconds = 3f)
     {
-        Instance.Show(message, isError);
+        Instance.Show(message, type, durationSeconds);
     }
 
-    private void Show(string message, bool isError = false)
+    private void Show(string message, NotificationType type, float durationSeconds)
     {
-        if (notificationContainer == null || notificationText == null)
-        {
-            Debug.LogWarning("[P][Notification] Контейнер не найден!");
-            return;
-        }
-
         notificationText.text = message;
 
-        if (isError)
-        {
-            notificationContainer.RemoveFromClassList("success-notification");
-            notificationContainer.AddToClassList("error-notification");
-        }
-        else
-        {
-            notificationContainer.RemoveFromClassList("error-notification");
-            notificationContainer.AddToClassList("success-notification");
-        }
+        foreach (string cssClass in notificationMap.Values)
+            notificationContainer.RemoveFromClassList(cssClass);
+
+        if (notificationMap.TryGetValue(type, out string cssClassName))
+            notificationContainer.AddToClassList(cssClassName);
 
         notificationContainer.style.display = DisplayStyle.Flex;
 
-        CancelInvoke(nameof(HideNotification));
-        Invoke(nameof(HideNotification), 3f);
+        showTween?.Kill();
+        hideTween?.Kill();
+        delayedHideTween?.Kill();
+
+        notificationContainer.style.scale = new Scale(new Vector2(0f, 1f));
+
+        float start = 0f;
+        float duration = 0.3f;
+
+        showTween = DOTween.To(
+            () => start,
+            x =>
+            {
+                start = x;
+                notificationContainer.style.scale = new Scale(new Vector2(x, 1f));
+            },
+            1f,
+            duration
+        ).SetEase(Ease.InCubic);
+
+        delayedHideTween = DOVirtual.DelayedCall(durationSeconds, HideNotification);
     }
 
     private void HideNotification()
     {
-        notificationContainer.style.display = DisplayStyle.None;
+        showTween?.Kill();
+        hideTween?.Kill();
+        delayedHideTween?.Kill();
+
+        float currentX = notificationContainer.resolvedStyle.scale.value.x;
+        float duration = 0.3f;
+
+        hideTween = DOTween.To(
+            () => currentX,
+            x =>
+            {
+                currentX = x;
+                notificationContainer.style.scale = new Scale(new Vector2(x, 1f));
+            },
+            0f,
+            duration
+        ).SetEase(Ease.InBack)
+         .OnComplete(() =>
+         {
+             notificationContainer.style.display = DisplayStyle.None;
+         });
     }
 }

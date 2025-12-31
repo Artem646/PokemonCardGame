@@ -15,24 +15,28 @@
     justify-content: center;
 }
 
-.error-notification {  
-    background-color: #FF4757;
-    color: white;
+.error-notification {
+    background-color: rgb(255, 71, 87);
     border-width: 1px;
-    border-color: #FF3742;
+    border-color: rgb(255, 55, 66);
 }
 
 .success-notification {
-    background-color: #2ED573;
-    color: white;
+    background-color: rgb(46, 213, 115);
     border-width: 1px;
-    border-color: #25CC65;
+    border-color: rgb(37, 204, 101);
+}
+
+.info-notification {
+    background-color: rgb(211, 209, 42);
+    border-width: 1px;
+    border-color: rgb(211, 209, 42);
 }
 
 .notification-text {
-    font-size: 27px;
-    -unity-text-align: middle-center;
-    color: #FFFFFF;
+    font-size: 28px;
+    color: rgb(0, 0, 0);
     white-space: normal;
+    -unity-text-align: middle-center;
     -unity-font-style: bold;
 }

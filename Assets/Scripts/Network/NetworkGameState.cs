@@ -37,7 +37,7 @@ public class NetworkGameState : NetworkBehaviour
 
     public override void Spawned()
     {
-        NotificationManager.ShowNotification("Готов");
+        NotificationManager.ShowNotification("Готов", NotificationType.Info);
         if (HasStateAuthority)
         {
             List<int> ids = SelectedDeckManager.GetSelectedDeckIds();
@@ -210,7 +210,7 @@ public class NetworkGameState : NetworkBehaviour
             resultMessage = $"{attacker.CardModel.title} и {defender.CardModel.title} равны по силе, оба отправлены в сброс";
         }
 
-        NotificationManager.ShowNotification(resultMessage);
+        NotificationManager.ShowNotification(resultMessage, NotificationType.Info);
     }
 
     private bool IsValidTurnRequest(PlayerRef player)

@@ -91,7 +91,9 @@ public class DeckController : MonoBehaviour
         deleteDeckButton.RegisterCallback<ClickEvent>(evt =>
         {
             _ = FirebaseFirestoreService.Instance.DeleteDeck(UserSession.Instance.ActiveUser, deck);
-            AddDecksToContainer(UserSession.Instance.ActiveUser.decks);
+            VisualElement deckRootToRemove = decksScrollView.Children().FirstOrDefault(child => (string)child.userData == deck.deckId);
+            if (deckRootToRemove != null)
+                decksScrollView.Remove(deckRootToRemove);
         });
     }
 

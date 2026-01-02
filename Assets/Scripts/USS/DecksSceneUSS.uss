@@ -60,3 +60,11 @@
     justify-content: flex-start;
     align-content: flex-start;
 }
+
+.overlay-none {
+    display: none;
+}
+
+.overlay-active {
+    display: flex;
+}

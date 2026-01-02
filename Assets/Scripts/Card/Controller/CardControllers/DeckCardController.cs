@@ -13,16 +13,22 @@ public class DeckCardController : BaseCardController
 
     public override void RegisterEvents()
     {
-        // DeckCardView.RegisterClickHandlers(OnCardElementClicked);
+        DeckCardView.RegisterClickHandlers(OnCardElementClicked);
     }
 
     public override void UnregisterEvents()
     {
-        // DeckCardView.UnregisterClickHandlers(OnCardElementClicked);
+        DeckCardView.UnregisterClickHandlers(OnCardElementClicked);
     }
 
-    // private void OnCardElementClicked(ClickEvent evt)
-    // { }
+    private void OnCardElementClicked(ClickEvent evt)
+    {
+        DeckCardController cloneController = CardControllerFactory.Create<DeckCardController>(CardModel);
+        cloneController?.UnregisterEvents();
+        IDeckCardView cloneView = cloneController?.DeckCardView;
+        if (cloneView != null)
+            CardOverlayManager.Instance?.ShowDeckCard(DeckCardView, cloneView, evt);
+    }
 
     public override void AddToContainer(object container)
     {

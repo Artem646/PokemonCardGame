@@ -21,7 +21,7 @@ public interface IUGUICardView : ICardView
 
 public interface ICollectionCardView : IUIToolkitCardView
 {
-    void SetOpacity(bool isUserCard);
+    void ApplyOwnedCardStyle(bool isUserCard);
     void SetActive(bool isActive);
     void RegisterClickHandlers(EventCallback<ClickEvent> onClick);
     void UnregisterClickHandlers(EventCallback<ClickEvent> onClick);

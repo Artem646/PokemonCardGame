@@ -1,11 +1,3 @@
-.card-zoom {
-    scale: 1.75;
-    transition: scale 150ms ease;
-    transform-origin: center center;
-    transition: scale 2.3s ease, translate 2.3s ease;
-    translate: 0 0;
-}
-
 #fullCard {
     flex-grow: 0;
     width: 300px;
@@ -297,4 +289,8 @@
     -unity-background-scale-mode: scale-and-crop;
     background-position-x: left 0;
     opacity: 0.34;
+}
+
+.grayCard { 
+    filter: grayscale(100%); 
 }

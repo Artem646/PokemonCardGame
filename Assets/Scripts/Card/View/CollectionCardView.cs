@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitCardView
@@ -5,6 +6,7 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
     public VisualElement CardRoot { get; }
     public VisualTreeAsset CardTemplate { get; }
     private VisualElement cardElement;
+    private VisualElement border;
     private Label titleLabel;
 
     public CollectionCardView(CardModel model, VisualTreeAsset template)
@@ -19,6 +21,7 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
     private void InitializeElements()
     {
         cardElement = CardRoot.Q<VisualElement>("fullCard");
+        border = CardRoot.Q<VisualElement>("border");
         titleLabel = CardRoot.Q<Label>("title");
     }
 
@@ -26,7 +29,7 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
     {
         cardElement.style.backgroundColor = new StyleColor(CardModel.colors.cardColor);
         titleLabel.text = CardModel.title;
-        CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, false);
+        CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, CardElementLayoutModeConfig.Collection);
         CardViewHelper.SetImagesUIToolkit(CardRoot, CardModel);
     }
 
@@ -45,8 +48,18 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
         cardElement.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    public void SetOpacity(bool isUserCard)
+    public void ApplyOwnedCardStyle(bool isUserCard)
     {
-        cardElement.style.opacity = isUserCard ? 1f : 0.3f;
+        if (!isUserCard)
+        {
+            cardElement.AddToClassList("grayCard");
+        }
+        else
+        {
+            border.style.borderTopColor = Color.softYellow;
+            border.style.borderRightColor = Color.softYellow;
+            border.style.borderBottomColor = Color.softYellow;
+            border.style.borderLeftColor = Color.softYellow;
+        }
     }
 }

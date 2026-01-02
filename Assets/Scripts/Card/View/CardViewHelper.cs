@@ -16,6 +16,13 @@ public struct ElementLayout
     public float SecondaryTop;
 }
 
+public enum CardElementLayoutModeConfig
+{
+    Collection,
+    Deck,
+    Description
+}
+
 public static class CardElementLayoutConfigForCollection
 {
     public static ElementLayout OneElementLayout = new()
@@ -78,9 +85,40 @@ public static class CardElementLayoutConfigForDeck
     };
 }
 
+public static class CardElementLayoutConfigForDescription
+{
+    public static ElementLayout OneElementLayout = new()
+    {
+        borderBodyFileName = "borderWithLinearGradientForOneElement",
+        borderElementsFileName = "borderForOneElement",
+        Width = 130,
+        Height = 50,
+        Left = 304,
+        Top = 429,
+        MainLeft = 29,
+        MainTop = 7,
+        SecondaryLeft = 0,
+        SecondaryTop = 0
+    };
+
+    public static ElementLayout TwoElementLayout = new()
+    {
+        borderBodyFileName = "borderWithLinearGradientForTwoElement",
+        borderElementsFileName = "borderForTwoElements",
+        Width = 130,
+        Height = 50,
+        Left = 304,
+        Top = 429,
+        MainLeft = 29,
+        MainTop = 7,
+        SecondaryLeft = 79,
+        SecondaryTop = 7
+    };
+}
+
 public static class CardViewHelper
 {
-    public static void UpdateBodyUIToolkit(VisualElement cardRoot, CardModel cardModel, bool forDeck)
+    public static void UpdateBodyUIToolkit(VisualElement cardRoot, CardModel cardModel, CardElementLayoutModeConfig mode)
     {
         VisualElement bodyContainer = cardRoot.Q<VisualElement>("body");
         VisualElement elementsArea = cardRoot.Q<VisualElement>("elementsArea");
@@ -90,17 +128,23 @@ public static class CardViewHelper
         XmlDocument bodyBorderXmlDocument, elementsAreaBorderXmlDocument;
         ElementLayout layout;
 
-        if (forDeck)
+        switch (mode)
         {
-            layout = cardModel.secondaryElement != null
-                ? CardElementLayoutConfigForDeck.TwoElementLayout
-                : CardElementLayoutConfigForDeck.OneElementLayout;
-        }
-        else
-        {
-            layout = cardModel.secondaryElement != null
-                ? CardElementLayoutConfigForCollection.TwoElementLayout
-                : CardElementLayoutConfigForCollection.OneElementLayout;
+            case CardElementLayoutModeConfig.Deck:
+                layout = cardModel.secondaryElement != null
+                    ? CardElementLayoutConfigForDeck.TwoElementLayout
+                    : CardElementLayoutConfigForDeck.OneElementLayout;
+                break;
+            case CardElementLayoutModeConfig.Description:
+                layout = cardModel.secondaryElement != null
+                    ? CardElementLayoutConfigForDescription.TwoElementLayout
+                    : CardElementLayoutConfigForDescription.OneElementLayout;
+                break;
+            default:
+                layout = cardModel.secondaryElement != null
+                    ? CardElementLayoutConfigForCollection.TwoElementLayout
+                    : CardElementLayoutConfigForCollection.OneElementLayout;
+                break;
         }
 
         elementsArea.style.width = new StyleLength(layout.Width);
@@ -161,6 +205,7 @@ public static class CardViewHelper
         BindGameObjectWithSvg(bodyContainer, bodyBorderXmlDocument.OuterXml);
         BindGameObjectWithSvg(elementsArea, elementsAreaBorderXmlDocument.OuterXml);
     }
+
     public static void SetImagesUIToolkit(VisualElement root, CardModel model)
     {
         root.Q<VisualElement>("pokemonImage").style.backgroundImage =
@@ -190,6 +235,7 @@ public static class CardViewHelper
         Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
         visualElement.style.backgroundImage = new StyleBackground(texture);
     }
+
     public static void BindGameObjectWithSvg(GameObject gameObject, string xmlCode)
     {
         Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);

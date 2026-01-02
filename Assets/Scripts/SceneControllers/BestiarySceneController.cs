@@ -6,7 +6,8 @@ using UnityEngine.UIElements;
 
 public static class SceneContext
 {
-    public static string PreviousSceneName;
+    public static string PreviousMenuSceneName { get; set; }
+    public static string PreviousDescriptionSceneName { get; set; }
 }
 
 public class BestiarySceneController : MonoBehaviour
@@ -16,11 +17,9 @@ public class BestiarySceneController : MonoBehaviour
 
     private VisualElement root;
     private VisualElement loadingOverlay;
-    private VisualElement cardOverlay;
     private ScrollView cardsContainer;
     private VisualElement filterPanel;
     private VisualElement openFilterPanelButton;
-    private VisualElement profileField;
 
     private CollectionCardListController bestiaryCardsListController;
     private FilterPanelView filterPanelView;
@@ -38,7 +37,6 @@ public class BestiarySceneController : MonoBehaviour
         CardControllerFactory.Init(template: cardTemplate);
 
         bestiaryCardsListController = new CollectionCardListController(cardsContainer);
-        CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, cardOverlay);
 
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += (activefilters, pokemonElements) =>
@@ -60,10 +58,8 @@ public class BestiarySceneController : MonoBehaviour
         root = uiDocument.rootVisualElement;
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
         cardsContainer = root.Q<ScrollView>("cardScrollView");
-        cardOverlay = root.Q<VisualElement>("overlay");
         filterPanel = root.Q<VisualElement>("elementsFilterPanel");
         openFilterPanelButton = root.Q<VisualElement>("handle");
-        profileField = root.Q<VisualElement>("profileField");
     }
 
     private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)
@@ -78,22 +74,22 @@ public class BestiarySceneController : MonoBehaviour
     {
         root.Q<Button>("exitButton").RegisterCallback<ClickEvent>(evt =>
         {
-            if (SceneContext.PreviousSceneName == "LoadingScene")
-                SceneManager.LoadScene(SceneContext.PreviousSceneName);
+            if (SceneContext.PreviousMenuSceneName == "LoadingScene")
+                SceneManager.LoadScene(SceneContext.PreviousMenuSceneName);
             else
-                SceneSwitcher.SwitchScene(SceneContext.PreviousSceneName, root);
+                SceneSwitcher.SwitchScene(SceneContext.PreviousMenuSceneName, root);
         });
 
         openFilterPanelButton.RegisterCallback<ClickEvent>(evt =>
-       {
-           isOpen = !isOpen;
-           float targetWidth = isOpen ? hidden : shown;
+        {
+            isOpen = !isOpen;
+            float targetWidth = isOpen ? hidden : shown;
 
-           DOTween.To(
-               () => filterPanel.resolvedStyle.width,
-               w => filterPanel.style.width = w,
-               targetWidth,
-               0.3f).SetEase(Ease.InOutQuad);
-       });
+            DOTween.To(
+                () => filterPanel.resolvedStyle.width,
+                w => filterPanel.style.width = w,
+                targetWidth,
+                0.3f).SetEase(Ease.InOutQuad);
+        });
     }
 }

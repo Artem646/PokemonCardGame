@@ -2,17 +2,18 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using DG.Tweening;
 
-public static class CollectionCardScaleAnimator
+public static class DeckCardScaleAnimator
 {
     private static VisualElement clone;
     private static Rect lastLocalRect;
     private static bool isAnimating = false;
-    private const float TARGET_SCALE = 2f;
+    private const float TARGET_SCALE = 2.45f;
     private const float DURATION = 0.35f;
 
     public static void ShowCard(VisualElement sourceCard, VisualElement cloneCard, VisualElement overlay, Vector2 clickPosition)
     {
-        if (isAnimating || !IsClickInCenter(sourceCard, clickPosition))
+        // if (isAnimating || !IsClickInCenter(sourceCard, clickPosition))
+        if (isAnimating)
             return;
 
         isAnimating = true;
@@ -80,23 +81,23 @@ public static class CollectionCardScaleAnimator
                    });
     }
 
-    private static bool IsClickInCenter(VisualElement card, Vector2 clickPosition)
-    {
-        var bounds = card.worldBound;
+    // private static bool IsClickInCenter(VisualElement card, Vector2 clickPosition)
+    // {
+    //     var bounds = card.worldBound;
 
-        float centerX = bounds.x + bounds.width / 2f;
-        float centerY = bounds.y + bounds.height / 2f;
+    //     float centerX = bounds.x + bounds.width / 2f;
+    //     float centerY = bounds.y + bounds.height / 2f;
 
-        float centerWidth = bounds.width * 0.6f;
-        float centerHeight = bounds.height * 0.6f;
+    //     float centerWidth = bounds.width * 0.6f;
+    //     float centerHeight = bounds.height * 0.6f;
 
-        Rect centerRect = new(
-            centerX - centerWidth / 2f,
-            centerY - centerHeight / 2f,
-            centerWidth,
-            centerHeight
-        );
+    //     Rect centerRect = new(
+    //         centerX - centerWidth / 2f,
+    //         centerY - centerHeight / 2f,
+    //         centerWidth,
+    //         centerHeight
+    //     );
 
-        return centerRect.Contains(clickPosition);
-    }
+    //     return centerRect.Contains(clickPosition);
+    // }
 }

@@ -1,3 +1,4 @@
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class CollectionCardController : BaseCardController
@@ -23,11 +24,9 @@ public class CollectionCardController : BaseCardController
 
     private void OnCardElementClicked(ClickEvent evt)
     {
-        CollectionCardController cloneController = CardControllerFactory.Create<CollectionCardController>(CardModel);
-        cloneController?.UnregisterEvents();
-        ICollectionCardView cloneView = cloneController?.CollectionCardView;
-        if (cloneView != null)
-            CardOverlayManager.Instance?.ShowCollectionCard(CollectionCardView, cloneView, evt);
+        SelectedCardModelStorage.SelectedCardModel = CardModel;
+        SceneContext.PreviousDescriptionSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadSceneAsync("DescriptionScene", LoadSceneMode.Additive);
     }
 
     public override void AddToContainer(object container)

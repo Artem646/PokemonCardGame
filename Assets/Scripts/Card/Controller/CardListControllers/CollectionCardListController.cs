@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class CollectionCardListController : CardListController<CollectionCardController>, IFilterableCardListController
@@ -66,17 +67,21 @@ public class CollectionCardListController : CardListController<CollectionCardCon
     protected override CollectionCardController CreateController(CardModel cardModel)
     {
         var controller = CardControllerFactory.Create<CollectionCardController>(cardModel);
-        var userCards = CardRepository.Instance.GetUserCards();
-        if (userCards != null)
+        if (SceneManager.GetActiveScene().name == "BestiaryScene")
         {
-            var ownedIds = userCards.cards.Select(c => c.id).ToHashSet();
-            bool isOwned = ownedIds.Contains(cardModel.id);
-            controller.CollectionCardView.SetOpacity(isOwned);
-        }
-        else
-        {
-            controller.CollectionCardView.SetOpacity(true);
+            var userCards = CardRepository.Instance.GetUserCards();
+            if (userCards.cards.Count != 0)
+            {
+                var ownedIds = userCards.cards.Select(c => c.id).ToHashSet();
+                bool isOwned = ownedIds.Contains(cardModel.id);
+                controller.CollectionCardView.ApplyOwnedCardStyle(isOwned);
+            }
+            else
+            {
+                controller.CollectionCardView.ApplyOwnedCardStyle(true);
+            }
         }
         return controller;
     }
+
 }

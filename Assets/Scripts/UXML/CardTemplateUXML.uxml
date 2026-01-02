@@ -1,16 +1,18 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/USS/CardTemplateUSS.uss?fileID=7433441132597879392&amp;guid=766bbc765c6b1c84cb06ae4a24170877&amp;type=3#CardTemplateUSS"/>
-    <ui:VisualElement name="fullCard" style="margin-bottom: 14px; bottom: auto; scale: 1 1; margin-right: 9px; margin-left: 9px; padding-bottom: 0; width: 300px; height: 430px; margin-top: 0;">
-        <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 430px; flex-grow: 1; flex-shrink: 0; width: 300px; min-height: auto;"/>
-        <ui:VisualElement name="body" style="width: 258px; height: 260px; border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px; top: 19px;">
-            <ui:VisualElement name="elementsArea" style="top: 223px; width: 75px; height: 32px; left: 178px; background-image: resource(&quot;Sprites/Area for element icons&quot;);">
-                <ui:VisualElement name="mainElement" style="width: 23px; height: 23px; top: 5px; left: 16px;"/>
-                <ui:VisualElement name="secondaryElement" style="width: 23px; height: 23px; top: 5px; left: 43px; display: flex;"/>
+    <ui:VisualElement name="border" style="flex-grow: 0; margin-right: 9px; margin-bottom: 14px; margin-left: 9px; width: 306px; height: 430px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 23px; border-top-right-radius: 23px; border-bottom-right-radius: 23px; border-bottom-left-radius: 23px;">
+        <ui:VisualElement name="fullCard" style="margin-bottom: 0; bottom: auto; scale: 1 1; margin-right: 0; margin-left: 0; padding-bottom: 0; width: 300px; height: 430px; margin-top: 0; align-items: center; justify-content: flex-start;">
+            <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 423px; flex-grow: 1; flex-shrink: 0; width: 300px; min-height: auto;"/>
+            <ui:VisualElement name="body" style="width: 258px; height: 260px; border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px; top: 19px; right: 16px; left: 1px;">
+                <ui:Label name="title" text="Label" style="top: 11px; right: -49px; width: 100%;"/>
+                <ui:VisualElement name="pokemonImage" style="width: 183px; height: 183px; top: 38px; bottom: 39px; right: 44px; left: 33px; background-image: resource(&quot;Sprites/PokemonImages/Metapod&quot;);"/>
+                <ui:VisualElement name="elementsArea" style="top: 223px; width: 75px; height: 32px; left: 178px; background-image: resource(&quot;Sprites/Area for element icons&quot;);">
+                    <ui:VisualElement name="mainElement" style="width: 23px; height: 23px; top: 5px; left: 16px;"/>
+                    <ui:VisualElement name="secondaryElement" style="width: 23px; height: 23px; top: 5px; left: 43px; display: flex;"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:Label name="title" text="Label" style="top: 11px; right: -49px; width: 100%;"/>
-            <ui:VisualElement name="pokemonImage" style="width: 183px; height: 183px; top: 38px; bottom: 39px; right: 44px; left: 33px; background-image: resource(&quot;Sprites/PokemonImages/Metapod&quot;);"/>
+            <ui:VisualElement name="footer" style="width: 258px; height: 114px; top: 35px; left: 1px;"/>
+            <ui:VisualElement name="footerTexture" style="-unity-background-image-tint-color: rgb(26, 24, 24); height: 114px; width: 258px; top: 295px; bottom: 11px; right: 21px; left: 22px; display: flex; background-color: rgba(250, 243, 183, 0); background-size: cover;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="footer" style="width: 258px; height: 118px; top: 35px;"/>
-        <ui:VisualElement name="footerTexture" style="-unity-background-image-tint-color: rgb(26, 24, 24); height: 118px; width: 258px; top: 295px; bottom: 19px; right: 21px; left: 20px; display: flex;"/>
     </ui:VisualElement>
 </ui:UXML>

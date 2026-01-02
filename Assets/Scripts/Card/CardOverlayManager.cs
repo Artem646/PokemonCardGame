@@ -19,7 +19,7 @@ public class CardOverlayManager
     public void RegisterOverlayVisualElement(string sceneName, VisualElement overlay)
     {
         overlaysVisualElement[sceneName] = overlay;
-        overlay.RegisterCallback<ClickEvent>(evt => CollectionCardScaleAnimator.HideCard(overlay));
+        overlay.RegisterCallback<ClickEvent>(evt => DeckCardScaleAnimator.HideCard(overlay));
     }
 
     public void RegisterOverlayGameObject(string sceneName, GameObject overlay)
@@ -32,12 +32,12 @@ public class CardOverlayManager
         trigger.triggers.Add(entry);
     }
 
-    public void ShowCollectionCard(ICollectionCardView originalCardView, ICollectionCardView cloneCardView, ClickEvent evt)
+    public void ShowDeckCard(IDeckCardView originalCardView, IDeckCardView cloneCardView, ClickEvent evt)
     {
         string sceneName = SceneManager.GetActiveScene().name;
         if (overlaysVisualElement.TryGetValue(sceneName, out var overlay))
         {
-            CollectionCardScaleAnimator.ShowCard(
+            DeckCardScaleAnimator.ShowCard(
                 originalCardView.CardRoot.Q<VisualElement>("fullCard"),
                 cloneCardView.CardRoot,
                 overlay,

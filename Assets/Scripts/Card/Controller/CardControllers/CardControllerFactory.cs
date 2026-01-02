@@ -15,6 +15,7 @@ public class CardControllerFactory
         uguiPrefab = prefab;
 
         registry[typeof(CollectionCardController)] = (model, parent, faceDown) => CreateCollection(model);
+        registry[typeof(DeckCardController)] = (model, parent, faceDown) => CreateDeck(model);
         registry[typeof(BattleCardController)] = (model, parent, faceDown) => CreateBattle(model, parent, faceDown);
     }
 
@@ -30,6 +31,12 @@ public class CardControllerFactory
     {
         CollectionCardView view = new(model, uxmlTemplate);
         return new CollectionCardController(model, view);
+    }
+
+    private static DeckCardController CreateDeck(CardModel model)
+    {
+        DeckCardView view = new(model, uxmlTemplate);
+        return new DeckCardController(model, view);
     }
 
     private static BattleCardController CreateBattle(CardModel model, Transform uguiParent, bool faceDown)

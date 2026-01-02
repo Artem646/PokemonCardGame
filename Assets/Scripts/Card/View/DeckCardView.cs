@@ -27,18 +27,18 @@ public class DeckCardView : CardViewBase, IUIToolkitCardView, IDeckCardView
     {
         cardElement.style.backgroundColor = new StyleColor(CardModel.colors.cardColor);
         titleLabel.text = CardModel.title;
-        CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, true);
+        CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, CardElementLayoutModeConfig.Deck);
         CardViewHelper.SetImagesUIToolkit(CardRoot, CardModel);
     }
 
     public void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
     {
-        cardElement?.RegisterCallback(onCardElementClick);
+        cardElement.RegisterCallback(onCardElementClick);
     }
 
     public void UnregisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
     {
-        cardElement?.UnregisterCallback(onCardElementClick);
+        cardElement.UnregisterCallback(onCardElementClick);
     }
 
     public void SetSelected(bool isSelected)

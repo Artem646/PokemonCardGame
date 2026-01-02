@@ -5,13 +5,8 @@ using UnityEngine.UIElements;
 
 public class DeckCardListController : CardListController<DeckCardController>
 {
-    private readonly VisualTreeAsset deckCardTemplate;
-
-    public DeckCardListController(VisualElement container, VisualTreeAsset template)
-        : base(container)
-    {
-        deckCardTemplate = template;
-    }
+    public DeckCardListController(VisualElement container)
+        : base(container) { }
 
     public async Task LoadCardsToDeckContainer(Deck deck)
     {
@@ -23,8 +18,7 @@ public class DeckCardListController : CardListController<DeckCardController>
 
     protected override DeckCardController CreateController(CardModel cardModel)
     {
-        DeckCardView view = new(cardModel, deckCardTemplate);
-        DeckCardController controller = new(cardModel, view);
+        var controller = CardControllerFactory.Create<DeckCardController>(cardModel);
         return controller;
     }
 }

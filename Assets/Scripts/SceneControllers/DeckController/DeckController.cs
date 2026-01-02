@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+
 public class DeckController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
@@ -11,23 +12,24 @@ public class DeckController : MonoBehaviour
 
     private DeckCardListController deckCardListController;
 
+    private VisualElement root;
     private ScrollView decksScrollView;
     private VisualElement deckRoot;
     private Label deckName;
-    private VisualElement addDeckVisualElement;
+    private Button addDeckButton;
     private Button editDeckButton;
     private Button deleteDeckButton;
     private VisualElement deckCardsContainer;
 
     private void Start()
     {
-        VisualElement root = uiDocument.rootVisualElement;
+        root = uiDocument.rootVisualElement;
         decksScrollView = root.Q<ScrollView>("decksScrollView");
-        addDeckVisualElement = root.Q<VisualElement>("addDeckElement");
+        addDeckButton = root.Q<Button>("addDeckButton");
 
         AddDecksToContainer(UserSession.Instance.ActiveUser.decks);
 
-        addDeckVisualElement.RegisterCallback<ClickEvent>(evt =>
+        addDeckButton.RegisterCallback<ClickEvent>(evt =>
         {
             OnAddButtonClicked();
         });
@@ -59,7 +61,6 @@ public class DeckController : MonoBehaviour
     private void AddDeckToContainer(Deck deck)
     {
         deckRoot = deckTemplate.Instantiate();
-
         deckRoot.userData = deck.deckId;
 
         deckName = deckRoot.Q<Label>("deckName");
@@ -72,7 +73,8 @@ public class DeckController : MonoBehaviour
 
         deckCardsContainer.Clear();
 
-        deckCardListController = new DeckCardListController(deckCardsContainer, deckCardTemplate);
+        CardControllerFactory.Init(template: deckCardTemplate);
+        deckCardListController = new DeckCardListController(deckCardsContainer);
         _ = deckCardListController.LoadCardsToDeckContainer(deck);
 
         RegisterCallbacks(deck);
@@ -111,8 +113,7 @@ public class DeckController : MonoBehaviour
                 deckCardsContainer.Clear();
 
                 deckCardListController = null;
-
-                deckCardListController = new DeckCardListController(deckCardsContainer, deckCardTemplate);
+                deckCardListController = new DeckCardListController(deckCardsContainer);
                 _ = deckCardListController.LoadCardsToDeckContainer(deck);
             }
         };

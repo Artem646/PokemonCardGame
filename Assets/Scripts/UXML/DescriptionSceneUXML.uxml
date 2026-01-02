@@ -1,0 +1,38 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/DescriptionSceneUSS.uss?fileID=7433441132597879392&amp;guid=4daa097e294d86e41927d9e4793e5042&amp;type=3#DescriptionSceneUSS"/>
+    <ui:VisualElement class="top-bar" style="width: auto; flex-grow: 0; padding-bottom: 10px; padding-top: 10px; padding-left: 60px; padding-right: 20px; height: 16%;">
+        <ui:VisualElement class="nav-buttons" style="min-width: auto; max-width: none; max-height: none; min-height: auto; height: 80%;">
+            <ParallelogramButton text="EXIT" name="exitButton" class="nav-button" style="font-size: 35px; width: 320px;"/>
+        </ui:VisualElement>
+        <ui:Label text="POKEMON" name="pokemonName" style="position: absolute; top: 25px; left: 908px; width: 650px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(106, 172, 110); border-right-color: rgb(106, 172, 110); border-top-color: rgb(106, 172, 110); border-bottom-color: rgb(106, 172, 110); height: 123px; color: rgb(143, 224, 66); font-size: 45px; -unity-text-align: middle-center; justify-content: flex-start; align-items: stretch; margin-top: 1px; margin-right: 0; margin-bottom: 1px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;"/>
+    </ui:VisualElement>
+    <ui:VisualElement enabled="true" class="main-content" style="flex-grow: 0; height: 84%;">
+        <ui:VisualElement class="card-panel" style="justify-content: flex-start; width: 25%; align-items: flex-start; padding-top: 50px; padding-right: 35px; padding-bottom: 50px; padding-left: 35px;">
+            <ui:VisualElement name="cardImage" class="card-image" style="height: 100%; border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; width: 100%; display: flex; background-color: rgba(29, 38, 48, 0); align-items: stretch; flex-direction: column; justify-content: flex-start;">
+                <ui:VisualElement name="fullCard" style="margin-bottom: 0; bottom: auto; scale: 1 1; margin-right: 0; margin-left: 0; padding-bottom: 0; width: 100%; height: 100%; margin-top: 0; border-top-left-radius: 46px; border-top-right-radius: 46px; border-bottom-right-radius: 46px; border-bottom-left-radius: 46px; background-color: rgb(125, 145, 125); background-size: 100% 100%; justify-content: flex-start; align-items: center; align-content: auto; flex-direction: column;">
+                    <ui:VisualElement name="texture" style="display: flex; visibility: visible; overflow: visible; -unity-background-image-tint-color: rgba(38, 37, 37, 0.51); background-color: rgba(0, 0, 0, 0.18); height: 100%; flex-grow: 0; flex-shrink: 0; width: 100%; min-height: auto; border-top-left-radius: 46px; border-top-right-radius: 46px; border-bottom-right-radius: 46px; border-bottom-left-radius: 46px; position: absolute; background-image: resource(&quot;Sprites/texture&quot;); align-items: stretch; justify-content: flex-start;"/>
+                    <ui:VisualElement name="body" style="width: 85%; height: 61%; border-top-left-radius: 26px; border-top-right-radius: 26px; border-bottom-right-radius: 26px; border-bottom-left-radius: 26px; top: 37px; background-color: rgba(0, 0, 0, 0.09); background-image: resource(&quot;Sprites/borderWithLinearGradientForTwoElement&quot;); align-items: center;">
+                        <ui:VisualElement name="elementsArea" style="top: 429px; width: 130px; height: 50px; left: 304px; background-image: resource(&quot;Sprites/Area for element icons&quot;); position: absolute;">
+                            <ui:VisualElement name="mainElement" style="width: 40px; height: 40px; top: 7px; left: 29px; position: absolute; background-image: resource(&quot;Sprites/Elements/bug&quot;);"/>
+                            <ui:VisualElement name="secondaryElement" style="width: 40px; height: 40px; top: 7px; left: 79px; display: flex; position: absolute; background-image: resource(&quot;Sprites/Elements/fairy&quot;);"/>
+                        </ui:VisualElement>
+                        <ui:Label name="title" text="Label" style="top: 20px; right: auto; width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 35px; color: rgb(255, 255, 255); -unity-text-align: middle-center;"/>
+                        <ui:VisualElement name="pokemonImage" style="width: 320px; height: 320px; top: 85px; bottom: auto; right: auto; left: 54px; background-image: resource(&quot;Sprites/PokemonImages/Metapod&quot;); position: absolute; aspect-ratio: 1;"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="footer" style="width: 85%; height: 25%; top: 73px; background-image: none; background-color: rgb(250, 243, 183); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; margin-top: 0;"/>
+                    <ui:VisualElement name="footerTexture" style="-unity-background-image-tint-color: rgba(26, 24, 24, 0.44); height: 25%; width: 85%; top: 561px; bottom: 40px; right: 39px; left: 37px; display: flex; background-image: resource(&quot;Sprites/textureFooter&quot;); position: absolute; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-size: cover; background-color: rgba(0, 0, 0, 0);"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="info-panel" style="flex-grow: 0; width: 75%; height: 100%;">
+            <ui:TabView name="infoTabs">
+                <ui:Tab label="LORE" name="">
+                    <ui:VisualElement style="flex-grow: 0; width: 100%; height: 100%; background-color: rgb(130, 54, 54);"/>
+                </ui:Tab>
+                <ui:Tab label="STATS">
+                    <ui:VisualElement style="flex-grow: 0; width: 100%; height: 100%; background-color: rgb(109, 134, 43);"/>
+                </ui:Tab>
+            </ui:TabView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

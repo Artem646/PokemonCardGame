@@ -734,6 +734,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -974,9 +975,9 @@ SceneRoots:
   - {fileID: 204868226}
   - {fileID: 1991916769}
   - {fileID: 489470406}
+  - {fileID: 315098319}
   - {fileID: 1301656711}
   - {fileID: 1211072767}
   - {fileID: 158689465}
   - {fileID: 2072557780}
   - {fileID: 1713367039}
-  - {fileID: 315098319}

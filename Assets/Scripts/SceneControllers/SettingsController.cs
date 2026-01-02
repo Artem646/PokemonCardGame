@@ -105,6 +105,7 @@ public class SettingsController : MonoBehaviour
 
     private void OnSignOutClicked(ClickEvent evt)
     {
+        CardRepository.Instance.ClearUserCards();
         AuthManager.Instance.SignOut();
     }
 

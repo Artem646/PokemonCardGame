@@ -22,8 +22,6 @@ public class CardRepositoryService
     {
         try
         {
-            userCardsList?.cards?.Clear();
-
             List<int> cardIds = UserSession.Instance.ActiveUser.cardsInCollection;
             if (cardIds.Count == 0)
             {
@@ -32,7 +30,6 @@ public class CardRepositoryService
                 return userCardsList;
             }
 
-            // LoadAllCardsIfNeeded();
             await AddCardsToCollectionByIds(cardIds);
 
             Debug.Log($"[P] Успешно загружено {userCardsList.cards.Count} карт.");
@@ -49,8 +46,6 @@ public class CardRepositoryService
 
     public async Task<GameCardModelList> GetGameCards()
     {
-        gameCardsList?.cards?.Clear();
-
         try
         {
             string cardsJsonText = cardsJson.text;
@@ -116,4 +111,5 @@ public class CardRepositoryService
 
     public UserCardModelList GetUserCardsList() => userCardsList;
     public GameCardModelList GetGameCardsList() => gameCardsList;
+    public void ClearUserCardsList() => userCardsList.cards.Clear();
 }

@@ -21,8 +21,8 @@ public class PlayingSceneController : MonoBehaviour
     private void OnBackButtonClicked()
     {
         NetworkRunnerHandler networkRunnerHandler = FindAnyObjectByType<NetworkRunnerHandler>();
-        networkRunnerHandler.ShutdownRunner();
+        if (networkRunnerHandler != null)
+            networkRunnerHandler.ShutdownRunner();
         SceneManager.LoadScene("CollectionScene");
     }
-
 }

@@ -41,4 +41,5 @@ public class CardRepository : MonoBehaviour
 
     public UserCardModelList GetUserCards() => service.GetUserCardsList();
     public GameCardModelList GetGameCards() => service.GetGameCardsList();
+    public void ClearUserCards() => service.ClearUserCardsList();
 }

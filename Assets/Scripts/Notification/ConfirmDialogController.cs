@@ -7,7 +7,8 @@ public class ConfirmDialogController : MonoBehaviour
     public static ConfirmDialogController Instance { get; private set; }
     [SerializeField] private UIDocument uiDocument;
 
-    private VisualElement dialogRoot;
+    private VisualElement root;
+    private VisualElement overlay;
     private Label dialogMessage;
     private Button retryButton;
     private Button cancelButton;
@@ -23,14 +24,14 @@ public class ConfirmDialogController : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        VisualElement root = uiDocument.rootVisualElement;
-        dialogRoot = root.Q<VisualElement>("dialogRoot");
+        root = uiDocument.rootVisualElement;
+        overlay = root.Q<VisualElement>("overlay");
         dialogMessage = root.Q<Label>("dialogMessage");
         retryButton = root.Q<Button>("retryButton");
         cancelButton = root.Q<Button>("cancelButton");
         bestiaryButton = root.Q<Button>("bestiaryButton");
 
-        dialogRoot.style.display = DisplayStyle.None;
+        overlay.style.display = DisplayStyle.None;
     }
 
     public static void ShowDialog(string message, Action onRetry, Action onCancel, Action onBestiaty)
@@ -41,7 +42,7 @@ public class ConfirmDialogController : MonoBehaviour
     private void Show(string message, Action onRetry, Action onCancel, Action onBestiary)
     {
         dialogMessage.text = message;
-        dialogRoot.style.display = DisplayStyle.Flex;
+        overlay.style.display = DisplayStyle.Flex;
 
         retryButton.clicked -= RetryClicked;
         cancelButton.clicked -= CancelClicked;
@@ -49,19 +50,19 @@ public class ConfirmDialogController : MonoBehaviour
 
         void RetryClicked()
         {
-            dialogRoot.style.display = DisplayStyle.None;
+            overlay.style.display = DisplayStyle.None;
             onRetry?.Invoke();
         }
 
         void CancelClicked()
         {
-            dialogRoot.style.display = DisplayStyle.None;
+            overlay.style.display = DisplayStyle.None;
             onCancel?.Invoke();
         }
 
         void BestiaryClicked()
         {
-            dialogRoot.style.display = DisplayStyle.None;
+            overlay.style.display = DisplayStyle.None;
             onBestiary?.Invoke();
         }
 
@@ -72,7 +73,7 @@ public class ConfirmDialogController : MonoBehaviour
 
     public static void CloseDialog()
     {
-        if (Instance != null && Instance.dialogRoot != null)
-            Instance.dialogRoot.style.display = DisplayStyle.None;
+        if (Instance != null && Instance.overlay != null)
+            Instance.overlay.style.display = DisplayStyle.None;
     }
 }

@@ -1,11 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Scripts/USS/ConfirmDialogUSS.uss?fileID=7433441132597879392&amp;guid=83f80203888950f468bdee08bcc862af&amp;type=3#ConfirmDialogUSS" />
-    <ui:VisualElement name="dialogRoot" class="dialog-root" style="height: 438px; display: none; position: absolute; top: 322px; left: 771px; width: 760px;">
-        <ui:Label name="dialogMessage" class="dialog-message" style="-unity-text-align: upper-center; white-space: normal; font-size: 30px; width: 329px;" />
-        <ui:VisualElement class="dialog-button-row">
-            <ui:Button name="retryButton" text="Повторить соединение" class="dialog-button-yes" style="height: 71px; width: 193px; font-size: 25px; white-space: normal;" />
-            <ui:Button name="bestiaryButton" text="Перейти в Бестриарий" class="dialog-button-no" style="height: 71px; width: 197px; font-size: 25px; flex-wrap: nowrap; white-space: normal; background-color: rgb(14, 121, 27);" />
-            <ui:Button name="cancelButton" text="Выйти&#10;" class="dialog-button-no" style="height: 71px; width: 197px; font-size: 25px;" />
+    <Style src="project://database/Assets/Scripts/USS/ConfirmDialogUSS.uss?fileID=7433441132597879392&amp;guid=83f80203888950f468bdee08bcc862af&amp;type=3#ConfirmDialogUSS"/>
+    <ui:VisualElement name="overlay" style="flex-grow: 0; display: none; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.35);">
+        <ui:VisualElement name="dialogRoot" class="dialog-root" style="height: 438px; display: flex; position: absolute; top: 322px; left: 771px; width: 760px;">
+            <ui:Label name="dialogMessage" class="dialog-message" style="-unity-text-align: upper-center; white-space: normal; font-size: 30px; width: 329px;"/>
+            <ui:VisualElement class="dialog-button-row">
+                <ui:Button name="retryButton" text="&#1055;&#1086;&#1074;&#1090;&#1086;&#1088;&#1080;&#1090;&#1100; &#1089;&#1086;&#1077;&#1076;&#1080;&#1085;&#1077;&#1085;&#1080;&#1077;" class="dialog-button-yes" style="height: 71px; width: 193px; font-size: 25px; white-space: normal;"/>
+                <ui:Button name="bestiaryButton" text="&#1055;&#1077;&#1088;&#1077;&#1081;&#1090;&#1080; &#1074; &#1041;&#1077;&#1089;&#1090;&#1088;&#1080;&#1072;&#1088;&#1080;&#1081;" class="dialog-button-no" style="height: 71px; width: 197px; font-size: 25px; flex-wrap: nowrap; white-space: normal; background-color: rgb(14, 121, 27);"/>
+                <ui:Button name="cancelButton" text="&#1042;&#1099;&#1081;&#1090;&#1080; " class="dialog-button-no" style="height: 71px; width: 197px; font-size: 25px;"/>
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

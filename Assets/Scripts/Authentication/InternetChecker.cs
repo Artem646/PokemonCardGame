@@ -88,7 +88,7 @@ public class InternetChecker : MonoBehaviour
             {
                 dialogVisible = false;
                 ConfirmDialogController.CloseDialog();
-                SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
+                SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
                 SceneManager.LoadScene("BestiaryScene");
             },
             onCancel: () =>

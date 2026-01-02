@@ -3,34 +3,47 @@ using UnityEngine.UIElements;
 
 public static class SceneSwitcher
 {
-    public static void SwitchScene(string sceneName, VisualElement currentRoot)
+    public static void SwitchScene(string targetSceneName, VisualElement currentRoot)
     {
-        if (!SceneManager.GetSceneByName(sceneName).isLoaded)
+        if (!SceneManager.GetSceneByName(targetSceneName).isLoaded)
         {
-            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive).completed += op =>
-            {
-                ActivateScene(sceneName, currentRoot);
-            };
+            SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Additive).completed += op =>
+                ActivateScene(targetSceneName, currentRoot);
         }
         else
-        {
-            ActivateScene(sceneName, currentRoot);
-        }
+            ActivateScene(targetSceneName, currentRoot);
     }
 
-    private static void ActivateScene(string sceneName, VisualElement currentRoot)
+    private static void ActivateScene(string targetSceneName, VisualElement currentRoot)
     {
         currentRoot.style.display = DisplayStyle.None;
-        var scene = SceneManager.GetSceneByName(sceneName);
-        SceneManager.SetActiveScene(scene);
-
-        foreach (var gameObject in scene.GetRootGameObjects())
+        Scene targetScene = SceneManager.GetSceneByName(targetSceneName);
+        SceneManager.SetActiveScene(targetScene);
+        foreach (var gameObject in targetScene.GetRootGameObjects())
         {
             if (gameObject.name == "UIDocument")
             {
-                UIDocument doc = gameObject.GetComponent<UIDocument>();
-                doc.rootVisualElement.style.display = DisplayStyle.Flex;
+                UIDocument document = gameObject.GetComponent<UIDocument>();
+                document.rootVisualElement.style.display = DisplayStyle.Flex;
+                break;
             }
         }
+    }
+
+    public static void ReturnToPreviousDescriptionScene()
+    {
+        Scene previousDescriptionScene = SceneManager.GetSceneByName(SceneContext.PreviousDescriptionSceneName);
+
+        foreach (var gameObject in previousDescriptionScene.GetRootGameObjects())
+        {
+            if (gameObject.name == "UIDocument")
+            {
+                UIDocument document = gameObject.GetComponent<UIDocument>();
+                document.rootVisualElement.style.display = DisplayStyle.Flex;
+                break;
+            }
+        }
+
+        SceneManager.UnloadSceneAsync("DescriptionScene");
     }
 }

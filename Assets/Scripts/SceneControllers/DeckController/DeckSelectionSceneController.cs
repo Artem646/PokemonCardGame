@@ -93,7 +93,7 @@ public class DeckSelectionSceneController : MonoBehaviour
 
         root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
         {
-            SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
+            SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
             SceneSwitcher.SwitchScene("BestiaryScene", root);
         });
 

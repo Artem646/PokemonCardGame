@@ -12,8 +12,6 @@ public class SignInController : MonoBehaviour
 
     private void Start()
     {
-        SceneContext.PreviousSceneName = SceneManager.GetActiveScene().name;
-
         root = uiDocument.rootVisualElement;
         googleSignInButton = root.Q<Button>("googleSignInButton");
         anonymousSignInButton = root.Q<Button>("anonymousSignInButton");

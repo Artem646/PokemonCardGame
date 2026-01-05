@@ -40,10 +40,10 @@ public class GoogleProvider : IAuthProvider
                 AuthResponseHandler.HandleGoogleResult(taskResult, OnGoogleSuccess);
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            ShowError("Ошибка при запуске входа: " + e.Message);
-            Debug.Log($"[P][GoogleProvider] Критическая ошибка в методе SignIn: {e.Message}");
+            Localizer.LocalizeNotification(NotificationKey.SingOutError, NotificationType.Error, ex.Message);
+            Debug.Log($"[P][GoogleProvider] Критическая ошибка в методе SignIn: {ex.Message}");
         }
     }
 
@@ -58,10 +58,10 @@ public class GoogleProvider : IAuthProvider
                 AuthResponseHandler.HandleGoogleResult(task, OnGoogleSuccess);
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            ShowError("Ошибка при запуске входа: " + e.Message);
-            Debug.Log($"[P][GoogleProvider] Критическая ошибка в методе SignInSilently: {e.Message}");
+            Localizer.LocalizeNotification(NotificationKey.SingOutError, NotificationType.Error, ex.Message);
+            Debug.Log($"[P][GoogleProvider] Критическая ошибка в методе SignInSilently: {ex.Message}");
 
         }
     }
@@ -78,14 +78,14 @@ public class GoogleProvider : IAuthProvider
         }
         catch (Exception e)
         {
-            ShowError("Ошибка подключения к серверу");
+            Localizer.LocalizeNotification(NotificationKey.FirebaseAuthError, NotificationType.Error);
             Debug.Log($"[P][GoogleProvider] Ошибка при запуске аутентификации Firebase: {e.Message}");
         }
     }
 
     private void OnFirebaseSuccess(FirebaseUser user)
     {
-        ShowSuccess($"Добро пожаловать, {user.DisplayName}!");
+        Localizer.LocalizeNotification(NotificationKey.GoogleSingInSuccess, NotificationType.Success, user.DisplayName);
         Debug.Log($"[P][GoogleProvider] Вход выполнен: {user.Email}");
     }
 
@@ -94,9 +94,6 @@ public class GoogleProvider : IAuthProvider
         googleController.SignOut();
         firebaseController.SignOut();
     }
-
-    private void ShowError(string message) => NotificationManager.ShowNotification(message, NotificationType.Error);
-    private void ShowSuccess(string message) => NotificationManager.ShowNotification(message, NotificationType.Success);
 
     public bool IsSignedIn() => firebaseController.IsSignedIn;
     public string GetUserId() => firebaseController.CurrentUser?.UserId;

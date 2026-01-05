@@ -191,26 +191,32 @@ public class NetworkGameState : NetworkBehaviour
         float attackerMultiplier = chart.GetMultiplier(attacker.CardModel.mainElement, defender.CardModel.mainElement);
         float defenderMultiplier = chart.GetMultiplier(defender.CardModel.mainElement, attacker.CardModel.mainElement);
 
-        string resultMessage;
-
         if (attackerMultiplier > defenderMultiplier)
         {
             gameManager.MoveCardToReset(defender, false);
-            resultMessage = $"{attacker.CardModel.title} победил {defender.CardModel.title}, потому что {attacker.CardModel.mainElement} сильнее {defender.CardModel.mainElement}";
+            Localizer.LocalizeNotification(NotificationKey.СlashWithWinnerInNetworkBattle, NotificationType.Info,
+                    attacker.CardModel.titleKey,
+                    defender.CardModel.titleKey,
+                    attacker.CardModel.mainElement,
+                    defender.CardModel.mainElement);
         }
         else if (attackerMultiplier < defenderMultiplier)
         {
             gameManager.MoveCardToReset(attacker, true);
-            resultMessage = $"{defender.CardModel.title} победил {attacker.CardModel.title}, потому что {defender.CardModel.mainElement} сильнее {attacker.CardModel.mainElement}";
+            Localizer.LocalizeNotification(NotificationKey.СlashWithWinnerInNetworkBattle, NotificationType.Info,
+                    defender.CardModel.titleKey,
+                    attacker.CardModel.titleKey,
+                    defender.CardModel.mainElement,
+                    attacker.CardModel.mainElement);
         }
         else
         {
             gameManager.MoveCardToReset(attacker, true);
             gameManager.MoveCardToReset(defender, false);
-            resultMessage = $"{attacker.CardModel.title} и {defender.CardModel.title} равны по силе, оба отправлены в сброс";
+            Localizer.LocalizeNotification(NotificationKey.ClashWithTieInNetworkBattle, NotificationType.Info,
+                    attacker.CardModel.titleKey,
+                    defender.CardModel.titleKey);
         }
-
-        NotificationManager.ShowNotification(resultMessage, NotificationType.Info);
     }
 
     private bool IsValidTurnRequest(PlayerRef player)

@@ -25,21 +25,17 @@ public class AnonymousProvider : IAuthProvider
         }
         catch (Exception ex)
         {
-            ShowError("Ошибка при запуске входа: " + ex.Message);
+            Localizer.LocalizeNotification(NotificationKey.SingOutError, NotificationType.Error, ex.Message);
             Debug.Log($"[P][AnonymousProvider] Критическая ошибка в методе SignIn: {ex.Message}");
         }
     }
 
     private void OnAnonymousSuccess(AuthResult result)
     {
-        FirebaseUser user = result.User;
-        ShowSuccess($"Добро пожаловать, Anonim!");
+        Localizer.LocalizeNotification(NotificationKey.AnonymousSingInSuccess, NotificationType.Success);
     }
 
     public void SignOut() => anonymousController.SignOut();
-
-    private void ShowError(string message) => NotificationManager.ShowNotification(message, NotificationType.Error);
-    private void ShowSuccess(string message) => NotificationManager.ShowNotification(message, NotificationType.Success);
 
     public bool IsSignedIn() => anonymousController.IsSignedIn;
     public string GetUserId() => anonymousController.CurrentUser?.UserId;

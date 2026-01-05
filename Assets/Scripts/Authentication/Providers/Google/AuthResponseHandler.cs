@@ -11,7 +11,7 @@ public static class AuthResponseHandler
         if (taskResult == null)
         {
             Debug.LogError("[P][GoogleProvider] Task is null");
-            ShowError("Не удалось начать вход через Google");
+            Localizer.LocalizeNotification(NotificationKey.GoogleSingOutFailed, NotificationType.Error);
             return;
         }
 
@@ -29,13 +29,13 @@ public static class AuthResponseHandler
                         Debug.Log($"[P][GoogleProvider] 🔸 Exception: {exception.GetType().Name}");
                         Debug.Log($"[P][GoogleProvider] 🔸 Message: {googleSignInException.Message}");
 
-                        string errorMessage = GetGoogleErrorMessage(googleSignInException.Status);
-                        Debug.LogError("[P][GoogleProvider] " + errorMessage);
-                        ShowError(errorMessage);
+                        NotificationKey key = GetGoogleErrorMessageKeyByStatus(googleSignInException.Status);
+                        Localizer.LocalizeNotification(key, NotificationType.Error);
                     }
                     else if (exception is OperationCanceledException)
                     {
                         Debug.Log("[P][GoogleProvider] OperationCanceledException (Вход отменён в диалоговом окне)");
+                        Localizer.LocalizeNotification(NotificationKey.GoogleCanceled, NotificationType.Error);
                     }
 
                     break;
@@ -50,7 +50,7 @@ public static class AuthResponseHandler
 
                 if (string.IsNullOrEmpty(googleUser.IdToken))
                 {
-                    ShowError("Ошибка получения токена Google");
+                    Localizer.LocalizeNotification(NotificationKey.GoogleTokenError, NotificationType.Error);
                     Debug.Log("[P][GoogleProvider] Ошибка получения токена Google");
                     return;
                 }
@@ -73,26 +73,26 @@ public static class AuthResponseHandler
             }
             catch (Exception e)
             {
-                ShowError("Ошибка при обработке данных Google");
+                Localizer.LocalizeNotification(NotificationKey.GoogleDataProcessingError, NotificationType.Error);
                 Debug.Log($"[P][GoogleProvider] Ошибка при обработке результата Google: {e.Message}");
             }
         }
     }
 
-    private static string GetGoogleErrorMessage(GoogleSignInStatusCode status)
+    private static NotificationKey GetGoogleErrorMessageKeyByStatus(GoogleSignInStatusCode status)
     {
         return status switch
         {
-            GoogleSignInStatusCode.NetworkError => "Ошибка сети. Проверьте подключение к интернету",
-            GoogleSignInStatusCode.InternalError => "Внутренняя ошибка сервиса Google",
-            GoogleSignInStatusCode.ApiNotConnected => "Сервис Google недоступен",
-            GoogleSignInStatusCode.InvalidAccount => "Неверный аккаунт Google",
-            GoogleSignInStatusCode.Timeout => "Время ожидания истекло",
-            GoogleSignInStatusCode.DeveloperError => "Ошибка настройки приложения",
-            GoogleSignInStatusCode.Canceled => "Вход отменён пользователем",
-            GoogleSignInStatusCode.Interrupted => "Вход отменён внешним событием",
-            GoogleSignInStatusCode.Error => "Вход отменён пользователем",
-            _ => "Ошибка входа через Google"
+            GoogleSignInStatusCode.NetworkError => NotificationKey.GoogleNetworkError,
+            GoogleSignInStatusCode.InternalError => NotificationKey.GoogleInternalError,
+            GoogleSignInStatusCode.ApiNotConnected => NotificationKey.GoogleApiNotConnected,
+            GoogleSignInStatusCode.InvalidAccount => NotificationKey.GoogleInvalidAccount,
+            GoogleSignInStatusCode.Timeout => NotificationKey.GoogleTimeout,
+            GoogleSignInStatusCode.DeveloperError => NotificationKey.GoogleDeveloperError,
+            GoogleSignInStatusCode.Canceled => NotificationKey.GoogleCanceled,
+            GoogleSignInStatusCode.Interrupted => NotificationKey.GoogleInterrupted,
+            GoogleSignInStatusCode.Error => NotificationKey.GoogleError,
+            _ => NotificationKey.GoogleUnknown
         };
     }
 
@@ -101,7 +101,7 @@ public static class AuthResponseHandler
         if (taskResult.IsFaulted)
         {
             Debug.Log("[P][GoogleProvider] Ошибка Firebase аутентификации");
-            ShowError("Ошибка подключения к серверу firebaseAuth");
+            Localizer.LocalizeNotification(NotificationKey.FirebaseAuthError, NotificationType.Error);
 
             if (taskResult.Exception != null)
             {
@@ -117,6 +117,8 @@ public static class AuthResponseHandler
             {
                 FirebaseUser firebaseUser = taskResult.Result;
 
+                Localizer.LocalizeNotification(NotificationKey.FirebaseAuthSuccess, NotificationType.Success);
+
                 Debug.Log("[P][GoogleProvider] Firebase аутентификация успешна прошла!");
                 Debug.Log($"[P][GoogleProvider] Firebase User: {firebaseUser.DisplayName}");
                 Debug.Log($"[P][GoogleProvider] Firebase Email: {firebaseUser.Email}");
@@ -126,7 +128,7 @@ public static class AuthResponseHandler
             }
             catch (Exception e)
             {
-                ShowError("Ошибка обработки данных пользователя");
+                Localizer.LocalizeNotification(NotificationKey.FirebaseUserDataError, NotificationType.Error);
                 Debug.Log($"[P][GoogleProvider] Ошибка при обработке Firebase пользователя: {e.Message}");
             }
         }
@@ -137,11 +139,12 @@ public static class AuthResponseHandler
         if (taskResult.IsCanceled)
         {
             Debug.Log("[P][AnonymousProvider] Firebase аутентификация отменена");
+            Localizer.LocalizeNotification(NotificationKey.AnonymousAuthCanceled, NotificationType.Error);
         }
         else if (taskResult.IsFaulted)
         {
             Debug.Log("[P][AnonymousProvider] Ошибка Firebase аутентификации");
-            ShowError("Ошибка подключения к серверу firebaseAuth");
+            Localizer.LocalizeNotification(NotificationKey.AnonymousAuthError, NotificationType.Error);
 
             if (taskResult.Exception != null)
             {
@@ -157,6 +160,8 @@ public static class AuthResponseHandler
             {
                 FirebaseUser firebaseUser = taskResult.Result.User;
 
+                Localizer.LocalizeNotification(NotificationKey.AnonymousAuthSuccess, NotificationType.Success);
+
                 Debug.Log("[P][AnonymousProvider] Firebase аутентификация успешна!");
                 Debug.Log($"[P][AnonymousProvider] Firebase UserId: {firebaseUser.UserId}");
 
@@ -164,14 +169,9 @@ public static class AuthResponseHandler
             }
             catch (Exception ex)
             {
-                ShowError("Ошибка обработки данных пользователя");
+                Localizer.LocalizeNotification(NotificationKey.AnonymousUserDataError, NotificationType.Error);
                 Debug.Log($"[P][AnonymousProvider] Ошибка при обработке Firebase пользователя: {ex.Message}");
             }
         }
-    }
-
-    private static void ShowError(string message)
-    {
-        NotificationManager.ShowNotification(message, NotificationType.Error);
     }
 }

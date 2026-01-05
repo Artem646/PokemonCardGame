@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
 
 public class BotGameState : MonoBehaviour
 {
@@ -96,35 +97,44 @@ public class BotGameState : MonoBehaviour
         float attackerMultiplier = chart.GetMultiplier(attacker.CardModel.mainElement, defender.CardModel.mainElement);
         float defenderMultiplier = chart.GetMultiplier(defender.CardModel.mainElement, attacker.CardModel.mainElement);
 
-        string attackerOwner = gameManager.CurrentGame.PlayerFieldListController.CardControllers.Contains(attacker)
-            ? "Игрок" : "Бот";
-        string defenderOwner = gameManager.CurrentGame.PlayerFieldListController.CardControllers.Contains(defender)
-            ? "Игрок" : "Бот";
+        LocalizedString playerLabel = new("NotificationsText", "Player");
+        LocalizedString botLabel = new("NotificationsText", "Bot");
 
-        string resultMessage;
+        string attackerOwner = gameManager.CurrentGame.PlayerFieldListController.CardControllers.Contains(attacker)
+            ? playerLabel.GetLocalizedString()
+            : botLabel.GetLocalizedString();
+
+        string defenderOwner = gameManager.CurrentGame.PlayerFieldListController.CardControllers.Contains(defender)
+            ? playerLabel.GetLocalizedString()
+            : botLabel.GetLocalizedString();
 
         if (attackerMultiplier > defenderMultiplier)
         {
             gameManager.MoveCardToReset(defender, false);
-            resultMessage = $"{attackerOwner}: {attacker.CardModel.title} победил {defenderOwner}: {defender.CardModel.title}, " +
-                            $"потому что {attacker.CardModel.mainElement} сильнее {defender.CardModel.mainElement}";
+            Localizer.LocalizeNotification(NotificationKey.СlashWithWinnerInBotBattle, NotificationType.Info,
+                    attackerOwner, attacker.CardModel.titleKey,
+                    defenderOwner, defender.CardModel.titleKey,
+                    attacker.CardModel.mainElement,
+                    defender.CardModel.mainElement);
         }
         else if (attackerMultiplier < defenderMultiplier)
         {
             gameManager.MoveCardToReset(attacker, true);
-            resultMessage = $"{defenderOwner}: {defender.CardModel.title} победил {attackerOwner}: {attacker.CardModel.title}, " +
-                            $"потому что {defender.CardModel.mainElement} сильнее {attacker.CardModel.mainElement}";
+            Localizer.LocalizeNotification(NotificationKey.СlashWithWinnerInBotBattle, NotificationType.Info,
+                    defenderOwner, defender.CardModel.titleKey,
+                    attackerOwner, attacker.CardModel.titleKey,
+                    defender.CardModel.mainElement,
+                    attacker.CardModel.mainElement);
         }
         else
         {
             gameManager.MoveCardToReset(attacker, true);
             gameManager.MoveCardToReset(defender, false);
-            resultMessage = $"{attackerOwner}: {attacker.CardModel.title} и {defenderOwner}: {defender.CardModel.title} равны по силе, оба отправлены в сброс";
+            Localizer.LocalizeNotification(NotificationKey.ClashWithTieInBotBattle, NotificationType.Info,
+                    attackerOwner, attacker.CardModel.titleKey,
+                    defenderOwner, defender.CardModel.titleKey);
         }
-
-        NotificationManager.ShowNotification(resultMessage, NotificationType.Info);
     }
-
 
     private void CheckGameEnd()
     {

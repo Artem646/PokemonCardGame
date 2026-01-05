@@ -143,7 +143,7 @@ public class FirebaseFirestoreService
         DocumentReference userDocument = firestore.Collection("users").Document(user.userData.userId);
         await userDocument.UpdateAsync(updateData);
 
-        NotificationManager.ShowNotification("Настройки профиля сохранены!", NotificationType.Success);
+        Localizer.LocalizeNotification(NotificationKey.ProfileUpdated, NotificationType.Success);
     }
 
     public async Task DeleteAnonymousUserDocument(User user)
@@ -218,7 +218,7 @@ public class FirebaseFirestoreService
         };
 
         await deckDocument.SetAsync(deckData);
-        NotificationManager.ShowNotification($"Колода '{deck.name}' добавлена", NotificationType.Success);
+        Localizer.LocalizeNotification(NotificationKey.DeckAdded, NotificationType.Success, deck.name);
     }
 
     public async Task UpdateDeck(User user, Deck deck)
@@ -238,6 +238,7 @@ public class FirebaseFirestoreService
             };
 
             await deckDocument.SetAsync(deckData, SetOptions.Overwrite);
+            Localizer.LocalizeNotification(NotificationKey.DeckUpdated, NotificationType.Success, deck.name);
         }
     }
 
@@ -251,7 +252,7 @@ public class FirebaseFirestoreService
             DocumentReference deckDocument = firestore.Collection("users").Document(user.userData.userId).Collection("decks").Document(deck.deckId);
             await deckDocument.DeleteAsync();
 
-            NotificationManager.ShowNotification($"Колода '{deck.name}' удалена", NotificationType.Success);
+            Localizer.LocalizeNotification(NotificationKey.DeckDeleted, NotificationType.Success, deck.name);
         }
     }
 

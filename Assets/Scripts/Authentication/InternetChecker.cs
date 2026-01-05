@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class InternetChecker : MonoBehaviour
 {
     public static InternetChecker Instance { get; private set; }
-    private bool dialogVisible;
 
     private void Awake()
     {
@@ -22,31 +21,28 @@ public class InternetChecker : MonoBehaviour
 
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += HandleSceneLoaded;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded -= HandleSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "LoadingScene")
         {
-            Debug.Log("[InternetChecker] Загрузилась сцена LoadingScene — проверяем интернет...");
-            CheckInternet();
+            VerifyInternetConnection();
         }
     }
 
-    public void CheckInternet()
+    public void VerifyInternetConnection()
     {
-        if (!IsConnected())
+        if (!HasInternetAccess())
         {
-            Debug.Log("[InternetChecker] Интернет не найден после загрузки данных, показываем окно...");
             ShowNoConnectionDialog(() =>
             {
-                Debug.Log("[InternetChecker] Интернет восстановлен, продолжаем работу...");
                 FirebaseInitializer.Instance.Initialize();
             });
         }
@@ -56,59 +52,49 @@ public class InternetChecker : MonoBehaviour
         }
     }
 
-    public bool IsConnected()
+    public bool HasInternetAccess()
     {
         return Application.internetReachability != NetworkReachability.NotReachable;
     }
 
-    public void ShowNoConnectionDialog(Action onRetry = null)
+    public void ShowNoConnectionDialog(Action actionIfConnected)
     {
-        if (dialogVisible) return;
-        dialogVisible = true;
-
         ConfirmDialogController.ShowDialog(
-            "Нет подключения к интернету.",
-            onRetry: async () =>
-            {
-                ConfirmDialogController.CloseDialog();
-                dialogVisible = false;
-                await Task.Delay(1000);
-
-                if (!IsConnected())
-                {
-                    Debug.Log("[InternetChecker] Интернет всё ещё отсутствует, показываем окно снова...");
-                    ShowNoConnectionDialog(onRetry);
-                }
-                else
-                {
-                    onRetry?.Invoke();
-                }
-            },
-            onBestiaty: () =>
-            {
-                dialogVisible = false;
-                ConfirmDialogController.CloseDialog();
-                SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
-                SceneManager.LoadScene("BestiaryScene");
-            },
-            onCancel: () =>
-            {
-                dialogVisible = false;
-                ConfirmDialogController.CloseDialog();
-                Application.Quit();
-            }
-        );
+            () => HandleRetryClicked(actionIfConnected),
+            HandleOpenBestiaryClicked,
+            HandleExitGameClicked);
     }
 
-    public void CheckBeforeAction(Action onConnected)
+    private async void HandleRetryClicked(Action actionIfConnected)
     {
-        if (IsConnected())
-        {
-            onConnected?.Invoke();
-        }
+        await Task.Delay(1000);
+
+        if (!HasInternetAccess())
+            ShowNoConnectionDialog(actionIfConnected);
         else
         {
-            ShowNoConnectionDialog(onConnected);
+            ConfirmDialogController.CloseDialogOverlay();
+            actionIfConnected?.Invoke();
         }
+    }
+
+    private void HandleOpenBestiaryClicked()
+    {
+        ConfirmDialogController.CloseDialogOverlay();
+        SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("BestiaryScene");
+    }
+
+    private void HandleExitGameClicked()
+    {
+        Application.Quit();
+    }
+
+    public void CheckBeforeAction(Action actionIfConnected)
+    {
+        if (HasInternetAccess())
+            actionIfConnected?.Invoke();
+        else
+            ShowNoConnectionDialog(actionIfConnected);
     }
 }

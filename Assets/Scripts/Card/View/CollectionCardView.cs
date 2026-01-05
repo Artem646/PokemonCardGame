@@ -7,7 +7,6 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
     public VisualTreeAsset CardTemplate { get; }
     private VisualElement cardElement;
     private VisualElement border;
-    private Label titleLabel;
 
     public CollectionCardView(CardModel model, VisualTreeAsset template)
         : base(model)
@@ -22,25 +21,24 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
     {
         cardElement = CardRoot.Q<VisualElement>("fullCard");
         border = CardRoot.Q<VisualElement>("border");
-        titleLabel = CardRoot.Q<Label>("title");
     }
 
     public override void BindData()
     {
         cardElement.style.backgroundColor = new StyleColor(CardModel.colors.cardColor);
-        titleLabel.text = CardModel.title;
+        Localizer.LocalizeElement(CardRoot, "title", CardModel.titleKey, "PokemonTitles");
         CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, CardElementLayoutModeConfig.Collection);
         CardViewHelper.SetImagesUIToolkit(CardRoot, CardModel);
     }
 
     public void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
     {
-        cardElement?.RegisterCallback(onCardElementClick);
+        cardElement.RegisterCallback(onCardElementClick);
     }
 
     public void UnregisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
     {
-        cardElement?.UnregisterCallback(onCardElementClick);
+        cardElement.UnregisterCallback(onCardElementClick);
     }
 
     public void SetActive(bool isActive)

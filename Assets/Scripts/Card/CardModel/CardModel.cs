@@ -53,7 +53,7 @@ public enum PokemonElement
 public class CardModel
 {
     public int id;
-    public string title;
+    public string titleKey;
     public string imageName;
 
     [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]

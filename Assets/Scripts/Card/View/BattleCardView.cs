@@ -1,12 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class BattleCardView : CardViewBase, IBattleCardView, IUGUICardView
 {
     public GameObject CardRoot { get; }
     public GameObject CardPrefab { get; }
-    private TextMeshProUGUI titleLabel;
     private GameObject backCover;
     private bool isFaceDown;
 
@@ -15,7 +13,7 @@ public class BattleCardView : CardViewBase, IBattleCardView, IUGUICardView
     {
         CardPrefab = prefab;
         CardRoot = Object.Instantiate(CardPrefab, parent);
-        CardRoot.name = faceDown ? $"{model.title}_Back" : model.title;
+        CardRoot.name = faceDown ? $"{model.titleKey}_Back" : model.titleKey;
         isFaceDown = faceDown;
 
         InitializeElements();
@@ -33,14 +31,13 @@ public class BattleCardView : CardViewBase, IBattleCardView, IUGUICardView
 
     private void InitializeElements()
     {
-        titleLabel = CardRoot.transform.Find("Body/Title").GetComponent<TextMeshProUGUI>();
         backCover = CardRoot.transform.Find("BackCover").gameObject;
     }
 
     public override void BindData()
     {
         CardRoot.GetComponent<Image>().color = CardModel.colors.cardColor;
-        titleLabel.text = CardModel.title;
+        Localizer.LocalizeGameObjectElement(CardRoot, "Body/Title", CardModel.titleKey, "PokemonTitles");
         CardViewHelper.UpdateBodyUGUI(CardRoot, CardModel);
         CardViewHelper.SetImagesUGUI(CardRoot, CardModel);
     }

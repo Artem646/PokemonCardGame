@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Localization;
 
 public class DeckCardView : CardViewBase, IUIToolkitCardView, IDeckCardView
 {
     public VisualElement CardRoot { get; }
     public VisualTreeAsset CardTemplate { get; }
     private VisualElement cardElement;
-    private Label titleLabel;
 
     public DeckCardView(CardModel model, VisualTreeAsset template)
         : base(model)
@@ -20,13 +20,12 @@ public class DeckCardView : CardViewBase, IUIToolkitCardView, IDeckCardView
     private void InitializeElements()
     {
         cardElement = CardRoot.Q<VisualElement>("fullCard");
-        titleLabel = CardRoot.Q<Label>("title");
     }
 
     public override void BindData()
     {
         cardElement.style.backgroundColor = new StyleColor(CardModel.colors.cardColor);
-        titleLabel.text = CardModel.title;
+        Localizer.LocalizeElement(CardRoot, "title", CardModel.titleKey, "PokemonTitles");
         CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, CardElementLayoutModeConfig.Deck);
         CardViewHelper.SetImagesUIToolkit(CardRoot, CardModel);
     }

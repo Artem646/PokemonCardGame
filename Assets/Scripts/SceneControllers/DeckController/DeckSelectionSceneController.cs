@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -18,17 +19,39 @@ public class DeckSelectionSceneController : MonoBehaviour
 
     private async void Start()
     {
-        root = uiDocument.rootVisualElement;
-        deckDropdown = root.Q<DropdownField>("deckSelectField");
-        confirmButton = root.Q<Button>("confirmDeckButton");
-        makeDeckButton = root.Q<Button>("makeDeckButton");
-        profileField = root.Q<VisualElement>("profileField");
+        InitializeUI();
+
+        LocalizeElements();
 
         UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
         await UserProfileView.Instance.LoadUserData();
 
         RefreshDeckDropdown();
         RegisterCallbacks();
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        deckDropdown = root.Q<DropdownField>("deckSelectField");
+        confirmButton = root.Q<Button>("confirmDeckButton");
+        makeDeckButton = root.Q<Button>("makeDeckButton");
+        profileField = root.Q<VisualElement>("profileField");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElements(root, new[]
+        {
+            ("playButton", "PlayButton"),
+            ("collectionButton", "CollectionButton"),
+            ("bestiaryButton", "BestiaryButton"),
+            ("decksButton", "DecksButton"),
+            ("makeDeckLabel", "MakeDeckLabel"),
+            ("selectDeckLabel", "SelectDeckLabel"),
+            ("makeDeckButton", "MakeDeckButton"),
+            ("confirmDeckButton", "ConfirmDeckButton")
+        }, "ElementsText");
     }
 
     public void RefreshDeckDropdown()
@@ -42,8 +65,12 @@ public class DeckSelectionSceneController : MonoBehaviour
         }
         else
         {
-            deckDropdown.choices = new() { "Пусто" };
-            deckDropdown.value = "Пусто";
+            LocalizedString localizedValue = new("MenuElementsText", "EmptyDropdown");
+            localizedValue.StringChanged += (str) =>
+            {
+                deckDropdown.choices = new() { str };
+                deckDropdown.value = str;
+            };
             confirmButton.SetEnabled(false);
         }
     }
@@ -71,7 +98,7 @@ public class DeckSelectionSceneController : MonoBehaviour
                 cards = new List<int>()
             };
 
-            editorController.SetSaveChangesButtonText("Играть");
+            editorController.SetDeckEditorAction(DeckEditorAction.Play);
             editorController.OpenDeckEditor(deck);
 
             editorController.OnDeckMaked += makedDeck =>

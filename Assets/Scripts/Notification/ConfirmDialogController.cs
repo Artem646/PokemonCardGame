@@ -1,18 +1,22 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UIElements;
 
 public class ConfirmDialogController : MonoBehaviour
 {
     public static ConfirmDialogController Instance { get; private set; }
+
     [SerializeField] private UIDocument uiDocument;
 
     private VisualElement root;
     private VisualElement overlay;
-    private Label dialogMessage;
+    private VisualElement dialog;
     private Button retryButton;
-    private Button cancelButton;
-    private Button bestiaryButton;
+    private Button exitGameButton;
+    private Button openBestiaryButton;
 
     private void Awake()
     {
@@ -24,56 +28,80 @@ public class ConfirmDialogController : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        root = uiDocument.rootVisualElement;
-        overlay = root.Q<VisualElement>("overlay");
-        dialogMessage = root.Q<Label>("dialogMessage");
-        retryButton = root.Q<Button>("retryButton");
-        cancelButton = root.Q<Button>("cancelButton");
-        bestiaryButton = root.Q<Button>("bestiaryButton");
+        InitializeUI();
+
+        ApplySavedLocale();
+        LocalizeElements();
 
         overlay.style.display = DisplayStyle.None;
     }
 
-    public static void ShowDialog(string message, Action onRetry, Action onCancel, Action onBestiaty)
+    private void InitializeUI()
     {
-        Instance.Show(message, onRetry, onCancel, onBestiaty);
+        root = uiDocument.rootVisualElement;
+        overlay = root.Q<VisualElement>("overlay");
+        dialog = root.Q<VisualElement>("dialogRoot");
+        retryButton = root.Q<Button>("retryButton");
+        exitGameButton = root.Q<Button>("exitGameButton");
+        openBestiaryButton = root.Q<Button>("openBestiaryButton");
     }
 
-    private void Show(string message, Action onRetry, Action onCancel, Action onBestiary)
+    private void LocalizeElements()
     {
-        dialogMessage.text = message;
+        Localizer.LocalizeElements(root, new[]
+        {
+            ("dialogMessageLabel", "DialogMessageLabel"),
+            ("retryButton", "RetryButton"),
+            ("openBestiaryButton", "OpenBestiaryButton"),
+            ("exitGameButton", "ExitGameButton")
+        }, "ElementsText");
+    }
+
+    public static void ShowDialog(Action onRetry, Action onOpenBestiary, Action onExitGame)
+    {
+        Instance.DisplayDialog(onRetry, onOpenBestiary, onExitGame);
+    }
+
+    private void DisplayDialog(Action onRetry, Action onOpenBestiary, Action onExitGame)
+    {
         overlay.style.display = DisplayStyle.Flex;
+        dialog.style.display = DisplayStyle.Flex;
 
         retryButton.clicked -= RetryClicked;
-        cancelButton.clicked -= CancelClicked;
-        bestiaryButton.clicked -= BestiaryClicked;
+        openBestiaryButton.clicked -= OpenBestiaryClicked;
+        exitGameButton.clicked -= ExitGameClicked;
 
         void RetryClicked()
         {
-            overlay.style.display = DisplayStyle.None;
+            dialog.style.display = DisplayStyle.None;
             onRetry?.Invoke();
         }
-
-        void CancelClicked()
-        {
-            overlay.style.display = DisplayStyle.None;
-            onCancel?.Invoke();
-        }
-
-        void BestiaryClicked()
-        {
-            overlay.style.display = DisplayStyle.None;
-            onBestiary?.Invoke();
-        }
+        void OpenBestiaryClicked() => onOpenBestiary?.Invoke();
+        void ExitGameClicked() => onExitGame?.Invoke();
 
         retryButton.clicked += RetryClicked;
-        cancelButton.clicked += CancelClicked;
-        bestiaryButton.clicked += BestiaryClicked;
+        openBestiaryButton.clicked += OpenBestiaryClicked;
+        exitGameButton.clicked += ExitGameClicked;
     }
 
-    public static void CloseDialog()
+    public static void CloseDialogOverlay()
     {
-        if (Instance != null && Instance.overlay != null)
-            Instance.overlay.style.display = DisplayStyle.None;
+        Instance.overlay.style.display = DisplayStyle.None;
+    }
+
+    private void ApplySavedLocale()
+    {
+        if (PlayerPrefs.HasKey("locale"))
+        {
+            List<Locale> locales = LocalizationSettings.AvailableLocales.Locales;
+            string savedCode = PlayerPrefs.GetString("locale");
+            Locale locale = locales.Find(locale => locale.Identifier.Code == savedCode);
+            LocalizationSettings.SelectedLocale = locale;
+        }
+        else
+        {
+            Locale locale = LocalizationSettings.AvailableLocales.GetLocale("en");
+            LocalizationSettings.SelectedLocale = locale;
+        }
     }
 }

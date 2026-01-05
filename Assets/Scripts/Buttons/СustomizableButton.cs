@@ -30,14 +30,6 @@ public partial class CustomizableButton : Button
     {
         generateVisualContent += OnGenerateVisualContent;
 
-        textLabel = new Label();
-        textLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-        textLabel.style.flexGrow = 1;
-        textLabel.style.color = Color.white;
-        Add(textLabel);
-
-        RegisterCallback<GeometryChangedEvent>(evt => { textLabel.text = ButtonText; });
-
         RegisterCallback<MouseEnterEvent>(evt => { isHovered = true; MarkDirtyRepaint(); });
         RegisterCallback<MouseLeaveEvent>(evt => { isHovered = false; isPressed = false; MarkDirtyRepaint(); });
         RegisterCallback<MouseDownEvent>(evt => { isPressed = true; MarkDirtyRepaint(); });

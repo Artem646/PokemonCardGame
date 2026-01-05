@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+public enum DeckEditorAction
+{
+    SaveChanges,
+    SaveDeck,
+    Play
+}
+
 public class DeckEditorController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
@@ -20,6 +27,8 @@ public class DeckEditorController : MonoBehaviour
     private Deck currentDeck;
     private List<int> selectedCards = new();
     private const int MAX_CARDS_COUNT = 5;
+
+    private DeckEditorAction currentAction;
 
     public event Action<Deck> OnDeckMaked;
     public event Action<Deck> OnDeckAdded;
@@ -80,8 +89,7 @@ public class DeckEditorController : MonoBehaviour
             controller?.SetSelected(false);
             selectedCards.Remove(cardId);
 
-            NotificationManager.ShowNotification($"В колоде должно быть ровно {MAX_CARDS_COUNT} карт!", NotificationType.Info);
-
+            Localizer.LocalizeNotification(NotificationKey.DeckMustHaveCountCards, NotificationType.Info, MAX_CARDS_COUNT);
             return;
         }
 
@@ -101,7 +109,7 @@ public class DeckEditorController : MonoBehaviour
 
         if (selectedCards.Count != MAX_CARDS_COUNT)
         {
-            NotificationManager.ShowNotification($"В колоде должно быть ровно {MAX_CARDS_COUNT} карт!", NotificationType.Info);
+            Localizer.LocalizeNotification(NotificationKey.DeckMustHaveCountCards, NotificationType.Info, MAX_CARDS_COUNT);
             return;
         }
 
@@ -111,47 +119,62 @@ public class DeckEditorController : MonoBehaviour
         bool nameChanged = !string.Equals(currentDeck.name, newName, StringComparison.Ordinal);
         bool cardsChanged = !currentDeck.cards.SequenceEqual(selectedCards);
 
-        if (performActionButton.text == "Сохранить изменения")
+        switch (currentAction)
         {
-            overlay.style.display = DisplayStyle.None;
+            case DeckEditorAction.SaveChanges:
+                {
+                    overlay.style.display = DisplayStyle.None;
 
-            if (nameChanged || cardsChanged)
-            {
-                currentDeck.name = newName;
-                currentDeck.cards = newCards;
+                    if (nameChanged || cardsChanged)
+                    {
+                        currentDeck.name = newName;
+                        currentDeck.cards = newCards;
 
-                await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
-                OnDeckUpdate?.Invoke(currentDeck);
-                NotificationManager.ShowNotification("Изменения сохранены!", NotificationType.Success);
-            }
-            else
-            {
-                NotificationManager.ShowNotification("Нет изменений", NotificationType.Info);
-            }
-        }
+                        await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
+                        OnDeckUpdate?.Invoke(currentDeck);
+                    }
+                    else
+                        Localizer.LocalizeNotification(NotificationKey.NoChanges, NotificationType.Info);
 
-        if (performActionButton.text == "Сохранить колоду")
-        {
-            overlay.style.display = DisplayStyle.None;
+                    break;
+                }
+            case DeckEditorAction.SaveDeck:
+                {
+                    overlay.style.display = DisplayStyle.None;
 
-            currentDeck.name = newName;
-            currentDeck.cards = newCards;
+                    currentDeck.name = newName;
+                    currentDeck.cards = newCards;
 
-            await FirebaseFirestoreService.Instance.AddDeck(UserSession.Instance.ActiveUser, currentDeck);
-            OnDeckAdded?.Invoke(currentDeck);
-        }
-
-        if (performActionButton.text == "Играть")
-        {
-            currentDeck.name = newName;
-            currentDeck.cards = newCards;
-
-            OnDeckMaked?.Invoke(currentDeck);
+                    await FirebaseFirestoreService.Instance.AddDeck(UserSession.Instance.ActiveUser, currentDeck);
+                    OnDeckAdded?.Invoke(currentDeck);
+                    break;
+                }
+            case DeckEditorAction.Play:
+                {
+                    currentDeck.name = newName;
+                    currentDeck.cards = newCards;
+                    OnDeckMaked?.Invoke(currentDeck);
+                    break;
+                }
         }
     }
 
-    public void SetSaveChangesButtonText(string text)
+    public void SetDeckEditorAction(DeckEditorAction action)
     {
-        performActionButton.text = text;
+        currentAction = action;
+        UpdatePerformActionButtonText();
+    }
+
+    private void UpdatePerformActionButtonText()
+    {
+        string key = currentAction switch
+        {
+            DeckEditorAction.SaveChanges => "SaveChangesButton",
+            DeckEditorAction.SaveDeck => "SaveDeckButton",
+            DeckEditorAction.Play => "PlayWithDeckButton",
+            _ => "PlayWithDeckButton"
+        };
+
+        Localizer.LocalizeElement(root, "performActionButton", key, "ElementsText");
     }
 }

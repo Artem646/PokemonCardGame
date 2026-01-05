@@ -20,16 +20,36 @@ public class StartPlaySceneController : MonoBehaviour
 
     private async void Start()
     {
-        root = uiDocument.rootVisualElement;
-        singlePlayerButton = root.Q<CustomizableButton>("singlePlayerButton");
-        multyPlayerButton = root.Q<CustomizableButton>("multyPlayerButton");
-        decksButton = root.Q<CustomizableButton>("decksButton");
-        profileField = root.Q<VisualElement>("profileField");
+        InitializeUI();
+
+        LocalizeElements();
 
         UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
         await UserProfileView.Instance.LoadUserData();
 
         RegisterCallbacks();
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        singlePlayerButton = root.Q<CustomizableButton>("singlePlayerButton");
+        multyPlayerButton = root.Q<CustomizableButton>("multyPlayerButton");
+        decksButton = root.Q<CustomizableButton>("decksButton");
+        profileField = root.Q<VisualElement>("profileField");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElements(root, new[]
+        {
+            ("playButton", "PlayButton"),
+            ("collectionButton", "CollectionButton"),
+            ("bestiaryButton", "BestiaryButton"),
+            ("singlePlayerLabel", "SinglePlayerLabel"),
+            ("multyPlayerLabel", "MultyPlayerLabel"),
+            ("decksLabel", "DecksLabel")
+        }, "ElementsText");
     }
 
     private void RegisterCallbacks()

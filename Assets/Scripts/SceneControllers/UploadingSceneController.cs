@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Firebase.Auth;
 using UnityEngine.UIElements;
 
 public class UploadingSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
+
+    private VisualElement root;
     private ProgressBar progressBar;
-    private Label statusLabel;
 
     private async void Start()
     {
@@ -22,12 +22,23 @@ public class UploadingSceneController : MonoBehaviour
 
     private void OnEnable()
     {
-        var root = uiDocument.rootVisualElement;
-        progressBar = root.Q<ProgressBar>("progressBar");
-        statusLabel = root.Q<Label>("statusLabel");
+        InitializeUI();
+
+        LocalizeElements();
 
         CardRepository.Instance.OnProgressChanged += HandleProgress;
         CardRepository.Instance.OnCardsLoaded += HandleCardsLoaded;
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        progressBar = root.Q<ProgressBar>("progressBar");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElement(root, "uploadingLabel", "UploadingLabel", "ElementsText");
     }
 
     private void OnDisable()
@@ -42,12 +53,12 @@ public class UploadingSceneController : MonoBehaviour
     private void HandleProgress(float progress)
     {
         progressBar.value = progress * 100f;
-        statusLabel.text = $"Загрузка карт... {Mathf.RoundToInt(progress * 100)}%";
+        Localizer.LocalizeElement(root, "uploadingLabel", "UploadingCardsLabel", "ElementsText", Mathf.RoundToInt(progress * 100));
     }
 
     private void HandleCardsLoaded()
     {
-        statusLabel.text = $"Загружено {CardRepository.Instance.GetUserCards().cards.Count} карт";
+        Localizer.LocalizeElement(root, "uploadingLabel", "CardsUploadedLabel", "ElementsText", CardRepository.Instance.GetUserCards().cards.Count);
         SceneManager.LoadScene("CollectionScene");
     }
 }

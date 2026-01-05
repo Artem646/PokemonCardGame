@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class SignInController : MonoBehaviour
@@ -12,12 +11,24 @@ public class SignInController : MonoBehaviour
 
     private void Start()
     {
-        root = uiDocument.rootVisualElement;
-        googleSignInButton = root.Q<Button>("googleSignInButton");
-        anonymousSignInButton = root.Q<Button>("anonymousSignInButton");
+        InitializeUI();
+
+        LocalizeElements();
 
         googleSignInButton.clicked += OnGoogleSignInClicked;
         anonymousSignInButton.clicked += OnAnonymousSignInClicked;
+    }
+
+    private void InitializeUI()
+    {
+        root = uiDocument.rootVisualElement;
+        googleSignInButton = root.Q<Button>("googleSignInButton");
+        anonymousSignInButton = root.Q<Button>("anonymousSingInButton");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElement(root, "anonymousSingInButton", "AnonymousSingInButton", "ElementsText");
     }
 
     public void OnGoogleSignInClicked()

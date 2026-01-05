@@ -16,37 +16,23 @@ public class DeckController : MonoBehaviour
     private ScrollView decksScrollView;
     private VisualElement deckRoot;
     private Label deckName;
-    private Button addDeckButton;
     private Button editDeckButton;
     private Button deleteDeckButton;
     private VisualElement deckCardsContainer;
 
     private void Start()
     {
-        root = uiDocument.rootVisualElement;
-        decksScrollView = root.Q<ScrollView>("decksScrollView");
-        addDeckButton = root.Q<Button>("addDeckButton");
+        InitializeUI();
 
         AddDecksToContainer(UserSession.Instance.ActiveUser.decks);
-
-        addDeckButton.RegisterCallback<ClickEvent>(evt =>
-        {
-            OnAddButtonClicked();
-        });
 
         RegisterEvent();
     }
 
-    private void OnAddButtonClicked()
+    private void InitializeUI()
     {
-        Deck newDeck = new()
-        {
-            name = "New deck",
-            cards = new List<int>()
-        };
-
-        editorController.SetSaveChangesButtonText("Сохранить колоду");
-        editorController.OpenDeckEditor(newDeck);
+        root = uiDocument.rootVisualElement;
+        decksScrollView = root.Q<ScrollView>("decksScrollView");
     }
 
     private void AddDecksToContainer(List<Deck> decks)
@@ -63,10 +49,9 @@ public class DeckController : MonoBehaviour
         deckRoot = deckTemplate.Instantiate();
         deckRoot.userData = deck.deckId;
 
-        deckName = deckRoot.Q<Label>("deckName");
-        editDeckButton = deckRoot.Q<Button>("editDeckButton");
-        deleteDeckButton = deckRoot.Q<Button>("deleteDeckButton");
-        deckCardsContainer = deckRoot.Q<VisualElement>("deckCardsContainer");
+        InitializeDeckUI();
+
+        LocalizeElements();
 
         deckRoot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         deckName.text = deck.name;
@@ -82,11 +67,28 @@ public class DeckController : MonoBehaviour
         decksScrollView.Add(deckRoot);
     }
 
+    private void InitializeDeckUI()
+    {
+        deckName = deckRoot.Q<Label>("deckName");
+        editDeckButton = deckRoot.Q<Button>("editDeckButton");
+        deleteDeckButton = deckRoot.Q<Button>("deleteDeckButton");
+        deckCardsContainer = deckRoot.Q<VisualElement>("deckCardsContainer");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElements(deckRoot, new[]
+        {
+            ("editDeckButton", "EditDeckButton"),
+            ("deleteDeckButton", "DeleteDeckButton")
+        }, "ElementsText");
+    }
+
     private void RegisterCallbacks(Deck deck)
     {
         editDeckButton.RegisterCallback<ClickEvent>(evt =>
         {
-            editorController.SetSaveChangesButtonText("Сохранить изменения");
+            editorController.SetDeckEditorAction(DeckEditorAction.SaveChanges);
             editorController.OpenDeckEditor(deck);
         });
 

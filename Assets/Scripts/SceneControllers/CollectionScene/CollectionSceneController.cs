@@ -28,6 +28,8 @@ public class CollectionSceneController : MonoBehaviour
     {
         InitializeUI();
 
+        LocalizeElements();
+
         loadingOverlay.style.display = DisplayStyle.Flex;
 
         CardControllerFactory.Init(template: cardTemplate);
@@ -58,8 +60,20 @@ public class CollectionSceneController : MonoBehaviour
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
         cardsContainer = root.Q<ScrollView>("cardScrollView");
         filterPanel = root.Q<VisualElement>("elementsFilterPanel");
-        openFilterPanelButton = root.Q<VisualElement>("handle");
+        openFilterPanelButton = root.Q<VisualElement>("openFiltersButton");
         profileField = root.Q<VisualElement>("profileField");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElements(root, new[]
+        {
+            ("playButton", "PlayButton"),
+            ("collectionButton", "CollectionButton"),
+            ("bestiaryButton", "BestiaryButton"),
+            ("decksButton", "DecksButton"),
+            ("filtersLabel", "FiltersLabel")
+        }, "ElementsText");
     }
 
     private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)

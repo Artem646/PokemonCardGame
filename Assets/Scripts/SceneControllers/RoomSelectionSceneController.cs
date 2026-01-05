@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private UIDocument uiDocument;
+
     private NetworkRunner runner;
     private NetworkRunnerHandler networkRunnerHandler;
     private VisualElement root;
@@ -22,6 +23,9 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
     private async void Start()
     {
         InitializeUI();
+
+        LocalizeElements();
+
         loadingOverlay.style.display = DisplayStyle.Flex;
         await InitializeNetworkRunner();
         await Task.Delay(700);
@@ -35,9 +39,21 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
         roomList = root.Q<ScrollView>("roomList");
         roomNameField = root.Q<TextField>("roomNameField");
         createRoomButton = root.Q<Button>("createRoomButton");
-        refreshButton = root.Q<Button>("refreshButton");
+        refreshButton = root.Q<Button>("refreshRoomsButton");
         backButton = root.Q<Button>("backButton");
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
+    }
+
+    private void LocalizeElements()
+    {
+        Localizer.LocalizeElements(root, new[]
+        {
+            ("createRoomLabel", "CreateRoomLabel"),
+            ("selectRoomLabel", "SelectRoomLabel"),
+            ("createRoomButton", "CreateRoomButton"),
+            ("refreshRoomsButton", "RefreshRoomsButton"),
+            ("backButton", "BackButton")
+        }, "ElementsText");
     }
 
     private void RegisterEvents()
@@ -58,18 +74,17 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
     private void CreateRoom()
     {
         ConnectionConfig.RoomName = string.IsNullOrEmpty(roomNameField.value) ? "DefaultRoom" : roomNameField.value;
-        SceneManager.LoadScene("TestConnScene");
+        SceneManager.LoadScene("ConnectionScene");
     }
 
     private void ConnectToRoom(string roomName)
     {
         ConnectionConfig.RoomName = roomName;
-        SceneManager.LoadScene("TestConnScene");
+        SceneManager.LoadScene("ConnectionScene");
     }
 
     private async void RefreshRooms()
     {
-        Debug.Log("Запрос обновления списка комнат...");
         await runner.JoinSessionLobby(SessionLobby.ClientServer);
     }
 
@@ -77,7 +92,7 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
     {
         roomList.Clear();
 
-        foreach (var session in sessionList)
+        foreach (SessionInfo session in sessionList)
         {
             Button button = new() { text = $"{session.Name}" };
             button.style.fontSize = 30;

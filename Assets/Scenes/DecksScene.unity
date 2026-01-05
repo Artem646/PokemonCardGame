@@ -436,6 +436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DecksSceneController
   uiDocument: {fileID: 1875852629}
   settingsController: {fileID: 1143605769}
+  editorController: {fileID: 163190214}
 --- !u!4 &992921892
 Transform:
   m_ObjectHideFlags: 0

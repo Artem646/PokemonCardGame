@@ -12,6 +12,7 @@ public class CollectionSceneController : MonoBehaviour
 
     private VisualElement root;
     private VisualElement loadingOverlay;
+    private VisualElement cardOverlay;
     private ScrollView cardsContainer;
     private VisualElement filterPanel;
     private VisualElement openFilterPanelButton;
@@ -36,6 +37,8 @@ public class CollectionSceneController : MonoBehaviour
 
         collectionCardListController = new CollectionCardListController(cardsContainer);
 
+        CardOverlayManager.Instance.RegisterCardOverlay(SceneManager.GetActiveScene().name, cardOverlay);
+
         UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
         await UserProfileView.Instance.LoadUserData();
 
@@ -59,6 +62,7 @@ public class CollectionSceneController : MonoBehaviour
         root = uiDocument.rootVisualElement;
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
         cardsContainer = root.Q<ScrollView>("cardScrollView");
+        cardOverlay = root.Q<VisualElement>("overlay");
         filterPanel = root.Q<VisualElement>("elementsFilterPanel");
         openFilterPanelButton = root.Q<VisualElement>("openFiltersButton");
         profileField = root.Q<VisualElement>("profileField");

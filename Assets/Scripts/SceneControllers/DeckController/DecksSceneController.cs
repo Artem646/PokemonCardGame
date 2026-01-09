@@ -20,7 +20,7 @@ public class DecksSceneController : MonoBehaviour
 
         LocalizeElements();
 
-        CardOverlayManager.Instance.RegisterOverlayVisualElement(SceneManager.GetActiveScene().name, cardOverlay);
+        CardOverlayManager.Instance.RegisterCardOverlay(SceneManager.GetActiveScene().name, cardOverlay);
 
         UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
         await UserProfileView.Instance.LoadUserData();

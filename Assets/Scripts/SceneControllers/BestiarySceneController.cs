@@ -17,6 +17,7 @@ public class BestiarySceneController : MonoBehaviour
 
     private VisualElement root;
     private VisualElement loadingOverlay;
+    private VisualElement cardOverlay;
     private ScrollView cardsContainer;
     private VisualElement filterPanel;
     private VisualElement openFilterPanelButton;
@@ -40,6 +41,8 @@ public class BestiarySceneController : MonoBehaviour
 
         bestiaryCardsListController = new CollectionCardListController(cardsContainer);
 
+        CardOverlayManager.Instance.RegisterCardOverlay(SceneManager.GetActiveScene().name, cardOverlay);
+
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += (activefilters, pokemonElements) =>
         {
@@ -59,6 +62,7 @@ public class BestiarySceneController : MonoBehaviour
     {
         root = uiDocument.rootVisualElement;
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
+        cardOverlay = root.Q<VisualElement>("overlay");
         cardsContainer = root.Q<ScrollView>("cardScrollView");
         filterPanel = root.Q<VisualElement>("elementsFilterPanel");
         openFilterPanelButton = root.Q<VisualElement>("openFiltersButton");

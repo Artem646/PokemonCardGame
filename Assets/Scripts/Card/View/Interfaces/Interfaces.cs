@@ -24,6 +24,7 @@ public interface ICollectionCardView : IUIToolkitCardView
     void ApplyOwnedCardStyle(bool isUserCard);
     void SetActive(bool isActive);
     void RegisterClickHandlers(EventCallback<ClickEvent> onClick);
+    void RegisterClickHandlersOnDescriptionButton(EventCallback<ClickEvent> onClick);
     void UnregisterClickHandlers(EventCallback<ClickEvent> onClick);
 }
 

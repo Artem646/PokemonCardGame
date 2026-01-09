@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.Localization;
 
-public class DeckCardView : CardViewBase, IUIToolkitCardView, IDeckCardView
+public class DeckCardView : CardViewBase, IDeckCardView
 {
     public VisualElement CardRoot { get; }
     public VisualTreeAsset CardTemplate { get; }

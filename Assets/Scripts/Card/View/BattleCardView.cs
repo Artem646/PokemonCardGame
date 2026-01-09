@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleCardView : CardViewBase, IBattleCardView, IUGUICardView
+public class BattleCardView : CardViewBase, IBattleCardView
 {
     public GameObject CardRoot { get; }
     public GameObject CardPrefab { get; }

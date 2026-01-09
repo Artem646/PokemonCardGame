@@ -23,11 +23,12 @@ public class DeckCardController : BaseCardController
 
     private void OnCardElementClicked(ClickEvent evt)
     {
+        CardControllerFactory.Init(template: DeckCardView.CardTemplate);
         DeckCardController cloneController = CardControllerFactory.Create<DeckCardController>(CardModel);
         cloneController?.UnregisterEvents();
         IDeckCardView cloneView = cloneController?.DeckCardView;
         if (cloneView != null)
-            CardOverlayManager.Instance?.ShowDeckCard(DeckCardView, cloneView, evt);
+            CardOverlayManager.Instance?.ShowDeckCard(DeckCardView, cloneView);
     }
 
     public override void AddToContainer(object container)

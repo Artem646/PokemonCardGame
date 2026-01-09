@@ -14,16 +14,29 @@ public class CollectionCardController : BaseCardController
 
     public override void RegisterEvents()
     {
-        CollectionCardView.RegisterClickHandlers(OnCardElementClicked);
+        CollectionCardView.RegisterClickHandlers(OnCardClicked);
+        CollectionCardView.RegisterClickHandlersOnDescriptionButton(OnDescriptionButtonClicked);
     }
 
     public override void UnregisterEvents()
     {
-        CollectionCardView.UnregisterClickHandlers(OnCardElementClicked);
+        CollectionCardView.UnregisterClickHandlers(OnCardClicked);
     }
 
-    private void OnCardElementClicked(ClickEvent evt)
+    private void OnCardClicked(ClickEvent evt)
     {
+        CardControllerFactory.Init(template: CollectionCardView.CardTemplate);
+        CollectionCardController cloneController = CardControllerFactory.Create<CollectionCardController>(CardModel);
+        cloneController?.UnregisterEvents();
+        ICollectionCardView cloneView = cloneController?.CollectionCardView;
+        if (cloneView != null)
+            CardOverlayManager.Instance?.ShowCollectionCard(CollectionCardView, cloneView);
+    }
+
+    private void OnDescriptionButtonClicked(ClickEvent evt)
+    {
+        CardOverlayManager.Instance.HideOverlay();
+
         SelectedCardModelStorage.SelectedCardModel = CardModel;
         SceneContext.PreviousDescriptionSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadSceneAsync("DescriptionScene", LoadSceneMode.Additive);

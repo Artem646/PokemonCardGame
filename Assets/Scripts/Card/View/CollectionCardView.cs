@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-
-public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitCardView
+public class CollectionCardView : CardViewBase, ICollectionCardView
 {
     public VisualElement CardRoot { get; }
     public VisualTreeAsset CardTemplate { get; }
     private VisualElement cardElement;
     private VisualElement border;
+    private VisualElement body;
+    private Button descriptionButton;
 
     public CollectionCardView(CardModel model, VisualTreeAsset template)
         : base(model)
@@ -20,7 +21,9 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
     private void InitializeElements()
     {
         cardElement = CardRoot.Q<VisualElement>("fullCard");
-        border = CardRoot.Q<VisualElement>("border");
+        border = CardRoot.Q<VisualElement>("cardFrame");
+        body = CardRoot.Q<VisualElement>("body");
+        descriptionButton = CardRoot.Q<Button>("descriptionButton");
     }
 
     public override void BindData()
@@ -31,14 +34,23 @@ public class CollectionCardView : CardViewBase, ICollectionCardView, IUIToolkitC
         CardViewHelper.SetImagesUIToolkit(CardRoot, CardModel);
     }
 
-    public void RegisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
+    public void RegisterClickHandlers(EventCallback<ClickEvent> onBodyClick)
     {
-        cardElement.RegisterCallback(onCardElementClick);
+        body.RegisterCallback(onBodyClick);
     }
 
-    public void UnregisterClickHandlers(EventCallback<ClickEvent> onCardElementClick)
+    public void RegisterClickHandlersOnDescriptionButton(EventCallback<ClickEvent> onDescriptionButtonClick)
     {
-        cardElement.UnregisterCallback(onCardElementClick);
+        descriptionButton.RegisterCallback<ClickEvent>(evt =>
+        {
+            evt.StopPropagation();
+            onDescriptionButtonClick.Invoke(evt);
+        });
+    }
+
+    public void UnregisterClickHandlers(EventCallback<ClickEvent> onBodyClick)
+    {
+        body.UnregisterCallback(onBodyClick);
     }
 
     public void SetActive(bool isActive)

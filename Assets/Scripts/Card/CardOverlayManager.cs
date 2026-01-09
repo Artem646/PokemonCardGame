@@ -14,12 +14,16 @@ public class CardOverlayManager
 
     private RectTransform lastCardRectTransform;
 
+    private const float COLLECTION_TARGET_SCALE = 2f;
+    private const float DECK_TARGET_SCALE = 2.35f;
+    private const float DURATION = 0.35f;
+
     private CardOverlayManager() { }
 
-    public void RegisterOverlayVisualElement(string sceneName, VisualElement overlay)
+    public void RegisterCardOverlay(string sceneName, VisualElement overlay)
     {
+        overlay.RegisterCallback<ClickEvent>(evt => CardScaleAnimatorUIToolkit.HideCard(overlay));
         overlaysVisualElement[sceneName] = overlay;
-        overlay.RegisterCallback<ClickEvent>(evt => DeckCardScaleAnimator.HideCard(overlay));
     }
 
     public void RegisterOverlayGameObject(string sceneName, GameObject overlay)
@@ -32,16 +36,36 @@ public class CardOverlayManager
         trigger.triggers.Add(entry);
     }
 
-    public void ShowDeckCard(IDeckCardView originalCardView, IDeckCardView cloneCardView, ClickEvent evt)
+    public void ShowCollectionCard(ICollectionCardView originalCardView, ICollectionCardView cloneCardView)
     {
         string sceneName = SceneManager.GetActiveScene().name;
+
         if (overlaysVisualElement.TryGetValue(sceneName, out var overlay))
         {
-            DeckCardScaleAnimator.ShowCard(
+            CardScaleAnimatorUIToolkit.ShowCard(
+               originalCardView.CardRoot.Q<VisualElement>("fullCard"),
+               cloneCardView.CardRoot,
+               overlay,
+               COLLECTION_TARGET_SCALE, DURATION
+           );
+        }
+        else
+        {
+            Debug.LogWarning($"[OverlayManager] OverlayVE для сцены {sceneName} не найден!");
+        }
+    }
+
+    public void ShowDeckCard(IDeckCardView originalCardView, IDeckCardView cloneCardView)
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        if (overlaysVisualElement.TryGetValue(sceneName, out var overlay))
+        {
+            CardScaleAnimatorUIToolkit.ShowCard(
                 originalCardView.CardRoot.Q<VisualElement>("fullCard"),
                 cloneCardView.CardRoot,
                 overlay,
-                evt.position
+                DECK_TARGET_SCALE, DURATION
             );
         }
         else
@@ -53,6 +77,7 @@ public class CardOverlayManager
     public void ShowBattleCard(IBattleCardView originalCardView, IBattleCardView cloneCardView)
     {
         string sceneName = SceneManager.GetActiveScene().name;
+
         if (overlaysGameObject.TryGetValue(sceneName, out var overlay))
         {
             RectTransform originalRectTransform = originalCardView.CardRoot.GetComponent<RectTransform>();
@@ -63,6 +88,21 @@ public class CardOverlayManager
         else
         {
             Debug.LogWarning($"[OverlayManager] OverlayGO для сцены {sceneName} не найден!");
+        }
+    }
+
+    public void HideOverlay()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        if (overlaysVisualElement.TryGetValue(sceneName, out var overlay))
+        {
+            overlay.schedule.Execute(() =>
+            {
+                overlay.Clear();
+                overlay.RemoveFromClassList("overlay-active");
+                overlay.AddToClassList("overlay-none");
+            }).StartingIn(100);
         }
     }
 }

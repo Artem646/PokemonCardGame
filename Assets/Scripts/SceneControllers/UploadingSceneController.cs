@@ -24,8 +24,6 @@ public class UploadingSceneController : MonoBehaviour
     {
         InitializeUI();
 
-        LocalizeElements();
-
         CardRepository.Instance.OnProgressChanged += HandleProgress;
         CardRepository.Instance.OnCardsLoaded += HandleCardsLoaded;
     }
@@ -34,11 +32,6 @@ public class UploadingSceneController : MonoBehaviour
     {
         root = uiDocument.rootVisualElement;
         progressBar = root.Q<ProgressBar>("progressBar");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElement(root, "uploadingLabel", "UploadingLabel", "ElementsText");
     }
 
     private void OnDisable()

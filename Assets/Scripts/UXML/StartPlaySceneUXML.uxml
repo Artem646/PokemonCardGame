@@ -6,20 +6,44 @@
             <ui:Label name="userName" class="player-name" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-wrap: wrap; width: 70%; height: 100%; justify-content: center; align-items: center; -unity-text-align: middle-center; white-space: normal; text-overflow: clip; font-size: 30px; left: 10px;"/>
         </ui:VisualElement>
         <ui:VisualElement class="nav-buttons" style="min-width: auto; max-width: none; max-height: none; min-height: auto; height: 100%; flex-grow: 0; width: 85%; margin-right: 0; align-content: auto; align-self: auto; justify-content: flex-end;">
-            <ParallelogramButton text="PLAY" name="playButton" target-scene-name="StartPlayScene" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
-            <ParallelogramButton text="COLLECTION" name="collectionButton" class="nav-button" style="padding-left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
-            <ParallelogramButton text="BESTIARY" name="bestiaryButton" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
+            <ParallelogramButton text="PLAY" name="playButton" target-scene-name="StartPlayScene" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(20381630464)"/>
+                </Bindings>
+            </ParallelogramButton>
+            <ParallelogramButton text="COLLECTION" name="collectionButton" class="nav-button" style="padding-left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(22688497664)"/>
+                </Bindings>
+            </ParallelogramButton>
+            <ParallelogramButton text="BESTIARY" name="bestiaryButton" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(24634654720)"/>
+                </Bindings>
+            </ParallelogramButton>
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement class="main-content" style="flex-direction: column; flex-grow: 1; padding-bottom: 0; padding-top: 0; display: flex; padding-right: 0; padding-left: 0; align-items: center; justify-content: center; background-color: rgb(85, 91, 123);">
         <CustomizableButton name="singlePlayerButton" text="" skew-offset="90" fill-color="rgb(168, 123, 79)" border-width="3" skew-top="0" skew-left="55" skew-right="55" skew-bottom="555" angle-top-left="0" angle-top-right="0" angle-bottom-left="0" angle-bottom-right="0" angle-left-top="0" angle-right-bottom="-9" button-text="SINGLE-PLAYER" style="flex-grow: 0; width: 700px; height: 350px; background-color: rgba(66, 73, 91, 0); border-right-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 0; align-items: center; justify-content: center; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; position: absolute; top: 124px; left: 631px; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(255, 255, 255); display: flex; font-size: 50px; -unity-text-outline-color: rgba(0, 0, 0, 0);">
-            <ui:Label text="SINGLE" name="singlePlayerLabel" style="font-size: 70px;"/>
+            <ui:Label text="SINGLE" name="singlePlayerLabel" style="font-size: 70px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(19155215908864)"/>
+                </Bindings>
+            </ui:Label>
         </CustomizableButton>
         <CustomizableButton name="multyPlayerButton" text="" angle-top-left="0" angle-left-top="9" fill-color="rgb(73, 89, 43)" border-width="3" button-text="MULTY-PLAYER" style="flex-grow: 0; width: 700px; height: 350px; background-color: rgba(66, 73, 91, 0); border-right-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 0; align-items: center; justify-content: center; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; position: absolute; top: 393px; left: 631px; font-size: 50px;">
-            <ui:Label text="NETWORK" name="multyPlayerLabel" style="color: rgb(255, 255, 255); font-size: 70px; top: 20px;"/>
+            <ui:Label text="NETWORK" name="multyPlayerLabel" style="color: rgb(255, 255, 255); font-size: 70px; top: 20px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(19215399976960)"/>
+                </Bindings>
+            </ui:Label>
         </CustomizableButton>
         <CustomizableButton name="decksButton" text="" skew-offset="90" fill-color="rgb(168, 123, 79)" border-width="3" skew-top="0" skew-left="55" skew-right="55" skew-bottom="555" angle-top-left="0" angle-top-right="0" angle-bottom-left="0" angle-bottom-right="0" angle-left-top="0" angle-right-bottom="0" button-text="DECKS" border-color="rgb(255, 255, 255)" style="flex-grow: 0; width: 576px; height: 622px; background-color: rgba(66, 73, 91, 0); border-right-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 0; align-items: center; justify-content: center; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; position: absolute; top: 122px; left: 1363px; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(255, 255, 255); display: flex; font-size: 50px; -unity-text-outline-color: rgba(0, 0, 0, 0);">
-            <ui:Label text="DECKS" name="decksLabel" style="font-size: 70px;"/>
+            <ui:Label text="DECKS" name="decksLabel" style="font-size: 70px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(26702446592)"/>
+                </Bindings>
+            </ui:Label>
         </CustomizableButton>
     </ui:VisualElement>
 </ui:UXML>

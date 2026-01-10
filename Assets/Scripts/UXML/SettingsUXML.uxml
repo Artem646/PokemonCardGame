@@ -3,7 +3,11 @@
     <ui:VisualElement name="overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.49); display: none; align-items: center; justify-content: center;">
         <ui:VisualElement name="settings" style="flex-direction: column; align-items: center; justify-content: flex-start; width: 1407px; height: 704px; margin: auto; background-color: rgb(40, 40, 40); border-radius: 10px; padding: 15px; position: absolute; top: auto; left: auto; border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; display: flex; align-self: auto;">
             <ui:VisualElement style="flex-grow: 0; width: 100%; height: 13%; flex-direction: row; justify-content: center; align-items: center;">
-                <ui:Label text="&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1080; &#1087;&#1088;&#1086;&#1092;&#1080;&#1083;&#1103;" name="profileSettingsLabel" style="font-size: 40px; color: white; margin-bottom: 0; -unity-text-align: middle-center; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; left: 40px; align-self: auto;"/>
+                <ui:Label text="&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1080; &#1087;&#1088;&#1086;&#1092;&#1080;&#1083;&#1103;" name="profileSettingsLabel" style="font-size: 40px; color: white; margin-bottom: 0; -unity-text-align: middle-center; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; left: 40px; align-self: auto;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(661067786551296)"/>
+                    </Bindings>
+                </ui:Label>
                 <ui:Button name="closeButton" text="&#10005;" selectable="false" focusable="false" style="position: relative; top: auto; right: auto; width: 70px; height: 70px; font-size: 45px; color: white; background-color: rgb(161, 63, 63); border-radius: 15px; align-self: stretch; align-content: auto; left: 32%;"/>
             </ui:VisualElement>
             <ui:VisualElement name="" style="flex-grow: 0; width: 90%; height: 200px; flex-direction: row; justify-content: space-evenly; margin-bottom: 10px; margin-top: 10px;">
@@ -17,16 +21,28 @@
             <ui:VisualElement style="flex-grow: 0; height: 10%; width: 80%; flex-direction: row;">
                 <ui:TextField name="profilePhotoUrlField" label="" value="URL photo: https://..." style="width: 100%; height: 60px; font-size: 35px; margin-bottom: 0; background-color: rgba(0, 0, 0, 0); margin-top: 0; margin-right: 0; margin-left: 0; min-width: 100px;"/>
             </ui:VisualElement>
-            <ui:Button name="saveProfileButton" text="&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1080;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1103;" style="width: 50%; height: 70px; font-size: 30px; background-color: rgb(55, 161, 63); color: white; border-radius: 20px; margin-top: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;"/>
+            <ui:Button name="saveProfileButton" text="&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1080;&#1090;&#1100; &#1080;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1103;" style="width: 50%; height: 70px; font-size: 30px; background-color: rgb(55, 161, 63); color: white; border-radius: 20px; margin-top: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(663274799955968)"/>
+                </Bindings>
+            </ui:Button>
             <CustomizableButton text="" name="singOutButton" button-text="SING OUT" angle-top-left="20" angle-top-right="-20" angle-bottom-left="5" angle-bottom-right="-5" border-color="rgb(255, 190, 26)" fill-color="rgb(143, 117, 62)" hover-color="rgb(155, 84, 34)" pressed-color="rgb(155, 84, 34)" style="position: absolute; top: 553px; left: 1118px; width: 250px; height: 120px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 25px; background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; align-items: center; justify-content: center;">
-                <ui:Label text="&#1042;&#1099;&#1081;&#1090;&#1080; &#1089; &#1091;&#1095;. &#1079;&#1072;&#1087;&#1080;&#1089;&#1080;" name="singOutLabel" style="font-size: 28px; color: rgb(255, 255, 255); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 100%; width: 168px; white-space: normal; align-items: center; justify-content: center;"/>
+                <ui:Label text="&#1042;&#1099;&#1081;&#1090;&#1080; &#1089; &#1091;&#1095;. &#1079;&#1072;&#1087;&#1080;&#1089;&#1080;" name="singOutLabel" style="font-size: 28px; color: rgb(255, 255, 255); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 100%; width: 168px; white-space: normal; align-items: center; justify-content: center;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(662521674924032)"/>
+                    </Bindings>
+                </ui:Label>
             </CustomizableButton>
             <ui:RadioButtonGroup label="" name="languageGroup" style="position: absolute; top: 509px; left: 56px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; color: rgb(255, 255, 255); height: 171px; width: 256px; background-color: rgb(159, 49, 49); -unity-text-align: middle-center; align-items: center; justify-content: center; flex-direction: row; align-content: auto; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-left-color: rgb(180, 151, 43); border-right-color: rgb(180, 151, 43); border-top-color: rgb(180, 151, 43); border-bottom-color: rgb(180, 151, 43);">
                 <ui:RadioButton label="Russian " name="ruLangRadioButton" style="width: 197px; right: auto; font-size: 35px; -unity-text-align: middle-center;"/>
                 <ui:RadioButton label="English" name="enLangRadioButton" style="width: 188px; font-size: 35px;"/>
                 <ui:RadioButton label="Belarusian" name="beLangRadioButton" style="font-size: 35px; width: 216px;"/>
             </ui:RadioButtonGroup>
-            <ui:Label text="&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1072; &#1103;&#1079;&#1099;&#1082;&#1072;" name="langSettingsLabel" style="position: absolute; top: 409px; left: 38px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; color: rgb(255, 255, 255); font-size: 35px; white-space: normal; width: 279px; -unity-text-align: middle-center;"/>
+            <ui:Label text="&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1072; &#1103;&#1079;&#1099;&#1082;&#1072;" name="langSettingsLabel" style="position: absolute; top: 409px; left: 38px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; color: rgb(255, 255, 255); font-size: 35px; white-space: normal; width: 279px; -unity-text-align: middle-center;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(661509274796032)"/>
+                </Bindings>
+            </ui:Label>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

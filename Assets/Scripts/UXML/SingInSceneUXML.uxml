@@ -6,7 +6,11 @@
                 <ui:Image class="google-icon" style="top: 13px; left: 17px; height: 44px; width: 48px; position: absolute; font-size: 50px; background-size: 100% 100%; align-items: center; justify-content: center; align-self: auto; align-content: flex-start; flex-shrink: 0; background-image: resource(&quot;Sprites/google_icon&quot;);"/>
                 <ui:Label text="Google" name="singInGoogleLabel" class="button-text" style="top: auto; left: auto; width: auto; position: relative; height: auto; font-size: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; white-space: nowrap; text-overflow: clip; align-self: auto; justify-content: center; color: rgb(0, 0, 0); align-items: center; flex-direction: column;"/>
             </ui:Button>
-            <ui:Button text="&#1043;&#1086;&#1089;&#1090;&#1100;" name="anonymousSingInButton" style="border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-color: rgb(232, 180, 169); width: 350px; height: 75px; font-size: 30px;"/>
+            <ui:Button text="&#1043;&#1086;&#1089;&#1090;&#1100;" name="anonymousSingInButton" style="border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-color: rgb(232, 180, 169); width: 350px; height: 75px; font-size: 30px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(665370257457152)"/>
+                </Bindings>
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

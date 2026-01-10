@@ -6,22 +6,54 @@
             <ui:Label name="userName" class="player-name" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-wrap: wrap; width: 70%; height: 100%; justify-content: center; align-items: center; -unity-text-align: middle-center; white-space: normal; text-overflow: clip; font-size: 30px; left: 10px;"/>
         </ui:VisualElement>
         <ui:VisualElement class="nav-buttons" style="min-width: auto; max-width: none; max-height: none; min-height: auto; height: 100%; flex-grow: 0; width: 85%; margin-right: 0; align-content: auto; align-self: auto; justify-content: flex-end;">
-            <ParallelogramButton text="PLAY" name="playButton" target-scene-name="" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
-            <ParallelogramButton text="COLLECTION" name="collectionButton" class="nav-button" style="padding-left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
-            <ParallelogramButton text="BESTIARY" name="bestiaryButton" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
-            <ParallelogramButton text="DECKS" enabled="true" name="decksButton" target-scene-name="" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;"/>
+            <ParallelogramButton text="PLAY" name="playButton" target-scene-name="" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(20381630464)"/>
+                </Bindings>
+            </ParallelogramButton>
+            <ParallelogramButton text="COLLECTION" name="collectionButton" class="nav-button" style="padding-left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(22688497664)"/>
+                </Bindings>
+            </ParallelogramButton>
+            <ParallelogramButton text="BESTIARY" name="bestiaryButton" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(24634654720)"/>
+                </Bindings>
+            </ParallelogramButton>
+            <ParallelogramButton text="DECKS" enabled="true" name="decksButton" target-scene-name="" class="nav-button" style="margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(26702446592)"/>
+                </Bindings>
+            </ParallelogramButton>
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement class="main-content" style="flex-direction: column; flex-grow: 1; padding-bottom: 0; padding-top: 0; display: flex; padding-right: 0; padding-left: 0; align-items: center; justify-content: center;">
         <ui:VisualElement style="flex-grow: 0; flex-shrink: 0; height: 70%; width: 50%; background-color: rgb(147, 73, 73); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(20, 22, 27); border-right-color: rgb(20, 22, 27); border-top-color: rgb(20, 22, 27); border-bottom-color: rgb(20, 22, 27); align-items: center; justify-content: center; flex-direction: row; border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px;">
             <ui:VisualElement name="makeDeckField" style="flex-grow: 1; width: 100%; height: 100%; background-color: rgb(66, 73, 91); border-right-width: 3px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 50px; align-items: center; justify-content: center; border-top-left-radius: 45px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 45px;">
-                <ui:Label text="MAKE DECK" name="makeDeckLabel" style="font-size: 70px; -unity-text-align: middle-center; margin-top: 0; margin-right: 0; margin-bottom: 80px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(255, 255, 255); white-space: normal; height: 116px; width: 456px;"/>
-                <ui:Button name="makeDeckButton" text="&#1057;&#1086;&#1073;&#1088;&#1072;&#1090;&#1100; &#1082;&#1086;&#1083;&#1086;&#1076;&#1091;" style="width: 335px; align-self: center; background-color: rgb(122, 44, 99); color: white; unity-font-style: bold; border-radius: 4px; font-size: 35px; margin-bottom: 0; height: 96px; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 35px; border-top-right-radius: 35px; border-bottom-right-radius: 35px; border-bottom-left-radius: 35px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px;"/>
+                <ui:Label text="MAKE DECK" name="makeDeckLabel" style="font-size: 70px; -unity-text-align: middle-center; margin-top: 0; margin-right: 0; margin-bottom: 80px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(255, 255, 255); white-space: normal; height: 116px; width: 456px;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(4975221997568)"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Button name="makeDeckButton" text="&#1057;&#1086;&#1073;&#1088;&#1072;&#1090;&#1100; &#1082;&#1086;&#1083;&#1086;&#1076;&#1091;" style="width: 335px; align-self: center; background-color: rgb(122, 44, 99); color: white; unity-font-style: bold; border-radius: 4px; font-size: 35px; margin-bottom: 0; height: 96px; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 35px; border-top-right-radius: 35px; border-bottom-right-radius: 35px; border-bottom-left-radius: 35px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(5136732061696)"/>
+                    </Bindings>
+                </ui:Button>
             </ui:VisualElement>
             <ui:VisualElement name="selectDeckField" style="flex-grow: 1; width: 100%; height: 100%; background-color: rgb(66, 73, 91); border-left-width: 3px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 50px; align-items: center; justify-content: center; align-content: auto; border-top-right-radius: 45px; border-bottom-right-radius: 45px;">
-                <ui:Label text="SELECT DECK " name="selectDeckLabel" style="unity-font-style: bold; font-size: 60px; color: rgb(255, 255, 255); margin-bottom: 50px; align-self: auto; justify-content: center; align-items: center; margin-top: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; white-space: normal; -unity-text-align: middle-center;"/>
+                <ui:Label text="SELECT DECK " name="selectDeckLabel" style="unity-font-style: bold; font-size: 60px; color: rgb(255, 255, 255); margin-bottom: 50px; align-self: auto; justify-content: center; align-items: center; margin-top: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; white-space: normal; -unity-text-align: middle-center;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(5630456168448)"/>
+                    </Bindings>
+                </ui:Label>
                 <ui:DropdownField name="deckSelectField" label="&#1050;&#1086;&#1083;&#1086;&#1076;&#1072;" style="width: 384px; margin-bottom: 50px; color: white; unity-font-style: normal; background-color: rgb(51, 51, 51); border-radius: 4px; height: 82px; margin-top: 0; margin-right: 0; margin-left: 0; font-size: 40px; -unity-text-align: middle-center; border-top-right-radius: 30px; border-top-left-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px;"/>
-                <ui:Button name="confirmDeckButton" text="&#1048;&#1075;&#1088;&#1072;&#1090;&#1100;" style="width: 293px; align-self: center; background-color: rgb(122, 44, 99); color: white; unity-font-style: bold; border-radius: 4px; font-size: 35px; margin-bottom: 0; height: 75px; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px;"/>
+                <ui:Button name="confirmDeckButton" text="&#1048;&#1075;&#1088;&#1072;&#1090;&#1100;" style="width: 293px; align-self: center; background-color: rgb(122, 44, 99); color: white; unity-font-style: bold; border-radius: 4px; font-size: 35px; margin-bottom: 0; height: 75px; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(314084714545152)"/>
+                    </Bindings>
+                </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

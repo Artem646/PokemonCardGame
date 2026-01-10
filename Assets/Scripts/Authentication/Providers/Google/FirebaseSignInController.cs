@@ -10,7 +10,6 @@ public class FirebaseSignInController
     public FirebaseSignInController()
     {
         auth = FirebaseAuthService.Instance.GetAuth();
-        Debug.Log("[P][FirebaseSingInController] FirebaseSingInController успешно создан.");
     }
 
     public Task<FirebaseUser> SignInWithGoogleAsync(string idToken)
@@ -24,7 +23,6 @@ public class FirebaseSignInController
         try
         {
             auth.SignOut();
-            Debug.Log("[FirebaseAuthService] Пользователь вышел из Firebase.");
         }
         catch (Exception ex)
         {

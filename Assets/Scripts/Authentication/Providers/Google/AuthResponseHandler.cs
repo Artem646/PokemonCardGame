@@ -17,7 +17,7 @@ public static class AuthResponseHandler
 
         if (taskResult.IsFaulted)
         {
-            Debug.Log("[P][GoogleProvider] ❌ ОШИБКА АУТЕНТИФИКАЦИИ");
+            Debug.Log("[P][GoogleProvider] ОШИБКА АУТЕНТИФИКАЦИИ");
 
             if (taskResult.Exception != null)
             {
@@ -34,7 +34,6 @@ public static class AuthResponseHandler
                     }
                     else if (exception is OperationCanceledException)
                     {
-                        Debug.Log("[P][GoogleProvider] OperationCanceledException (Вход отменён в диалоговом окне)");
                         Localizer.LocalizeNotification(NotificationKey.GoogleCanceled, NotificationType.Error);
                     }
 
@@ -54,20 +53,6 @@ public static class AuthResponseHandler
                     Debug.Log("[P][GoogleProvider] Ошибка получения токена Google");
                     return;
                 }
-
-                Debug.Log("[P][GoogleProvider] ✅ УСПЕШНАЯ АУТЕНТИФИКАЦИЯ GOOGLE");
-                Debug.Log("[P][GoogleProvider] 👤 ОСНОВНАЯ ИНФОРМАЦИЯ:");
-                Debug.Log("[P][GoogleProvider] Welcome Google User: " + googleUser.DisplayName);
-                Debug.Log("[P][GoogleProvider] Gmail: " + googleUser.Email);
-                Debug.Log("[P][GoogleProvider] Google ID: " + googleUser.UserId);
-                Debug.Log("[P][GoogleProvider] Имя: " + googleUser.GivenName);
-                Debug.Log("[P][GoogleProvider] Фамилия: " + googleUser.FamilyName);
-
-                Debug.Log("[P][GoogleProvider] 📊 ПРОВЕРКА ДАННЫХ:");
-                Debug.Log("[P][GoogleProvider] Email: " + (string.IsNullOrEmpty(googleUser.Email) ? "❌" : "✅"));
-                Debug.Log("[P][GoogleProvider] IdToken: " + (string.IsNullOrEmpty(googleUser.IdToken) ? "❌" : "✅"));
-                Debug.Log("[P][GoogleProvider] Аватар: " + (googleUser.ImageUrl == null ? "❌" : "✅"));
-                Debug.Log("[P][GoogleProvider] Платформа: " + Application.platform);
 
                 onSuccess(googleUser.IdToken);
             }
@@ -116,14 +101,7 @@ public static class AuthResponseHandler
             try
             {
                 FirebaseUser firebaseUser = taskResult.Result;
-
                 Localizer.LocalizeNotification(NotificationKey.FirebaseAuthSuccess, NotificationType.Success);
-
-                Debug.Log("[P][GoogleProvider] Firebase аутентификация успешна прошла!");
-                Debug.Log($"[P][GoogleProvider] Firebase User: {firebaseUser.DisplayName}");
-                Debug.Log($"[P][GoogleProvider] Firebase Email: {firebaseUser.Email}");
-                Debug.Log($"[P][GoogleProvider] Firebase UserId: {firebaseUser.UserId}");
-
                 onSuccess(firebaseUser);
             }
             catch (Exception e)
@@ -138,7 +116,6 @@ public static class AuthResponseHandler
     {
         if (taskResult.IsCanceled)
         {
-            Debug.Log("[P][AnonymousProvider] Firebase аутентификация отменена");
             Localizer.LocalizeNotification(NotificationKey.AnonymousAuthCanceled, NotificationType.Error);
         }
         else if (taskResult.IsFaulted)
@@ -159,12 +136,7 @@ public static class AuthResponseHandler
             try
             {
                 FirebaseUser firebaseUser = taskResult.Result.User;
-
                 Localizer.LocalizeNotification(NotificationKey.AnonymousAuthSuccess, NotificationType.Success);
-
-                Debug.Log("[P][AnonymousProvider] Firebase аутентификация успешна!");
-                Debug.Log($"[P][AnonymousProvider] Firebase UserId: {firebaseUser.UserId}");
-
                 onSuccess(taskResult.Result);
             }
             catch (Exception ex)

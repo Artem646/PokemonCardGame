@@ -23,7 +23,6 @@ public class AuthManager : MonoBehaviour
             Instance = this;
             factory = new AuthFactory();
             DontDestroyOnLoad(gameObject);
-            Debug.Log("[P][AuthManager] AuthManager успешно создан.");
         }
     }
 
@@ -39,19 +38,16 @@ public class AuthManager : MonoBehaviour
 
     private async void RestoreSession()
     {
-        Debug.Log("[P][AuthManager] Попытка восстановления сессии...");
-
         FirebaseUser currentUser = auth.CurrentUser;
         if (currentUser == null)
         {
-            Debug.Log("[P][AuthManager] Нет локального пользователя — переход к SignInScene.");
             SceneManager.LoadScene("SignInScene");
             return;
         }
 
         try
         {
-            var token = await currentUser.TokenAsync(true);
+            string token = await currentUser.TokenAsync(true);
             AuthType type = GetAuthTypeFromProviderData(currentUser);
             if (type != AuthType.Unknown)
             {
@@ -75,8 +71,8 @@ public class AuthManager : MonoBehaviour
         if (user.IsAnonymous)
             return AuthType.Anonymous;
 
-        var providerDataList = new List<IUserInfo>(user.ProviderData);
-        foreach (var provider in providerDataList)
+        List<IUserInfo> providerDataList = new(user.ProviderData);
+        foreach (IUserInfo provider in providerDataList)
         {
             if (provider.ProviderId == "google.com")
             {
@@ -103,7 +99,6 @@ public class AuthManager : MonoBehaviour
     {
         currentProvider.SignOut();
         currentProvider = null;
-        Debug.Log("[P][AuthManager] Выход выполнен.");
     }
 
     private void OnDestroy()

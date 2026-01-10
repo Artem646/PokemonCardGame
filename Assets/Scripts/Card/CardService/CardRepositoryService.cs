@@ -25,7 +25,6 @@ public class CardRepositoryService
             List<int> cardIds = UserSession.Instance.ActiveUser.cardsInCollection;
             if (cardIds.Count == 0)
             {
-                Debug.LogWarning("[P] У пользователя нет карт в коллекции.");
                 OnCardsLoaded?.Invoke();
                 return userCardsList;
             }
@@ -49,13 +48,7 @@ public class CardRepositoryService
         try
         {
             string cardsJsonText = cardsJson.text;
-            var loaded = await Task.Run(() => CardsLoader.GetCardsListFromJson(cardsJsonText));
-            if (loaded?.cards == null || loaded.cards.Count == 0)
-            {
-                Debug.LogWarning("[P] JSON загружен, но список карт пуст.");
-                gameCardsList = new GameCardModelList { cards = new List<CardModel>() };
-            }
-            gameCardsList = loaded;
+            gameCardsList = await Task.Run(() => CardsLoader.GetCardsListFromJson(cardsJsonText));
             Debug.Log($"[P] Загружено {gameCardsList.cards.Count} карт из JSON.");
         }
         catch (Exception e)

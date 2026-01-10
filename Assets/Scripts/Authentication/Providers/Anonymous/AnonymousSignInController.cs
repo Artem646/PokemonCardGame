@@ -10,7 +10,6 @@ public class AnonymousSingInController
     public AnonymousSingInController()
     {
         auth = FirebaseAuthService.Instance.GetAuth();
-        Debug.Log("[P][AnonymousSingInController] AnonymousSingInController успешно создан.");
     }
 
     public Task<AuthResult> SignInWithAnonymousAsync()
@@ -24,7 +23,6 @@ public class AnonymousSingInController
         {
             auth.CurrentUser.DeleteAsync();
             auth.SignOut();
-            Debug.Log("[P]AnonymousAuthService] Анонимный пользователь вышел из Firebase и удалил аккаунт.");
         }
         catch (Exception ex)
         {

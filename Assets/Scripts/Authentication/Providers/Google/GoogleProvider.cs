@@ -14,7 +14,6 @@ public class GoogleProvider : IAuthProvider
         googleController = new GoogleSignInController(webClientId);
         firebaseController = new FirebaseSignInController();
         CheckExistingAuthSession();
-        Debug.Log("[P][GoogleProvider] GoogleProvider успешно создан.");
     }
 
     private void CheckExistingAuthSession()
@@ -86,7 +85,6 @@ public class GoogleProvider : IAuthProvider
     private void OnFirebaseSuccess(FirebaseUser user)
     {
         Localizer.LocalizeNotification(NotificationKey.GoogleSingInSuccess, NotificationType.Success, user.DisplayName);
-        Debug.Log($"[P][GoogleProvider] Вход выполнен: {user.Email}");
     }
 
     public void SignOut()

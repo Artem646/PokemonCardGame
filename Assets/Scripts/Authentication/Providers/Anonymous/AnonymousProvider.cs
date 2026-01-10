@@ -10,7 +10,6 @@ public class AnonymousProvider : IAuthProvider
     public AnonymousProvider()
     {
         anonymousController = new AnonymousSingInController();
-        Debug.Log("[P][AnonymousProvider] AnonymousProvider успешно создан.");
     }
 
     public void SignIn()

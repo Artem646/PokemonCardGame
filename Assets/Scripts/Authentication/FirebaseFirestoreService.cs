@@ -30,8 +30,6 @@ public class FirebaseFirestoreService
         }
 
         isFirestoreInitialized = true;
-
-        Debug.Log("[P][FirebaseService] Firebase Firestore успешно инициализирован.");
     }
 
     public async Task<User> CreateOrUpdateUserDocument(FirebaseUser firebaseUser)
@@ -136,7 +134,6 @@ public class FirebaseFirestoreService
 
         if (updateData.Count == 0)
         {
-            Debug.Log("[FirestoreService] Нет изменений для обновления профиля.");
             return;
         }
 
@@ -266,12 +263,6 @@ public class FirebaseFirestoreService
     {
         DocumentReference userDocument = firestore.Collection("users").Document(userId);
         DocumentSnapshot documentSnapshot = await userDocument.GetSnapshotAsync();
-
-        if (!documentSnapshot.Exists)
-        {
-            Debug.LogWarning($"[FirestoreService] Пользователь {userId} не найден.");
-            return null;
-        }
 
         Dictionary<string, object> data = documentSnapshot.ToDictionary();
         Dictionary<string, object> userDataMap = data["userData"] as Dictionary<string, object>;

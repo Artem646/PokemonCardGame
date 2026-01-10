@@ -24,8 +24,6 @@ public class FirebaseInitializer
             return;
         }
 
-        Debug.Log("[P][FirebaseInitializer] Starting Firebase dependency check...");
-
         await Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             dependencyStatus = task.Result;
@@ -34,8 +32,6 @@ public class FirebaseInitializer
                 try
                 {
                     FirebaseAuthService.Instance.InitializeFirebaseAuth();
-                    Debug.Log("[P][FirebaseInitializer] FirebaseInitializer initialized successfully.");
-
                     AuthManager.Instance.Initialize();
                     isInitialized = true;
                 }

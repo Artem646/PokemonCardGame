@@ -16,7 +16,6 @@ public class GoogleSignInController
             RequestIdToken = true,
             RequestEmail = true
         };
-        Debug.Log("[P][GoogleSignInController] GoogleSignInController успешно создан.");
     }
 
     public void Initialize(bool silent = false)
@@ -35,8 +34,6 @@ public class GoogleSignInController
         }
 
         isInitialized = true;
-
-        Debug.Log("[P][GoogleSignInController] Google Sign-In успешна инициализирована.");
     }
 
     public Task<GoogleSignInUser> SignIn() => GoogleSignIn.DefaultInstance.SignIn();
@@ -50,7 +47,6 @@ public class GoogleSignInController
             GoogleSignIn.DefaultInstance.SignOut();
             isInitialized = false;
             GoogleSignIn.Configuration = null;
-            Debug.Log("[P][GoogleSignInController] Пользователь вышел из Google аккаунта.");
         }
         catch (Exception e)
         {

@@ -24,8 +24,6 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
     {
         InitializeUI();
 
-        LocalizeElements();
-
         loadingOverlay.style.display = DisplayStyle.Flex;
         await InitializeNetworkRunner();
         await Task.Delay(700);
@@ -42,18 +40,6 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
         refreshButton = root.Q<Button>("refreshRoomsButton");
         backButton = root.Q<Button>("backButton");
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElements(root, new[]
-        {
-            ("createRoomLabel", "CreateRoomLabel"),
-            ("selectRoomLabel", "SelectRoomLabel"),
-            ("createRoomButton", "CreateRoomButton"),
-            ("refreshRoomsButton", "RefreshRoomsButton"),
-            ("backButton", "BackButton")
-        }, "ElementsText");
     }
 
     private void RegisterEvents()

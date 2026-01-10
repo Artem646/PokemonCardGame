@@ -51,8 +51,6 @@ public class DeckController : MonoBehaviour
 
         InitializeDeckUI();
 
-        LocalizeElements();
-
         deckRoot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         deckName.text = deck.name;
 
@@ -73,15 +71,6 @@ public class DeckController : MonoBehaviour
         editDeckButton = deckRoot.Q<Button>("editDeckButton");
         deleteDeckButton = deckRoot.Q<Button>("deleteDeckButton");
         deckCardsContainer = deckRoot.Q<VisualElement>("deckCardsContainer");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElements(deckRoot, new[]
-        {
-            ("editDeckButton", "EditDeckButton"),
-            ("deleteDeckButton", "DeleteDeckButton")
-        }, "ElementsText");
     }
 
     private void RegisterCallbacks(Deck deck)

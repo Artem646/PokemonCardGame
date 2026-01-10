@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using UnityEngine.UIElements;
 
 public class LoadingSceneController : MonoBehaviour
 {
@@ -47,14 +46,8 @@ public class LoadingSceneController : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("locale"))
         {
-            List<Locale> locales = LocalizationSettings.AvailableLocales.Locales;
             string savedCode = PlayerPrefs.GetString("locale");
-            Locale locale = locales.Find(locale => locale.Identifier.Code == savedCode);
-            LocalizationSettings.SelectedLocale = locale;
-        }
-        else
-        {
-            Locale locale = LocalizationSettings.AvailableLocales.GetLocale("en");
+            Locale locale = LocalizationSettings.AvailableLocales.GetLocale(savedCode);
             LocalizationSettings.SelectedLocale = locale;
         }
     }

@@ -30,7 +30,6 @@ public class ConfirmDialogController : MonoBehaviour
 
         InitializeUI();
 
-        ApplySavedLocale();
         LocalizeElements();
 
         overlay.style.display = DisplayStyle.None;
@@ -87,21 +86,5 @@ public class ConfirmDialogController : MonoBehaviour
     public static void CloseDialogOverlay()
     {
         Instance.overlay.style.display = DisplayStyle.None;
-    }
-
-    private void ApplySavedLocale()
-    {
-        if (PlayerPrefs.HasKey("locale"))
-        {
-            List<Locale> locales = LocalizationSettings.AvailableLocales.Locales;
-            string savedCode = PlayerPrefs.GetString("locale");
-            Locale locale = locales.Find(locale => locale.Identifier.Code == savedCode);
-            LocalizationSettings.SelectedLocale = locale;
-        }
-        else
-        {
-            Locale locale = LocalizationSettings.AvailableLocales.GetLocale("en");
-            LocalizationSettings.SelectedLocale = locale;
-        }
     }
 }

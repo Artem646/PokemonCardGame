@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization;
-using System.Collections.Generic;
 
 public class SettingsController : MonoBehaviour
 {
@@ -30,8 +29,6 @@ public class SettingsController : MonoBehaviour
     private void Start()
     {
         InitializeUI();
-
-        LocalizeElements();
 
         // user = UserSession.Instance.ActiveUser;
         // FillUIFromUser(user);
@@ -68,17 +65,6 @@ public class SettingsController : MonoBehaviour
         // googleLinkButton = root.Q<Button>("googleLinkButton");
     }
 
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElements(root, new[]
-        {
-            ("profileSettingsLabel", "ProfileSettingsLabel"),
-            ("langSettingsLabel", "LangSettingsLabel"),
-            ("singOutLabel", "SingOutLabel"),
-            ("saveProfileButton", "SaveProfileButton")
-        }, "ElementsText");
-    }
-
     private void OnLanguageChanged(ChangeEvent<int> evt)
     {
         int selectedIndex = evt.newValue;
@@ -91,14 +77,11 @@ public class SettingsController : MonoBehaviour
         };
 
         SetLocale(selectedCode);
-        PlayerPrefs.SetString("locale", selectedCode);
-        PlayerPrefs.Save();
     }
 
     private void SetLocale(string code)
     {
-        List<Locale> locales = LocalizationSettings.AvailableLocales.Locales;
-        Locale locale = locales.Find(locale => locale.Identifier.Code == code);
+        Locale locale = LocalizationSettings.AvailableLocales.GetLocale(code);
         LocalizationSettings.SelectedLocale = locale;
     }
 
@@ -112,6 +95,9 @@ public class SettingsController : MonoBehaviour
                 break;
             case "en":
                 languageGroup.value = 1;
+                break;
+            case "be":
+                languageGroup.value = 2;
                 break;
         }
     }

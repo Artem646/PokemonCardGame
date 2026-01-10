@@ -33,8 +33,6 @@ public class BestiarySceneController : MonoBehaviour
     {
         InitializeUI();
 
-        LocalizeElements();
-
         loadingOverlay.style.display = DisplayStyle.Flex;
 
         CardControllerFactory.Init(template: cardTemplate);
@@ -66,16 +64,6 @@ public class BestiarySceneController : MonoBehaviour
         cardsContainer = root.Q<ScrollView>("cardScrollView");
         filterPanel = root.Q<VisualElement>("elementsFilterPanel");
         openFilterPanelButton = root.Q<VisualElement>("openFiltersButton");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElements(root, new[]
-        {
-            ("exitButton", "ExitButton"),
-            ("bestiaryLabel", "BestiaryLabel"),
-            ("filtersLabel", "FiltersLabel")
-        }, "ElementsText");
     }
 
     private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)

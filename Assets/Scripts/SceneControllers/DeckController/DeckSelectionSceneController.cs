@@ -21,8 +21,6 @@ public class DeckSelectionSceneController : MonoBehaviour
     {
         InitializeUI();
 
-        LocalizeElements();
-
         UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
         await UserProfileView.Instance.LoadUserData();
 
@@ -37,21 +35,6 @@ public class DeckSelectionSceneController : MonoBehaviour
         confirmButton = root.Q<Button>("confirmDeckButton");
         makeDeckButton = root.Q<Button>("makeDeckButton");
         profileField = root.Q<VisualElement>("profileField");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElements(root, new[]
-        {
-            ("playButton", "PlayButton"),
-            ("collectionButton", "CollectionButton"),
-            ("bestiaryButton", "BestiaryButton"),
-            ("decksButton", "DecksButton"),
-            ("makeDeckLabel", "MakeDeckLabel"),
-            ("selectDeckLabel", "SelectDeckLabel"),
-            ("makeDeckButton", "MakeDeckButton"),
-            ("confirmDeckButton", "ConfirmDeckButton")
-        }, "ElementsText");
     }
 
     public void RefreshDeckDropdown()

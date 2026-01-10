@@ -13,8 +13,6 @@ public class SignInController : MonoBehaviour
     {
         InitializeUI();
 
-        LocalizeElements();
-
         googleSignInButton.clicked += OnGoogleSignInClicked;
         anonymousSignInButton.clicked += OnAnonymousSignInClicked;
     }
@@ -24,11 +22,6 @@ public class SignInController : MonoBehaviour
         root = uiDocument.rootVisualElement;
         googleSignInButton = root.Q<Button>("googleSignInButton");
         anonymousSignInButton = root.Q<Button>("anonymousSingInButton");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElement(root, "anonymousSingInButton", "AnonymousSingInButton", "ElementsText");
     }
 
     public void OnGoogleSignInClicked()

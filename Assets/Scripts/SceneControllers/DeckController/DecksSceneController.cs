@@ -18,8 +18,6 @@ public class DecksSceneController : MonoBehaviour
     {
         InitializeUI();
 
-        LocalizeElements();
-
         CardOverlayManager.Instance.RegisterCardOverlay(SceneManager.GetActiveScene().name, cardOverlay);
 
         UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
@@ -34,18 +32,6 @@ public class DecksSceneController : MonoBehaviour
         profileField = root.Q<VisualElement>("profileField");
         cardOverlay = root.Q<VisualElement>("overlay");
         addDeckButton = root.Q<Button>("addDeckButton");
-    }
-
-    private void LocalizeElements()
-    {
-        Localizer.LocalizeElements(root, new[]
-        {
-            ("playButton", "PlayButton"),
-            ("collectionButton", "CollectionButton"),
-            ("bestiaryButton", "BestiaryButton"),
-            ("decksButton", "DecksButton"),
-            ("addDeckButton", "AddDeckButton")
-        }, "ElementsText");
     }
 
     private void RegisterCallbacks()

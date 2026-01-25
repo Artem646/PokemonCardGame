@@ -104,34 +104,6 @@
     bottom: auto;
 }
 
-#addToCardDeck {
-    flex-grow: 0;
-    width: 50px;
-    align-self: stretch;
-    justify-content: flex-start;
-    align-items: auto;
-    align-content: auto;
-    height: 50px;
-    position: absolute;
-    top: -11px;
-    left: 220px;
-    background-color: rgb(0, 0, 0);
-    background-image: resource('Sprites/plus');
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    -unity-slice-type: sliced;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-bottom-left-radius: 25px;
-}
-
 #pokemonImage {
     flex-grow: 1;
     width: 190px;
@@ -143,7 +115,6 @@
     top: 45px;
     position: absolute;
     left: 36px;
-    background-image: resource('Sprites/PokemonImages/Wartortle');
     right: 36px;
 }
 
@@ -162,7 +133,6 @@
     position: absolute;
     top: 233px;
     left: 186px;
-    background-image: resource('Sprites/Area for element icons');
     background-size: 100% 100%;
     border-top-width: 0;
     border-right-width: 0;
@@ -221,32 +191,6 @@
 }
 
 #footer {
-    flex-grow: 0;
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
-    background-size: 100% 100%;
-    width: 265px;
-    height: 118px;
-    position: relative;
-    top: 25px;
-    left: 0;
-    bottom: 17px;
-    right: 0;
-    align-items: auto;
-    align-self: auto;
-    align-content: auto;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    background-color: rgb(250, 243, 183);
-    background-image: none;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;

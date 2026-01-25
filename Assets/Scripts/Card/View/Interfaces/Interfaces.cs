@@ -22,6 +22,7 @@ public interface IUGUICardView : ICardView
 public interface ICollectionCardView : IUIToolkitCardView
 {
     void ApplyOwnedCardStyle(bool isUserCard);
+    void ApplyStyleForCloneCard();
     void SetActive(bool isActive);
     void RegisterClickHandlers(EventCallback<ClickEvent> onClick);
     void RegisterClickHandlersOnDescriptionButton(EventCallback<ClickEvent> onClick);

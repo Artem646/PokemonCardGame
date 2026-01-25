@@ -23,14 +23,20 @@ public class CollectionCardController : BaseCardController
         CollectionCardView.UnregisterClickHandlers(OnCardClicked);
     }
 
+    public void RemoveMarginsAroundCard()
+    {
+        CollectionCardView.ApplyStyleForCloneCard();
+    }
+
     private void OnCardClicked(ClickEvent evt)
     {
         CardControllerFactory.Init(template: CollectionCardView.CardTemplate);
         CollectionCardController cloneController = CardControllerFactory.Create<CollectionCardController>(CardModel);
         cloneController?.UnregisterEvents();
-        ICollectionCardView cloneView = cloneController?.CollectionCardView;
-        if (cloneView != null)
-            CardOverlayManager.Instance?.ShowCollectionCard(CollectionCardView, cloneView);
+        cloneController?.RemoveMarginsAroundCard();
+        ICollectionCardView cloneCardView = cloneController?.CollectionCardView;
+        if (cloneCardView != null)
+            CardOverlayManager.Instance?.ShowCollectionCard(CollectionCardView, cloneCardView);
     }
 
     private void OnDescriptionButtonClicked(ClickEvent evt)

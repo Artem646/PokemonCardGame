@@ -20,10 +20,10 @@ public class CollectionCardView : CardViewBase, ICollectionCardView
 
     private void InitializeElements()
     {
-        cardElement = CardRoot.Q<VisualElement>("fullCard");
         border = CardRoot.Q<VisualElement>("cardFrame");
-        body = CardRoot.Q<VisualElement>("body");
+        cardElement = CardRoot.Q<VisualElement>("fullCard");
         descriptionButton = CardRoot.Q<Button>("descriptionButton");
+        body = CardRoot.Q<VisualElement>("body");
     }
 
     public override void BindData()
@@ -71,5 +71,27 @@ public class CollectionCardView : CardViewBase, ICollectionCardView
             border.style.borderBottomColor = Color.softYellow;
             border.style.borderLeftColor = Color.softYellow;
         }
+    }
+
+    public void ApplyStyleForCloneCard()
+    {
+        RemoveMargins();
+        ResetBorderWidth();
+    }
+
+    private void RemoveMargins()
+    {
+        border.style.marginTop = 0;
+        border.style.marginRight = 0;
+        border.style.marginBottom = 0;
+        border.style.marginLeft = 0;
+    }
+
+    private void ResetBorderWidth()
+    {
+        border.style.borderTopWidth = 0;
+        border.style.borderRightWidth = 0;
+        border.style.borderBottomWidth = 0;
+        border.style.borderLeftWidth = 0;
     }
 }

@@ -6,14 +6,15 @@ public static class BattleCardScaleAnimator
 {
     private static RectTransform clone;
     private static Vector2 lastLocalPos;
-    private static bool isAnimating = false;
-    private const float TARGET_SCALE = 3f;
-    private const float DURATION = 0.5f;
+    private static Sequence currentSequence;
+
+    private const float TARGET_SCALE = 3.7f;
+    private const float DURATION = 0.45f;
 
     public static void ShowCard(RectTransform sourceCard, RectTransform cloneCard, GameObject overlay, Canvas canvas)
     {
-        if (isAnimating) return;
-        isAnimating = true;
+        if (currentSequence != null)
+            return;
 
         RectTransform overlayRectTransform = overlay.GetComponent<RectTransform>();
 
@@ -38,14 +39,16 @@ public static class BattleCardScaleAnimator
 
         overlay.SetActive(true);
 
-        Sequence seq = DOTween.Sequence();
-        seq.Join(clone.DOAnchorPos(targetPos, DURATION).SetEase(Ease.InQuad));
-        seq.Join(clone.DOScale(TARGET_SCALE, DURATION).SetEase(Ease.InQuad));
-        seq.Join(overlay.GetComponent<UGUI.Image>().DOFade(0.6f, DURATION));
-        seq.OnComplete(() =>
+        currentSequence = DOTween.Sequence();
+
+        currentSequence.Join(clone.DOAnchorPos(targetPos, DURATION).SetEase(Ease.InQuad));
+        currentSequence.Join(clone.DOScale(TARGET_SCALE, DURATION).SetEase(Ease.InQuad));
+        currentSequence.Join(overlay.GetComponent<UGUI.Image>().DOFade(0.6f, DURATION));
+
+        currentSequence.OnComplete(() =>
         {
-            CardStateManager.RaiseCard();
-            isAnimating = false;
+            CardStateManager.IsCardRaised = true;
+            currentSequence = null;
         });
     }
 
@@ -53,22 +56,21 @@ public static class BattleCardScaleAnimator
     {
         RectTransform overlayRectTransform = overlay.GetComponent<RectTransform>();
 
-        if (isAnimating || overlayRectTransform.childCount == 0) return;
-        if (clone == null) return;
+        if (overlayRectTransform.childCount == 0 || clone == null || currentSequence != null) return;
 
-        isAnimating = true;
+        currentSequence = DOTween.Sequence();
 
-        Sequence seq = DOTween.Sequence();
-        seq.Join(clone.DOAnchorPos(lastLocalPos, DURATION).SetEase(Ease.InQuad));
-        seq.Join(clone.DOScale(1f, DURATION).SetEase(Ease.InQuad));
-        seq.Join(clone.DORotate(new Vector3(0, 0, 10f), DURATION * 0.5f).SetLoops(2, LoopType.Yoyo));
-        seq.Join(overlayRectTransform.GetComponent<UGUI.Image>().DOFade(0f, DURATION));
-        seq.OnComplete(() =>
+        currentSequence.Join(clone.DOAnchorPos(lastLocalPos, DURATION).SetEase(Ease.InQuad));
+        currentSequence.Join(clone.DOScale(1f, DURATION).SetEase(Ease.InQuad));
+        currentSequence.Join(clone.DORotate(new Vector3(0, 0, 10f), DURATION * 0.5f).SetLoops(2, LoopType.Yoyo));
+        currentSequence.Join(overlayRectTransform.GetComponent<UGUI.Image>().DOFade(0f, DURATION));
+
+        currentSequence.OnComplete(() =>
         {
             overlay.SetActive(false);
             Object.Destroy(clone.gameObject);
-            CardStateManager.ResetCardState();
-            isAnimating = false;
+            CardStateManager.IsCardRaised = false;
+            currentSequence = null;
         });
     }
 }

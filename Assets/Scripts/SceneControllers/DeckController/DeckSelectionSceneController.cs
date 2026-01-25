@@ -48,7 +48,7 @@ public class DeckSelectionSceneController : MonoBehaviour
         }
         else
         {
-            LocalizedString localizedValue = new("MenuElementsText", "EmptyDropdown");
+            LocalizedString localizedValue = new("ElementsText", "EmptyDropdown");
             localizedValue.StringChanged += (str) =>
             {
                 deckDropdown.choices = new() { str };

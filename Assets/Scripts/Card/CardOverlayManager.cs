@@ -14,9 +14,9 @@ public class CardOverlayManager
 
     private RectTransform lastCardRectTransform;
 
-    private const float COLLECTION_TARGET_SCALE = 2f;
+    private const float COLLECTION_TARGET_SCALE = 2.35f;
     private const float DECK_TARGET_SCALE = 2.35f;
-    private const float DURATION = 0.35f;
+    private const float DURATION = 0.4f;
 
     private CardOverlayManager() { }
 
@@ -43,7 +43,7 @@ public class CardOverlayManager
         if (overlaysVisualElement.TryGetValue(sceneName, out var overlay))
         {
             CardScaleAnimatorUIToolkit.ShowCard(
-               originalCardView.CardRoot.Q<VisualElement>("fullCard"),
+               originalCardView.CardRoot,
                cloneCardView.CardRoot,
                overlay,
                COLLECTION_TARGET_SCALE, DURATION
@@ -62,7 +62,7 @@ public class CardOverlayManager
         if (overlaysVisualElement.TryGetValue(sceneName, out var overlay))
         {
             CardScaleAnimatorUIToolkit.ShowCard(
-                originalCardView.CardRoot.Q<VisualElement>("fullCard"),
+                originalCardView.CardRoot,
                 cloneCardView.CardRoot,
                 overlay,
                 DECK_TARGET_SCALE, DURATION

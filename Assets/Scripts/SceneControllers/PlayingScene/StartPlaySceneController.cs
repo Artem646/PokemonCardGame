@@ -2,9 +2,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public static class GameModeConfig
+public enum GameType
 {
-    public static bool IsMultiplayer { get; set; }
+    Bot,
+    Multiplayer
+}
+
+public static class GameTypeConfig
+{
+    public static GameType CurrentType { get; set; }
 }
 
 public class StartPlaySceneController : MonoBehaviour
@@ -52,13 +58,13 @@ public class StartPlaySceneController : MonoBehaviour
 
         multyPlayerButton.RegisterCallback<ClickEvent>(evt =>
         {
-            GameModeConfig.IsMultiplayer = true;
+            GameTypeConfig.CurrentType = GameType.Multiplayer;
             SceneSwitcher.SwitchScene("DeckSelectionScene", root);
         });
 
         singlePlayerButton.RegisterCallback<ClickEvent>(evt =>
         {
-            GameModeConfig.IsMultiplayer = false;
+            GameTypeConfig.CurrentType = GameType.Bot;
             SceneSwitcher.SwitchScene("DeckSelectionScene", root);
         });
 

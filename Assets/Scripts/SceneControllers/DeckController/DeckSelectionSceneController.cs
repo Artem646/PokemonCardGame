@@ -126,11 +126,11 @@ public class DeckSelectionSceneController : MonoBehaviour
 
     private void ProcessGameMode()
     {
-        if (GameModeConfig.IsMultiplayer)
+        if (GameTypeConfig.CurrentType == GameType.Multiplayer)
         {
             SceneManager.LoadScene("RoomSelectionScene");
         }
-        else
+        else if (GameTypeConfig.CurrentType == GameType.Bot)
         {
             SceneManager.LoadScene("PlayingScene");
             SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -141,12 +141,7 @@ public class DeckSelectionSceneController : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-        if (gameManager != null)
-        {
-            BotGameState botState = new GameObject("BotGameState").AddComponent<BotGameState>();
-            botState.BindGameManager(gameManager);
-            botState.StartGame();
-        }
+        gameManager.InitBotGame();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

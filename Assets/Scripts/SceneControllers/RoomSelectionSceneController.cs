@@ -10,8 +10,8 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
 {
     [SerializeField] private UIDocument uiDocument;
 
-    private NetworkRunner runner;
-    private NetworkRunnerHandler networkRunnerHandler;
+    private NetworkRunner networkRunner;
+    // private NetworkRunnerHandler networkRunnerHandler;
     private VisualElement root;
     private ScrollView roomList;
     private TextField roomNameField;
@@ -42,19 +42,19 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
         loadingOverlay = root.Q<VisualElement>("loadingOverlay");
     }
 
+    private async Task InitializeNetworkRunner()
+    {
+        networkRunner = gameObject.AddComponent<NetworkRunner>();
+        networkRunner.AddCallbacks(this);
+        // networkRunnerHandler = FindAnyObjectByType<NetworkRunnerHandler>();
+        await networkRunner.JoinSessionLobby(SessionLobby.ClientServer);
+    }
+
     private void RegisterEvents()
     {
         createRoomButton.clicked += CreateRoom;
         refreshButton.clicked += RefreshRooms;
         backButton.clicked += BackToDeckSelection;
-    }
-
-    private async Task InitializeNetworkRunner()
-    {
-        runner = gameObject.AddComponent<NetworkRunner>();
-        runner.AddCallbacks(this);
-        networkRunnerHandler = FindAnyObjectByType<NetworkRunnerHandler>();
-        await runner.JoinSessionLobby(SessionLobby.ClientServer);
     }
 
     private void CreateRoom()
@@ -71,7 +71,7 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
 
     private async void RefreshRooms()
     {
-        await runner.JoinSessionLobby(SessionLobby.ClientServer);
+        await networkRunner.JoinSessionLobby(SessionLobby.ClientServer);
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -89,8 +89,8 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
 
     private void BackToDeckSelection()
     {
-        if (networkRunnerHandler != null)
-            networkRunnerHandler.ShutdownRunner();
+        // if (networkRunnerHandler != null)
+        //     networkRunnerHandler.ShutdownRunner();
         SceneManager.LoadScene("DeckSelectionScene");
     }
 
@@ -114,11 +114,11 @@ public class RoomSelectionSceneController : MonoBehaviour, INetworkRunnerCallbac
     public void OnSceneLoadStart(NetworkRunner runner) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
 
-    private void OnDestroy()
-    {
-        if (networkRunnerHandler != null)
-        {
-            networkRunnerHandler.ShutdownRunner();
-        }
-    }
+    // private void OnDestroy()
+    // {
+    //     if (networkRunnerHandler != null)
+    //     {
+    //         networkRunnerHandler.ShutdownRunner();
+    //     }
+    // }
 }

@@ -68,10 +68,15 @@ public class TypeChartWindow : EditorWindow
             alignment = TextAnchor.MiddleCenter
         };
 
+        // if (Mathf.Approximately(value, 2f)) style.normal.textColor = Color.green;
+        // else if (Mathf.Approximately(value, 0.5f)) style.normal.textColor = Color.red;
+        // else if (Mathf.Approximately(value, 0f)) style.normal.textColor = Color.black;
+        // else style.normal.textColor = Color.gray;
+
         if (Mathf.Approximately(value, 2f)) style.normal.textColor = Color.green;
+        else if (Mathf.Approximately(value, 1f)) style.normal.textColor = Color.yellow;
         else if (Mathf.Approximately(value, 0.5f)) style.normal.textColor = Color.red;
         else if (Mathf.Approximately(value, 0f)) style.normal.textColor = Color.black;
-        else style.normal.textColor = Color.gray;
 
         return style;
     }

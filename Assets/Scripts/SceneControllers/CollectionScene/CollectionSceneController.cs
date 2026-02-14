@@ -17,6 +17,9 @@ public class CollectionSceneController : MonoBehaviour
     private VisualElement filterPanel;
     private VisualElement openFilterPanelButton;
     private VisualElement profileField;
+    private VisualElement fadeOverlay;
+
+    private Tween fadeTween;
 
     private CollectionCardListController collectionCardListController;
     private FilterPanelView filterPanelView;
@@ -28,6 +31,8 @@ public class CollectionSceneController : MonoBehaviour
     private async void Start()
     {
         InitializeUI();
+
+        FadeIn();
 
         loadingOverlay.style.display = DisplayStyle.Flex;
 
@@ -64,6 +69,21 @@ public class CollectionSceneController : MonoBehaviour
         filterPanel = root.Q<VisualElement>("elementsFilterPanel");
         openFilterPanelButton = root.Q<VisualElement>("openFiltersButton");
         profileField = root.Q<VisualElement>("profileField");
+        fadeOverlay = root.Q<VisualElement>("fadeOverlay");
+    }
+
+    private void FadeIn()
+    {
+        fadeOverlay.style.opacity = 1f;
+
+        fadeTween?.Kill();
+        fadeTween = DOTween.To(
+            () => fadeOverlay.style.opacity.value,
+            x => fadeOverlay.style.opacity = x,
+            0f, 0.6f
+        ).SetEase(Ease.OutQuad);
+
+        fadeOverlay.style.display = DisplayStyle.None;
     }
 
     private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)

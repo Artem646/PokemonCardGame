@@ -33,7 +33,7 @@ public class InternetChecker : MonoBehaviour
     {
         if (scene.name == "LoadingScene")
         {
-            VerifyInternetConnection();
+            // VerifyInternetConnection();
         }
     }
 

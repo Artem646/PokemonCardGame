@@ -13,8 +13,7 @@ public static class BattleCardScaleAnimator
 
     public static void ShowCard(RectTransform sourceCard, RectTransform cloneCard, GameObject overlay, Canvas canvas)
     {
-        if (currentSequence != null)
-            return;
+        if (currentSequence != null) return;
 
         RectTransform overlayRectTransform = overlay.GetComponent<RectTransform>();
 
@@ -47,7 +46,6 @@ public static class BattleCardScaleAnimator
 
         currentSequence.OnComplete(() =>
         {
-            CardStateManager.IsCardRaised = true;
             currentSequence = null;
         });
     }
@@ -68,8 +66,8 @@ public static class BattleCardScaleAnimator
         currentSequence.OnComplete(() =>
         {
             overlay.SetActive(false);
+            CardStateInteractionManager.EndRaise();
             Object.Destroy(clone.gameObject);
-            CardStateManager.IsCardRaised = false;
             currentSequence = null;
         });
     }

@@ -22,7 +22,7 @@ public static class SelectedDeckManager
     public static string GetSelectedDeckCsv()
     {
         List<int> ids = GetSelectedDeckIds();
-        return ids.Count == 0 ? string.Empty : string.Join(",", ids);
+        return string.Join(",", ids);
     }
 
     public static List<int> ParseCsv(string csv)

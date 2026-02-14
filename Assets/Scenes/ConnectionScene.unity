@@ -480,7 +480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3986d4c19b3f7b0488d77a4f0d7f0cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkRunnerHandler
-  networkGameStatePrefab: {fileID: 5882802786382739450, guid: a0001e42e37815348846546b9a2e4a7f, type: 3}
+  networkGameControllerPrefab: {fileID: 5882802786382739450, guid: a0001e42e37815348846546b9a2e4a7f, type: 3}
+  networkGameTurnManagerPrefab: {fileID: 3266766215863288577, guid: 5c9770f949d65404ab4a7b0255d09e6a, type: 3}
 --- !u!4 &1586427462
 Transform:
   m_ObjectHideFlags: 0

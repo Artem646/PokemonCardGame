@@ -9,6 +9,7 @@ public class ColorHexConverter : JsonConverter<Color>
     public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         string hex = reader.Value?.ToString();
+
         if (string.IsNullOrWhiteSpace(hex) || hex == "#")
             return Color.clear;
 
@@ -17,6 +18,7 @@ public class ColorHexConverter : JsonConverter<Color>
 
         return Color.white;
     }
+
     public override void WriteJson(JsonWriter writer, Color value, JsonSerializer serializer) { }
 }
 
@@ -35,18 +37,10 @@ public class CardColors
 
 public enum PokemonElement
 {
-    Grass,
-    Fire,
-    Water,
-    electric,
-    Bug,
-    Ground,
-    Poison,
-    Flying,
-    Fighting,
-    Normal,
-    Psychic,
-    Fairy
+    Grass, Fire, Water,
+    electric, Bug, Ground,
+    Poison, Flying, Fighting,
+    Normal, Psychic, Fairy
 }
 
 [Serializable]
@@ -61,13 +55,15 @@ public class CardModel
 
     [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
     public PokemonElement? secondaryElement;
+
     public CardColors colors;
+
+    public int attack;
+    public int health;
 
     // Раскомментируй по необходимости
     // public string ultimateDescription;
-    // public int attack;
     // public int defense;
     // public int specialAttack;
     // public int physicalAttack;
-    // public int health;
 }

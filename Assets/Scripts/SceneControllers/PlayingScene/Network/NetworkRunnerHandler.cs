@@ -1,22 +1,23 @@
 using Fusion;
 using Fusion.Sockets;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
-    [SerializeField] private NetworkObject networkGameStatePrefab;
+    [SerializeField] private NetworkObject networkGameControllerPrefab;
+    [SerializeField] private NetworkObject networkGameTurnManagerPrefab;
+
     private NetworkRunner networkRunner;
-    private NetworkGameState networkGameState;
+    private NetworkGameController networkGameController;
+    private NetworkGameTurnManager networkGameTurnManager;
 
     async void Start()
     {
         networkRunner = gameObject.AddComponent<NetworkRunner>();
         networkRunner.AddCallbacks(this);
         DontDestroyOnLoad(gameObject);
-
         await networkRunner.JoinSessionLobby(SessionLobby.ClientServer);
 
         Debug.Log($"[NetworkRunnerHandler] Starting game: Mode={ConnectionConfig.Mode}, Room={ConnectionConfig.RoomName}");
@@ -33,22 +34,34 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    public void OnSceneLoadDone(NetworkRunner runner)
+    public void OnSceneLoadDone(NetworkRunner netRunner)
     {
-        if (networkGameState == null && runner.IsSharedModeMasterClient)
+        if (networkGameController == null &&
+            networkGameTurnManager == null &&
+            netRunner.IsSharedModeMasterClient)
         {
-            NetworkObject obj = runner.Spawn(networkGameStatePrefab, flags: NetworkSpawnFlags.DontDestroyOnLoad);
-            networkGameState = obj.GetComponent<NetworkGameState>();
+            NetworkObject networkGameControllerObject = netRunner.Spawn(networkGameControllerPrefab, flags: NetworkSpawnFlags.DontDestroyOnLoad);
+            networkGameController = networkGameControllerObject.GetComponent<NetworkGameController>();
+
+            NetworkObject networkGameTurnManagerObject = netRunner.Spawn(networkGameTurnManagerPrefab, flags: NetworkSpawnFlags.DontDestroyOnLoad);
+            networkGameTurnManager = networkGameTurnManagerObject.GetComponent<NetworkGameTurnManager>();
         }
 
-        if (networkGameState == null)
-            networkGameState = FindAnyObjectByType<NetworkGameState>();
+        if (networkGameController == null && networkGameTurnManager == null)
+        {
+            networkGameController = FindAnyObjectByType<NetworkGameController>();
+            networkGameTurnManager = FindAnyObjectByType<NetworkGameTurnManager>();
+        }
 
         GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-        if (gameManager != null && networkGameState != null)
+
+        if (gameManager != null && networkGameController != null && networkGameTurnManager != null)
         {
-            networkGameState.BindGameManager(gameManager);
-            gameManager.Init(networkGameState);
+            networkGameController.FindGameManager();
+            networkGameTurnManager.FindObjects();
+            gameManager.FindObjects();
+
+            gameManager.InitNetworkGame();
         }
     }
 
@@ -56,8 +69,8 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log($"OnPlayerJoined: PlayerId={player.PlayerId}");
 
-        if (runner.IsSharedModeMasterClient && networkGameState != null)
-            networkGameState.AssignPlayerRole(player);
+        if (runner.IsSharedModeMasterClient)
+            networkGameController.AssignPlayerRole(player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -76,11 +89,12 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             else
                 await networkRunner.Shutdown();
 
-            networkGameState = null;
+            networkGameController = null;
+            networkGameTurnManager = null;
+
             Destroy(networkRunner);
         }
     }
-
 
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }

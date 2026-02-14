@@ -39,4 +39,7 @@ public interface IDeckCardView : IUIToolkitCardView
 public interface IBattleCardView : IUGUICardView
 {
     void ApplyFaceDownState(bool faceDown);
+    void ApplyBattleStyle(CardBattleState battleState);
+    void ResetBattleStyle();
+    void SetHPOnClone(int HP);
 }

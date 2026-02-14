@@ -68,38 +68,31 @@ public class CardRepositoryService
         foreach (int cardId in cardIds)
         {
             CardModel card = GetCardById(cardId);
-            if (card != null)
-            {
-                AddCardToCollection(card);
-            }
+            if (card != null) AddCardToCollection(card);
+
             loaded++;
+
             float progress = (float)loaded / total;
             OnProgressChanged?.Invoke(progress);
 
-            await Task.Yield();
+            await Task.Delay(50);
         }
+
+        OnProgressChanged?.Invoke(1f);
     }
 
     private CardModel GetCardById(int cardId)
     {
         CardModel card = gameCardsList.cards.FirstOrDefault(c => c.id == cardId);
-        if (card == null)
-        {
-            Debug.LogWarning($"[P] Карта с id = {cardId} не найдена.");
-        }
+        if (card == null) Debug.LogError($"[P] Карта с id = {cardId} не найдена.");
         return card;
     }
 
     public void AddCardToCollection(CardModel card)
     {
-        if (card == null)
-            return;
-
+        if (card == null) return;
         bool alreadyExists = userCardsList.cards.Any(c => c.id == card.id);
-        if (!alreadyExists)
-        {
-            userCardsList.cards.Add(card);
-        }
+        if (!alreadyExists) userCardsList.cards.Add(card);
     }
 
     public UserCardModelList GetUserCardsList() => userCardsList;

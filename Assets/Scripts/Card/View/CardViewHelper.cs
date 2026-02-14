@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Xml;
+using TMPro;
 
 public struct ElementLayout
 {
@@ -191,8 +192,8 @@ public static class CardViewHelper
             borderElementsFileName = "borderForOneElement";
             bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
 
-            RectTransform recrElementArea = elementsArea.GetComponent<RectTransform>();
-            recrElementArea.sizeDelta = new Vector2(37.8f, recrElementArea.sizeDelta.y);
+            RectTransform rectElementArea = elementsArea.GetComponent<RectTransform>();
+            rectElementArea.sizeDelta = new Vector2(37.8f, rectElementArea.sizeDelta.y);
 
             RectTransform main = mainElement.GetComponent<RectTransform>();
             main.anchoredPosition = new Vector2(2.7f, main.anchoredPosition.y);
@@ -204,6 +205,40 @@ public static class CardViewHelper
         UpdateGradientStops(bodyBorderXmlDocument, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
         BindGameObjectWithSvg(bodyContainer, bodyBorderXmlDocument.OuterXml);
         BindGameObjectWithSvg(elementsArea, elementsAreaBorderXmlDocument.OuterXml);
+    }
+
+    public static void UpdateStatsUIToolkit(VisualElement cardRoot, CardModel cardModel)
+    {
+        Label healthValue = cardRoot.Q<Label>("healthValue");
+        healthValue.text = cardModel.health.ToString();
+
+        Label attackValue = cardRoot.Q<Label>("attackValue");
+        attackValue.text = cardModel.attack.ToString();
+    }
+
+    // public static void UpdateStatsUGUI(GameObject cardRoot, CardModel cardModel)
+    // {
+
+    // }
+
+    public static void BindHPWithBattleState(GameObject cardRoot, CardModel cardModel)
+    {
+        TextMeshProUGUI healthValue = cardRoot.transform.Find("Health/HealthValue").GetComponent<TextMeshProUGUI>();
+        if (cardRoot.TryGetComponent<CardBattleState>(out var battleState))
+        {
+            battleState.CurrentHP = cardModel.health;
+            battleState.OnXPChanged += (newXP) =>
+            {
+                healthValue.text = newXP.ToString();
+            };
+            healthValue.text = battleState.CurrentHP.ToString();
+        }
+    }
+
+    public static void BindCloneHPWithOriginal(GameObject cardRoot, int HP)
+    {
+        TextMeshProUGUI healthValue = cardRoot.transform.Find("Health/HealthValue").GetComponent<TextMeshProUGUI>();
+        healthValue.text = HP.ToString();
     }
 
     public static void SetImagesUIToolkit(VisualElement root, CardModel model)

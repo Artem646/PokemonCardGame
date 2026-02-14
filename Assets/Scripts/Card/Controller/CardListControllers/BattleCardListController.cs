@@ -25,15 +25,12 @@ public class BattleCardListController : CardListController<BattleCardController>
     {
         Transform handContainer = cardContainer as Transform;
         bool faceDown = handContainer.name == "EnemyHand" || handContainer.name == "EnemyBattleField";
+
         BattleCardController controller = CardControllerFactory.Create<BattleCardController>(model, handContainer, faceDown);
-        if (controller.BattleCardView.CardRoot.TryGetComponent<CardMovemantScript>(out var movement))
-            movement.CardId = controller.CardModel.id;
+
+        if (controller.BattleCardView.CardRoot.TryGetComponent<CardControllerLink>(out var link))
+            link.Controller = controller;
+
         return controller;
     }
-
-    // protected override void OnCardAdded(BattleCardController controller)
-    // {
-    //     if (cardContainer is Transform handContainer)
-    //         controller.CardView.CardRootGameObject.transform.SetParent(handContainer, false);
-    // }
 }

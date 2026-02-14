@@ -29,11 +29,12 @@ public class CardOverlayManager
     public void RegisterOverlayGameObject(string sceneName, GameObject overlay)
     {
         overlaysGameObject[sceneName] = overlay;
-        if (!overlay.TryGetComponent<EventTrigger>(out var trigger))
-            trigger = overlay.AddComponent<EventTrigger>();
-        var entry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
-        entry.callback.AddListener((data) => BattleCardScaleAnimator.HideCard(overlay));
-        trigger.triggers.Add(entry);
+        if (overlay.TryGetComponent<EventTrigger>(out var trigger))
+        {
+            EventTrigger.Entry entry = new() { eventID = EventTriggerType.PointerClick };
+            entry.callback.AddListener((data) => BattleCardScaleAnimator.HideCard(overlay));
+            trigger.triggers.Add(entry);
+        }
     }
 
     public void ShowCollectionCard(ICollectionCardView originalCardView, ICollectionCardView cloneCardView)

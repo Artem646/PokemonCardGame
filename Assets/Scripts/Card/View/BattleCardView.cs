@@ -20,7 +20,7 @@ public class BattleCardView : CardViewBase, IBattleCardView
         BindData();
         ApplyFaceDownState(isFaceDown);
 
-        if (CardRoot.TryGetComponent(out CardFlipScript flipScript))
+        if (CardRoot.TryGetComponent<CardFlipScript>(out var flipScript))
         {
             flipScript.OnFlipStateChanged += (faceDown) =>
             {
@@ -40,6 +40,8 @@ public class BattleCardView : CardViewBase, IBattleCardView
         Localizer.LocalizeGameObjectElement(CardRoot, "Body/Title", CardModel.titleKey, "PokemonTitles");
         CardViewHelper.UpdateBodyUGUI(CardRoot, CardModel);
         CardViewHelper.SetImagesUGUI(CardRoot, CardModel);
+        CardViewHelper.BindHPWithBattleState(CardRoot, CardModel);
+        // CardViewHelper.UpdateStatsUGUI(CardRoot, CardModel);
     }
 
     public void ApplyFaceDownState(bool faceDown)
@@ -47,4 +49,33 @@ public class BattleCardView : CardViewBase, IBattleCardView
         isFaceDown = faceDown;
         backCover.SetActive(isFaceDown);
     }
+
+    public void ApplyBattleStyle(CardBattleState battleState)
+    {
+        if (battleState.IsFresh)
+        {
+            CardRoot.transform.Find("GrayFilter").gameObject.SetActive(true);
+            CardRoot.GetComponent<Outline>().enabled = false;
+        }
+        else
+        {
+            CardRoot.transform.Find("GrayFilter").gameObject.SetActive(false);
+
+            if (!battleState.HasAttacked)
+                CardRoot.GetComponent<Outline>().effectColor = new Color32(247, 234, 117, 255);
+            else
+                CardRoot.GetComponent<Outline>().effectColor = Color.softRed;
+
+            CardRoot.GetComponent<Outline>().enabled = true;
+        }
+    }
+
+    public void ResetBattleStyle()
+    {
+        CardRoot.transform.Find("GrayFilter").gameObject.SetActive(false);
+        CardRoot.GetComponent<Outline>().enabled = false;
+        CardRoot.transform.Find("Highlighted").gameObject.SetActive(false);
+    }
+
+    public void SetHPOnClone(int HP) => CardViewHelper.BindCloneHPWithOriginal(CardRoot, HP);
 }

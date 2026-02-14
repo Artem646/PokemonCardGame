@@ -18,6 +18,6 @@ public class TypeChart : ScriptableObject
     public float GetMultiplier(PokemonElement attacker, PokemonElement defender)
     {
         TypePair pair = pairs.FirstOrDefault(p => p.attacker == attacker && p.defender == defender);
-        return pair.multiplier == 0 ? 1f : pair.multiplier;
+        return pair.multiplier;
     }
 }

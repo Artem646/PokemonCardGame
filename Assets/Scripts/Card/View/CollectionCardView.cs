@@ -32,6 +32,7 @@ public class CollectionCardView : CardViewBase, ICollectionCardView
         Localizer.LocalizeElement(CardRoot, "title", CardModel.titleKey, "PokemonTitles");
         CardViewHelper.UpdateBodyUIToolkit(CardRoot, CardModel, CardElementLayoutModeConfig.Collection);
         CardViewHelper.SetImagesUIToolkit(CardRoot, CardModel);
+        CardViewHelper.UpdateStatsUIToolkit(CardRoot, CardModel);
     }
 
     public void RegisterClickHandlers(EventCallback<ClickEvent> onBodyClick)

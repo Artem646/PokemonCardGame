@@ -1,0 +1,197 @@
+.card-frame {
+    width: 100%;
+    height: 100%;
+    border-radius: 23px;
+    border-width: 3px;
+}
+
+.full-card {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(125, 145, 125);
+    border-radius: 20px;
+}
+
+.card-texture {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.18);
+    background-image: resource("Sprites/texture");
+    -unity-background-image-tint-color: rgba(38, 37, 37, 0.51);
+    border-radius: 20px;
+}
+
+.card-body {
+    width: 85%;
+    height: 85%;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.09);
+    background-image: resource("Sprites/borderWithLinearGradientForTwoElement");
+    border-radius: 16px;
+    top: auto;
+    bottom: auto;
+    right: auto;
+    left: auto;
+}
+
+.title-panel {
+    position: absolute;
+    width: 79%;
+    height: 13.5%;
+    background-color: rgb(255, 243, 183);
+    border-radius: 18px;
+    rotate: 17deg;
+    translate: -30% -16%;
+    top: 5%;
+    left: 52%;
+}
+
+.pokemon-title {
+    width: 100%;
+    height: 100%;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Fonts/ShiftyNotesRegular-BWZ6d%20SDF%201.asset?fileID=11400000&guid=b2f542a44c0eb4548bbf678d77ac4081&type=2#ShiftyNotesRegular-BWZ6d SDF 1");
+    font-size: 38px;
+    letter-spacing: 12px;
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+    margin-top: 1.5%;
+}
+
+.pokemon-image {
+    width: 71%;
+    height: 70%;
+    position: absolute;
+    background-image: resource("Sprites/PokemonImages/Metapod");
+    top: 13%;
+    left: 13%;
+}
+
+.elements-panel {
+    width: 96.3%;
+    height: 12%;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    bottom: 1.7%;
+}
+
+.elements-area {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.two-elements {
+    width: 30%;
+    height: 100%;
+    background-image: resource("Sprites/borderForTwoElements");
+}
+
+.one-element {
+    width: 23%;
+    height: 90%;
+    background-image: resource("Sprites/borderForOneElement");
+}
+
+.two-elements .element {
+    width: 31%;
+    height: 72%;
+}
+
+.one-element .element {
+    width: 35%;
+    height: 72%;
+}
+
+.two-elements .main-element {
+    background-image: resource("Sprites/Elements/bug");
+    top: 1%;
+    left: 2%;
+}
+
+.two-elements .secondary-element {
+    background-image: resource("Sprites/Elements/poison");
+    top: 1%;
+    left: 7%;
+}
+
+.one-element .main-element {
+    background-image: resource("Sprites/Elements/bug");
+    top: 1%;
+    left: 5%;
+}
+
+.one-element .secondary-element {
+    display: none;
+}
+
+.card-number-panel {
+    width: 13%;
+    height: 12%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(168, 138, 118);
+    right: 3%;
+    top: 1.5%;
+    border-radius: 50px;
+    border-width: 2px;
+    border-color: rgb(0, 0, 0);
+}
+
+.card-number-label {
+    color: rgb(255, 255, 255);
+    margin: 0;
+    padding: 0;
+    -unity-font-definition: url("project://database/Assets/Photon/Fusion/Runtime/RuntimeAssets/JetBrainsMono-Regular.ttf?fileID=12800000&guid=a4ed52b30ac954791b7f3c691f1a348e&type=3#JetBrainsMono-Regular");
+}
+
+.deck-editor-card {
+    width: 18.5%;
+    height: 48%;
+    margin-top: 0.7%;
+}
+
+.selected-card_frame {
+    border-color: coral;
+}
+
+.no-selected-card {
+    opacity: 0.5;
+}
+
+.deck-card {
+    width: 17%;
+    height: 100%;
+    margin-right: 1%;
+    margin-left: 1%;
+}
+
+.small-deck-card {
+    width: 22%;
+    height: 95%;
+}
+
+.clone-card {
+    width: 18%;
+    height: 40%;
+    margin: 0;
+}
+
+.clone-card .card-frame {
+    border-color: coral;
+}
+
+.small-evolution-card {
+    width: 100%; 
+    height: 100%;
+}
+
+.small-evolution-card .card-frame {
+    border-color: rgb(0, 0, 0);
+}

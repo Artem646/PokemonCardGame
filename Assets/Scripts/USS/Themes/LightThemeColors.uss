@@ -1,0 +1,61 @@
+:root {
+    --bg-main: rgb(172, 174, 136);
+    --border-color: rgb(0, 0, 0);
+    --bg-open-filter-button: rgb(91, 119, 163);
+    --bg-top-panel: rgb(176, 143, 85);
+    --top-nav-button-text-color: rgb(255, 255, 255);
+    --player-name-text-color: rgb(255, 255, 255);
+    --bg-profile-field: rgb(85, 103, 105);
+    --profile-field-border-color: rgb(105, 55, 55);
+    --top-panel-border-color: rgb(0, 0, 0);
+    --bg-start-play-scene: rgb(116, 122, 158);
+    --bg-options-scene: rgb(116, 122, 158);
+    --bg-options-blocks-container: rgb(107, 52, 114); 
+    --bg-add-deck-button: rgb(150, 110, 74);
+    --add-deck-button-text-color: rgb(33, 37, 41);
+    --bg-deck: rgba(240, 244, 248, 0);
+    --bg-top-deck-panel: rgb(118, 90, 171);
+    --deck-name-text-color: rgb(255, 255, 255);
+    --bg-edit-deck-button: rgb(151, 150, 53);
+    --edit-deck-button-text-color: rgb(0, 0, 0);
+    --bg-delete-deck-button: rgb(159, 61, 61);
+    --delete-deck-button-text-color: rgb(248, 238, 107);
+    --bg-deck-cards-container: rgb(101, 166, 106);
+    --bg-deck-selection-scene: rgb(131, 161, 186);
+    --bg-selection-panel: rgb(166, 69, 90);
+    --selection-panel-border-color: rgb(86, 86, 86);
+    --bg-make-deck-field: rgb(222, 195, 60);
+    --make-deck-field-border-color: rgb(180, 188, 196);
+    --make-deck-label-text-color: rgb(44, 53, 64);
+    --bg-make-deck-button: rgb(154, 94, 90);
+    --make-deck-button-text-color: rgb(255, 255, 255);
+    --bg-select-deck-field: rgb(222, 195, 60);
+    --make-select-field-border-color: rgb(180, 188, 196);
+    --select-deck-label-text-color: rgb(44, 53, 64);
+    --bg-select-deck-button: rgb(154, 94, 90);
+    --select-deck-button-text-color: rgb(255, 255, 255);
+    --bg-deck-dropdown: rgba(255, 255, 255, 0);
+    --deck-dropdown-text-color: rgb(44, 53, 64);
+    --deck-dropdown-arrow: rgb(0, 0, 0);
+    --deck-dropdown-line: rgb(0, 0, 0);
+    --bg-add-friend-button: rgb(150, 110, 74);
+    --add-friend-button-text-color: rgb(33, 37, 41);
+    --bg-friend: rgba(240, 244, 248, 0);
+    --bg-top-friend-panel: rgb(77, 182, 172);
+    --bg-edit-friend-button: rgb(225, 155, 126);
+    --edit-friend-button-text-color: rgb(33, 37, 41);
+    --bg-delete-friend-button: rgb(211, 47, 47);
+    --delete-friend-button-text-color: rgb(77, 246, 161);
+    --content-container: rgb(156, 70, 96);
+    --bg-update-photo-button: rgb(211, 167, 96);
+    --update-photo-button-text-color: rgb(0, 0, 0);
+    --nickname-label-text-color: rgb(101, 224, 211);
+    --friend-name-text-color: rgb(248, 242, 65);
+}
+
+.nav-button {
+    --parallelogram-btn-fill-color: rgb(85, 103, 105);
+    --parallelogram-btn-hover-color: rgba(76, 204, 102, 0.3);
+    --parallelogram-btn-border-color: rgb(105, 55, 55);
+    --parallelogram-btn-active-color: rgb(127, 255, 212);
+}

@@ -1,74 +1,61 @@
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class CollectionSceneController : MonoBehaviour
+public class CollectionSceneController : MonoBehaviour, IRefreshableScene
 {
     [SerializeField] private UIDocument uiDocument;
-    [SerializeField] private VisualTreeAsset cardTemplate;
-    [SerializeField] private SettingsController settingsController;
 
     private VisualElement root;
-    private VisualElement loadingOverlay;
     private VisualElement cardOverlay;
-    private ScrollView cardsContainer;
+    private VisualElement cardsContainer;
     private VisualElement filterPanel;
     private VisualElement openFilterPanelButton;
-    private VisualElement profileField;
     private VisualElement fadeOverlay;
 
     private Tween fadeTween;
 
-    private CollectionCardListController collectionCardListController;
+    private List<CollectionCardController> userCardControllers = new();
+
     private FilterPanelView filterPanelView;
+    private List<PokemonElement> activeFiltersCache = new();
 
     private bool isOpen = false;
-    private float hidden = 250f;
-    private float shown = 0f;
+    private const float HIDDEN = -250f;
+    private const float SHOWN = 0f;
 
-    private async void Start()
+    private void Start()
     {
         InitializeUI();
-
         FadeIn();
-
-        loadingOverlay.style.display = DisplayStyle.Flex;
-
-        CardControllerFactory.Init(template: cardTemplate);
-
-        collectionCardListController = new CollectionCardListController(cardsContainer);
-
         CardOverlayManager.Instance.RegisterCardOverlay(SceneManager.GetActiveScene().name, cardOverlay);
 
-        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
-        await UserProfileView.Instance.LoadUserData();
+        UserCardModelList userCards = CardRepository.Instance.GetUserCardsList();
+        List<int> userCardsIds = userCards.cards.Select(c => c.id).ToList();
+        userCardControllers = CardRepository.Instance.GetGameCollectionCardControllersList()
+            .Where(cardController => userCardsIds.Contains(cardController.CardModel.id)).ToList();
 
         filterPanelView = new FilterPanelView(root);
         filterPanelView.OnFilterChanged += (activeFilters, pokemonElements) =>
         {
-            collectionCardListController.ApplyElementFilter(activeFilters, cardsContainer, pokemonElements);
+            activeFiltersCache = activeFilters;
+            ApplyElementFilter(activeFilters);
         };
 
-        await collectionCardListController.AddUserCardsToScrollView();
-
-        await WaitUntilCardsLoaded(cardsContainer, CardRepository.Instance.GetUserCards().cards.Count);
-
-        loadingOverlay.style.display = DisplayStyle.None;
-
+        ApplyElementFilter(activeFiltersCache);
         RegisterCallbacks();
     }
 
     private void InitializeUI()
     {
         root = uiDocument.rootVisualElement;
-        loadingOverlay = root.Q<VisualElement>("loadingOverlay");
-        cardsContainer = root.Q<ScrollView>("cardScrollView");
         cardOverlay = root.Q<VisualElement>("overlay");
-        filterPanel = root.Q<VisualElement>("elementsFilterPanel");
+        cardsContainer = root.Q<VisualElement>("cardsContainer");
+        filterPanel = root.Q<VisualElement>("filterPanel");
         openFilterPanelButton = root.Q<VisualElement>("openFiltersButton");
-        profileField = root.Q<VisualElement>("profileField");
         fadeOverlay = root.Q<VisualElement>("fadeOverlay");
     }
 
@@ -86,47 +73,49 @@ public class CollectionSceneController : MonoBehaviour
         fadeOverlay.style.display = DisplayStyle.None;
     }
 
-    private async Task WaitUntilCardsLoaded(ScrollView cardsContainer, int expectedCount)
+    private void FillContainerWithCards(List<CollectionCardController> cardControllersList)
     {
-        while (cardsContainer.childCount < expectedCount)
+        cardsContainer.Clear();
+        foreach (CollectionCardController cardController in cardControllersList)
         {
-            await Task.Yield();
+            ICollectionCardView cardView = cardController.CollectionCardView;
+            cardView.ApplyCardStyleForActiveScene("CollectionScene");
+            cardsContainer.Add(cardView.CardRoot);
         }
+    }
+
+    public void RefreshSceneContent() => ApplyElementFilter(activeFiltersCache);
+
+    public void ApplyElementFilter(List<PokemonElement> activeFilters)
+    {
+        List<CollectionCardController> filteredCardControllers = new();
+
+        if (activeFilters == null || activeFilters.Count == 0)
+            filteredCardControllers = userCardControllers;
+        else
+        {
+            filteredCardControllers = userCardControllers.Where(cardController =>
+                activeFilters.Contains(cardController.CardModel.mainElement) ||
+                (cardController.CardModel.secondaryElement.HasValue &&
+                activeFilters.Contains(cardController.CardModel.secondaryElement.Value))
+            ).ToList();
+        }
+
+        FillContainerWithCards(filteredCardControllers);
     }
 
     private void RegisterCallbacks()
     {
-        root.Q<Button>("playButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("StartPlayScene", root);
-        });
-
-        root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
-            SceneSwitcher.SwitchScene("BestiaryScene", root);
-        });
-
-        root.Q<Button>("decksButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("DecksScene", root);
-        });
-
         openFilterPanelButton.RegisterCallback<ClickEvent>(evt =>
         {
             isOpen = !isOpen;
-            float targetWidth = isOpen ? hidden : shown;
+            float targetMargin = isOpen ? SHOWN : HIDDEN;
 
             DOTween.To(
-                () => filterPanel.resolvedStyle.width,
-                w => filterPanel.style.width = w,
-                targetWidth,
-                0.3f).SetEase(Ease.InOutQuad);
-        });
-
-        profileField.RegisterCallback<ClickEvent>(evt =>
-        {
-            settingsController.OpenSettings();
+                () => filterPanel.resolvedStyle.marginLeft,
+                x => filterPanel.style.marginLeft = x,
+                targetMargin, 0.5f)
+                .SetEase(Ease.OutQuad);
         });
     }
 }

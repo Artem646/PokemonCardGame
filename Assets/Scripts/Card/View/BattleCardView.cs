@@ -1,81 +1,65 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BattleCardView : CardViewBase, IBattleCardView
 {
     public GameObject CardRoot { get; }
     public GameObject CardPrefab { get; }
-    private GameObject backCover;
-    private bool isFaceDown;
 
-    public BattleCardView(CardModel model, GameObject prefab, Transform parent, bool faceDown)
+    public BattleCardView(CardModel model, GameObject prefab3D)
         : base(model)
     {
-        CardPrefab = prefab;
-        CardRoot = Object.Instantiate(CardPrefab, parent);
-        CardRoot.name = faceDown ? $"{model.titleKey}_Back" : model.titleKey;
-        isFaceDown = faceDown;
+        model.visualData = CardVisualRegistrySO.Instance.GetVisualData(model.id);
 
-        InitializeElements();
+        CardPrefab = prefab3D;
+        CardRoot = Object.Instantiate(prefab3D);
+        CardRoot.name = model.titleKey;
+
+        if (CardRoot.TryGetComponent<CardVisualTweaker>(out var tweaker))
+            tweaker.visualData = model.visualData;
+
         BindData();
-        ApplyFaceDownState(isFaceDown);
-
-        if (CardRoot.TryGetComponent<CardFlipScript>(out var flipScript))
-        {
-            flipScript.OnFlipStateChanged += (faceDown) =>
-            {
-                ApplyFaceDownState(faceDown);
-            };
-        }
-    }
-
-    private void InitializeElements()
-    {
-        backCover = CardRoot.transform.Find("BackCover").gameObject;
     }
 
     public override void BindData()
     {
-        CardRoot.GetComponent<Image>().color = CardModel.colors.cardColor;
-        Localizer.LocalizeGameObjectElement(CardRoot, "Body/Title", CardModel.titleKey, "PokemonTitles");
-        CardViewHelper.UpdateBodyUGUI(CardRoot, CardModel);
-        CardViewHelper.SetImagesUGUI(CardRoot, CardModel);
-        CardViewHelper.BindHPWithBattleState(CardRoot, CardModel);
-        // CardViewHelper.UpdateStatsUGUI(CardRoot, CardModel);
+        MeshRenderer meshRendererCardPlate = CardRoot.transform.Find("FrontUIContainer/CardPlate").GetComponent<MeshRenderer>();
+        meshRendererCardPlate.materials[2].color = CardModel.colors.cardColor;
+        Localizer.LocalizeCard3DTitleGameObject(CardRoot, "FrontUIContainer/Body/Title/TitleText", CardModel, "PokemonTitles");
+        CardViewHelper.UpdateBody3D(CardRoot, CardModel);
+        CardViewHelper.SetImages3D(CardRoot, CardModel);
+        CardViewHelper.UpdateStats3D(CardRoot, CardModel);
+        CardViewHelper.UpdateAbilities3D(CardRoot, CardModel);
+        CardViewHelper.UpdateAbilityDamage3D(CardRoot, CardModel);
+        CardViewHelper.BindHPWithBattleState3D(CardRoot, CardModel);
     }
 
-    public void ApplyFaceDownState(bool faceDown)
-    {
-        isFaceDown = faceDown;
-        backCover.SetActive(isFaceDown);
-    }
+    public void ApplyFaceDownState(bool faceDown) { }
 
     public void ApplyBattleStyle(CardBattleState battleState)
     {
         if (battleState.IsFresh)
         {
             CardRoot.transform.Find("GrayFilter").gameObject.SetActive(true);
-            CardRoot.GetComponent<Outline>().enabled = false;
+            CardRoot.transform.Find("CardFrame").gameObject.SetActive(false);
         }
         else
         {
             CardRoot.transform.Find("GrayFilter").gameObject.SetActive(false);
 
             if (!battleState.HasAttacked)
-                CardRoot.GetComponent<Outline>().effectColor = new Color32(247, 234, 117, 255);
+                CardRoot.transform.Find("CardFrame").GetComponent<MeshRenderer>().material.color = new Color32(247, 234, 117, 255);
             else
-                CardRoot.GetComponent<Outline>().effectColor = Color.softRed;
+                CardRoot.transform.Find("CardFrame").GetComponent<MeshRenderer>().material.color = new Color32(165, 165, 165, 255);
 
-            CardRoot.GetComponent<Outline>().enabled = true;
+            CardRoot.transform.Find("CardFrame").gameObject.SetActive(true);
         }
     }
 
     public void ResetBattleStyle()
     {
         CardRoot.transform.Find("GrayFilter").gameObject.SetActive(false);
-        CardRoot.GetComponent<Outline>().enabled = false;
-        CardRoot.transform.Find("Highlighted").gameObject.SetActive(false);
+        CardRoot.transform.Find("CardFrame").gameObject.SetActive(false);
     }
 
-    public void SetHPOnClone(int HP) => CardViewHelper.BindCloneHPWithOriginal(CardRoot, HP);
+    public void SetHPOnClone(int HP) { }
 }

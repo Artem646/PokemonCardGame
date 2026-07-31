@@ -6,6 +6,7 @@ public interface IAuthFactory
 public enum AuthType
 {
     Google,
+    Email,
     Anonymous,
     Unknown
 }

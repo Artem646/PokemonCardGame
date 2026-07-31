@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class NetworkGameTurnManager : NetworkBehaviour
 {
-    [SerializeField] private GameManagerScript gameManager;
-
+    private GameManager gameManager;
     private NetworkGameController networkGameController;
 
     [Header("Network")]
@@ -17,21 +16,22 @@ public class NetworkGameTurnManager : NetworkBehaviour
     [Networked] public float TurnEndTime { get; set; }
     [Networked] public bool TurnManagerInitialized { get; private set; }
 
-    private const float TURN_DURATION = 30f;
+    private const float TURN_DURATION = 90f;
 
     public TurnPhase CurrentPhase { get; private set; } = TurnPhase.Waiting;
 
-    private List<BattleCardController> playerFieldCards, playerHandCards, enemyFieldCards;
+    private BattleCardController[] playerFieldCards, playerHandCards, enemyFieldCards;
 
     public event Action<int> OnTurnStarted;
     public event Action<TurnPhase> OnPhaseChanged;
 
     public void FindNetworkGameController() => networkGameController = FindAnyObjectByType<NetworkGameController>();
+    public void FindGameManager() => gameManager = FindAnyObjectByType<GameManager>();
 
     public void FindObjects()
     {
         FindNetworkGameController();
-        gameManager = FindAnyObjectByType<GameManagerScript>();
+        FindGameManager();
     }
 
     public bool IsMyTurn()
@@ -42,26 +42,35 @@ public class NetworkGameTurnManager : NetworkBehaviour
                 (networkGameController.IsSecondPlayer && !IsFirstPlayerTurn);
     }
 
-    private void InitializeVariables()
+    public void InitializeVariables()
     {
-        playerFieldCards = gameManager.CurrentGame.PlayerFieldListController.CardControllers;
-        playerHandCards = gameManager.CurrentGame.PlayerHandListController.CardControllers;
-        enemyFieldCards = gameManager.CurrentGame.EnemyFieldListController.CardControllers;
+        playerFieldCards = gameManager.CurrentGame.PlayerFieldControllers;
+        playerHandCards = gameManager.CurrentGame.PlayerHandControllers;
+        enemyFieldCards = gameManager.CurrentGame.EnemyFieldControllers;
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (HasStateAuthority && !TurnManagerInitialized)
+        {
+            if (networkGameController != null &&
+                networkGameController.IsFirstPlayerGameFullLoaded &&
+                networkGameController.IsSecondPlayerGameFullLoaded)
+            {
+                StartFirstTurn();
+            }
+        }
     }
 
     public void StartFirstTurn()
     {
-        InitializeVariables();
+        IsFirstPlayerTurn = true;
+        RoundNumber = 1;
+        TurnDuration = TURN_DURATION;
+        TurnEndTime = Runner.SimulationTime + TurnDuration;
+        TurnManagerInitialized = true;
 
-        if (HasStateAuthority)
-        {
-            IsFirstPlayerTurn = true;
-            RoundNumber = 1;
-            TurnDuration = TURN_DURATION;
-            TurnEndTime = Runner.SimulationTime + TurnDuration;
-            TurnManagerInitialized = true;
-            RpcNotifyTurnStarted();
-        }
+        RpcNotifyTurnStarted();
     }
 
     private void StartTurn()
@@ -86,16 +95,15 @@ public class NetworkGameTurnManager : NetworkBehaviour
         }
     }
 
-    public override void Spawned() { }
-
     public void GoToPlayCardPhase()
     {
+        InitializeVariables();
+
         CurrentPhase = TurnPhase.PlayCard;
 
-        // NotificationManager.ShowNotification($"Фаза: {CurrentPhase}", NotificationType.Info);
+        NotificationManager.ShowNotification($"Фаза: {CurrentPhase}", NotificationType.Info, 1f);
 
-        if ((playerFieldCards.Count < 3 && playerHandCards.Count == 0) ||
-            playerFieldCards.Count == 3)
+        if ((playerFieldCards.AnyNull() && playerHandCards.IsEmpty()) || playerFieldCards.IsFull())
             GoToAttackPhase();
         else
             OnPhaseChanged?.Invoke(CurrentPhase);
@@ -103,14 +111,34 @@ public class NetworkGameTurnManager : NetworkBehaviour
 
     public void GoToAttackPhase()
     {
-        CurrentPhase = TurnPhase.Attack;
+        InitializeVariables();
 
-        // NotificationManager.ShowNotification($"Фаза: {CurrentPhase}", NotificationType.Info);
+        if (!CheckAttackAvailability()) RequestEndTurn();
+        else
+        {
+            CurrentPhase = TurnPhase.Attack;
+            OnPhaseChanged?.Invoke(CurrentPhase);
 
-        foreach (BattleCardController card in playerFieldCards)
-            card.BattleCardView.ApplyBattleStyle(card.BattleState);
+            NotificationManager.ShowNotification($"Фаза: {CurrentPhase}", NotificationType.Info, 1f);
 
-        CheckAttackAvailability();
+            foreach (BattleCardController card in playerFieldCards.GetAllNotNull())
+                card.BattleCardView.ApplyBattleStyle(card.BattleState);
+        }
+    }
+
+    private bool CheckAttackAvailability()
+    {
+        bool canAttack = GetAttackableCards(IsMyTurn()).Any();
+        if (!canAttack) return false;
+        else return true;
+    }
+
+    public IEnumerable<BattleCardController> GetAttackableCards(bool forFirstPlayer)
+    {
+        InitializeVariables();
+
+        BattleCardController[] array = forFirstPlayer ? playerFieldCards : enemyFieldCards;
+        return array.Where(c => c != null && c.CanAttack);
     }
 
     public void RequestEndTurn()
@@ -120,35 +148,19 @@ public class NetworkGameTurnManager : NetworkBehaviour
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    private void RpcEndTurn()
-    {
-        StartTurn();
-    }
-
-    public IEnumerable<BattleCardController> GetAttackableCards(bool forFirstPlayer)
-    {
-        List<BattleCardController> list = forFirstPlayer ? playerFieldCards : enemyFieldCards;
-        return list.Where(c => c != null && c.CanAttack);
-    }
-
-    private void CheckAttackAvailability()
-    {
-        bool canAttack = GetAttackableCards(IsMyTurn()).Any();
-        if (!canAttack) RequestEndTurn();
-        else OnPhaseChanged?.Invoke(CurrentPhase);
-    }
+    private void RpcEndTurn() => StartTurn();
 
     public void ResetTurnFlagsForAllCards()
     {
-        foreach (BattleCardController card in playerFieldCards)
+        InitializeVariables();
+
+        foreach (BattleCardController card in playerFieldCards.GetAllNotNull())
         {
             card.ResetTurnFlags();
             card.BattleCardView.ResetBattleStyle();
         }
 
-        foreach (BattleCardController card in enemyFieldCards)
-        {
+        foreach (BattleCardController card in enemyFieldCards.GetAllNotNull())
             card.ResetTurnFlags();
-        }
     }
 }

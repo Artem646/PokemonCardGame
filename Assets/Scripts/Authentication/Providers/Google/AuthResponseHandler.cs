@@ -1,8 +1,17 @@
 using System;
 using System.Threading.Tasks;
+using Firebase;
 using Firebase.Auth;
 using Google;
 using UnityEngine;
+
+public enum AuthErrorTarget
+{
+    Email,
+    Password,
+    General
+}
+
 
 public static class AuthResponseHandler
 {
@@ -33,9 +42,7 @@ public static class AuthResponseHandler
                         Localizer.LocalizeNotification(key, NotificationType.Error);
                     }
                     else if (exception is OperationCanceledException)
-                    {
                         Localizer.LocalizeNotification(NotificationKey.GoogleCanceled, NotificationType.Error);
-                    }
 
                     break;
                 }
@@ -91,9 +98,7 @@ public static class AuthResponseHandler
             if (taskResult.Exception != null)
             {
                 foreach (var innerException in taskResult.Exception.InnerExceptions)
-                {
                     Debug.Log($"[P][GoogleProvider] Auth Inner Exception: {innerException.Message}");
-                }
             }
         }
         else if (taskResult.IsCompletedSuccessfully)
@@ -112,12 +117,10 @@ public static class AuthResponseHandler
         }
     }
 
-    public static void HandleAnonymousFirebaseResult(Task<AuthResult> taskResult, Action<AuthResult> onSuccess)
+    public static void HandleAnonymousFirebaseResult(Task<AuthResult> taskResult, Action onSuccess)
     {
         if (taskResult.IsCanceled)
-        {
             Localizer.LocalizeNotification(NotificationKey.AnonymousAuthCanceled, NotificationType.Error);
-        }
         else if (taskResult.IsFaulted)
         {
             Debug.Log("[P][AnonymousProvider] Ошибка Firebase аутентификации");
@@ -126,24 +129,73 @@ public static class AuthResponseHandler
             if (taskResult.Exception != null)
             {
                 foreach (var innerException in taskResult.Exception.InnerExceptions)
-                {
                     Debug.Log($"[P][AnonymousProvider] Auth Inner Exception: {innerException.Message}");
-                }
             }
         }
         else if (taskResult.IsCompletedSuccessfully)
         {
-            try
+            Localizer.LocalizeNotification(NotificationKey.AnonymousAuthSuccess, NotificationType.Success);
+            onSuccess();
+        }
+    }
+
+    public static void HandleEmailFirebaseResult(Task<AuthResult> taskResult, Action<AuthResult> onSuccess, Action<AuthErrorTarget, string> onError)
+    {
+        if (taskResult.IsCanceled)
+        {
+            onError(AuthErrorTarget.General, Localizer.GetNotificationText(NotificationKey.EmailAuthCanceled));
+            return;
+        }
+        else if (taskResult.IsFaulted)
+        {
+            onError(AuthErrorTarget.General, Localizer.GetNotificationText(NotificationKey.EmailAuthError));
+
+            if (taskResult.Exception != null)
             {
-                FirebaseUser firebaseUser = taskResult.Result.User;
-                Localizer.LocalizeNotification(NotificationKey.AnonymousAuthSuccess, NotificationType.Success);
-                onSuccess(taskResult.Result);
-            }
-            catch (Exception ex)
-            {
-                Localizer.LocalizeNotification(NotificationKey.AnonymousUserDataError, NotificationType.Error);
-                Debug.Log($"[P][AnonymousProvider] Ошибка при обработке Firebase пользователя: {ex.Message}");
+                foreach (var innerException in taskResult.Exception.Flatten().InnerExceptions)
+                {
+                    if (innerException is FirebaseException firebaseEx)
+                    {
+                        AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+                        Debug.LogError($"[P][AuthResponseHandler] Firebase Auth Error: {errorCode}");
+
+                        var (target, messageKey) = GetEmailErrorDetailsByCode(errorCode);
+                        onError(target, Localizer.GetNotificationText(messageKey));
+                        return;
+                    }
+                    else
+                    {
+                        onError(AuthErrorTarget.General, Localizer.GetNotificationText(NotificationKey.EmailNetworkRequestFailed));
+                        Debug.LogError($"[P][AuthResponseHandler] System Error: {innerException.Message}");
+                    }
+                }
             }
         }
+        else if (taskResult.IsCompletedSuccessfully)
+            onSuccess(taskResult.Result);
+    }
+
+    private static (AuthErrorTarget target, NotificationKey messageKey) GetEmailErrorDetailsByCode(AuthError errorCode)
+    {
+        return errorCode switch
+        {
+            AuthError.MissingEmail => (AuthErrorTarget.Email, NotificationKey.MissingEmail),
+            AuthError.InvalidEmail => (AuthErrorTarget.Email, NotificationKey.InvalidEmail),
+            AuthError.UserNotFound => (AuthErrorTarget.Email, NotificationKey.EmailUserNotFound),
+            AuthError.EmailAlreadyInUse => (AuthErrorTarget.Email, NotificationKey.EmailAlreadyInUse),
+            AuthError.UserDisabled => (AuthErrorTarget.Email, NotificationKey.EmailUserDisabled),
+
+            AuthError.MissingPassword => (AuthErrorTarget.Password, NotificationKey.EmailMissingPassword),
+            AuthError.WrongPassword => (AuthErrorTarget.Password, NotificationKey.EmailWrongPassword),
+            AuthError.WeakPassword => (AuthErrorTarget.Password, NotificationKey.EmailWeakPassword),
+
+            AuthError.NetworkRequestFailed => (AuthErrorTarget.General, NotificationKey.EmailNetworkRequestFailed),
+            AuthError.TooManyRequests => (AuthErrorTarget.General, NotificationKey.EmailTooManyRequests),
+            AuthError.OperationNotAllowed => (AuthErrorTarget.General, NotificationKey.EmailOperationNotAllowed),
+            AuthError.InvalidCredential => (AuthErrorTarget.General, NotificationKey.EmailInvalidCredential),
+            AuthError.AccountExistsWithDifferentCredentials => (AuthErrorTarget.General, NotificationKey.EmailAccountExistsWithDifferentCredentials),
+
+            _ => (AuthErrorTarget.General, NotificationKey.EmailUnknownError)
+        };
     }
 }

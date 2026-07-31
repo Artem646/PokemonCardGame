@@ -30,16 +30,13 @@ public class UploadingSceneController : MonoBehaviour
 
         await Task.Delay(2000);
 
-        User user = await FirebaseFirestoreService.Instance.CreateOrUpdateUserDocument(FirebaseAuthService.Instance.GetAuth().CurrentUser);
-        UserSession.Instance.ActiveUser = user;
-
-        UserProfileData profile = await UserProfileService.Instance.GetUserProfile();
+        UserProfileData profile = UserProfileService.Instance.GetUserProfile();
         UserProfileView.Instance.PreloadData(profile);
 
         CardRepository.Instance.OnProgressChanged += HandleProgress;
         CardRepository.Instance.OnCardsLoaded += HandleCardsLoaded;
 
-        await CardRepository.Instance.GetUserCardsCollection();
+        await CardRepository.Instance.LoadUserCardsCollection();
     }
 
     private void InitializeUI()
@@ -83,7 +80,7 @@ public class UploadingSceneController : MonoBehaviour
         progressTween?.Kill();
         progressBar.value = 100f;
 
-        Localizer.LocalizeElement(root, "uploadingLabel", "CardsUploadedLabel", "ElementsText", CardRepository.Instance.GetUserCards().cards.Count);
+        Localizer.LocalizeElement(root, "uploadingLabel", "CardsUploadedLabel", "ElementsText", CardRepository.Instance.GetUserCardsList().cards.Count);
 
         StartCoroutine(FadeOutAndLoadScene("CollectionScene"));
     }
@@ -101,5 +98,15 @@ public class UploadingSceneController : MonoBehaviour
         yield return fadeTween.WaitForCompletion();
 
         SceneManager.LoadScene(sceneName);
+    }
+
+    private void OnDestroy()
+    {
+        CardRepository.Instance.OnProgressChanged -= HandleProgress;
+        CardRepository.Instance.OnCardsLoaded -= HandleCardsLoaded;
+
+        dotsSequence?.Kill();
+        progressTween?.Kill();
+        fadeTween?.Kill();
     }
 }

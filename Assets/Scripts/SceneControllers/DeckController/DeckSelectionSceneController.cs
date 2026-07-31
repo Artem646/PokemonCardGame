@@ -9,21 +9,15 @@ public class DeckSelectionSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private DeckEditorController editorController;
-    [SerializeField] private SettingsController settingsController;
 
     private VisualElement root;
     private DropdownField deckDropdown;
     private Button confirmButton;
     private Button makeDeckButton;
-    private VisualElement profileField;
 
-    private async void Start()
+    private void Start()
     {
         InitializeUI();
-
-        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
-        await UserProfileView.Instance.LoadUserData();
-
         RefreshDeckDropdown();
         RegisterCallbacks();
     }
@@ -34,7 +28,6 @@ public class DeckSelectionSceneController : MonoBehaviour
         deckDropdown = root.Q<DropdownField>("deckSelectField");
         confirmButton = root.Q<Button>("confirmDeckButton");
         makeDeckButton = root.Q<Button>("makeDeckButton");
-        profileField = root.Q<VisualElement>("profileField");
     }
 
     public void RefreshDeckDropdown()
@@ -69,7 +62,7 @@ public class DeckSelectionSceneController : MonoBehaviour
             if (selectedDeck != null)
             {
                 SelectedDeckManager.SetSelectedDeck(selectedDeck);
-                ProcessGameMode();
+                SceneManager.LoadScene("GameLoadingScene");
             }
         });
 
@@ -87,34 +80,8 @@ public class DeckSelectionSceneController : MonoBehaviour
             editorController.OnDeckMaked += makedDeck =>
             {
                 SelectedDeckManager.SetSelectedDeck(makedDeck);
-                ProcessGameMode();
+                SceneManager.LoadScene("GameLoadingScene");
             };
-        });
-
-        root.Q<Button>("playButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("StartPlayScene", root);
-        });
-
-        root.Q<Button>("collectionButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("CollectionScene", root);
-        });
-
-        root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
-            SceneSwitcher.SwitchScene("BestiaryScene", root);
-        });
-
-        root.Q<Button>("decksButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("DecksScene", root);
-        });
-
-        profileField.RegisterCallback<ClickEvent>(evt =>
-        {
-            settingsController.OpenSettings();
         });
 
         SceneManager.activeSceneChanged += (oldScene, newScene) =>
@@ -122,26 +89,5 @@ public class DeckSelectionSceneController : MonoBehaviour
             if (newScene.name == "DeckSelectionScene")
                 RefreshDeckDropdown();
         };
-    }
-
-    private void ProcessGameMode()
-    {
-        if (GameTypeConfig.CurrentType == GameType.Multiplayer)
-        {
-            SceneManager.LoadScene("RoomSelectionScene");
-        }
-        else if (GameTypeConfig.CurrentType == GameType.Bot)
-        {
-            SceneManager.LoadScene("PlayingScene");
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        GameManagerScript gameManager = FindAnyObjectByType<GameManagerScript>();
-        gameManager.InitBotGame();
-        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

@@ -1,12 +1,7 @@
-using System.Collections.Generic;
-
 public class Game
 {
-    public List<CardModel> PlayerDeck { get; set; }
-    public List<CardModel> EnemyDeck { get; set; }
-
-    public BattleCardListController PlayerHandListController { get; set; }
-    public BattleCardListController EnemyHandListController { get; set; }
-    public BattleCardListController PlayerFieldListController { get; set; }
-    public BattleCardListController EnemyFieldListController { get; set; }
+    public BattleCardController[] PlayerHandControllers { get; set; }
+    public BattleCardController[] EnemyHandControllers { get; set; }
+    public BattleCardController[] PlayerFieldControllers { get; set; }
+    public BattleCardController[] EnemyFieldControllers { get; set; }
 }

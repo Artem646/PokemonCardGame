@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class UserProfileView
@@ -10,74 +7,35 @@ public class UserProfileView
 
     private VisualElement userImage;
     private Label userName;
-    private bool isInitialized;
 
     private UserProfileData cachedProfile;
 
     private UserProfileView() { }
 
-    public void SetUIDocument(UIDocument uiDocument, SettingsController settingsController)
+    public void SetUIDocument(VisualElement root)
     {
-        VisualElement root = uiDocument.rootVisualElement;
         userImage = root.Q<VisualElement>("userImage");
         userName = root.Q<Label>("userName");
-        isInitialized = true;
 
-        if (cachedProfile != null)
-            UpdateView(cachedProfile);
+        UpdateView();
 
-        settingsController.OnProfileUpdated += UpdateViewFromUser;
+        UserProfileService.OnAvatarUpdated -= UpdateViewAfterUpdate;
+        UserProfileService.OnAvatarUpdated += UpdateViewAfterUpdate;
     }
 
-    public async Task LoadUserData()
+    public void UpdateView()
     {
-        if (cachedProfile != null)
-        {
-            UpdateView(cachedProfile);
-            return;
-        }
-
-        UserProfileData profileData = await UserProfileService.Instance.GetUserProfile();
-        cachedProfile = profileData;
-        UpdateView(profileData);
+        userName.text = cachedProfile.DisplayName;
+        if (cachedProfile.PhotoTexture != null)
+            userImage.style.backgroundImage = new StyleBackground(cachedProfile.PhotoTexture);
     }
 
-    public void UpdateView(UserProfileData profileData)
+    private void UpdateViewAfterUpdate()
     {
-        if (!isInitialized || profileData == null) return;
-
-        userName.text = profileData.DisplayName;
-        if (profileData.PhotoTexture != null)
-        {
-            userImage.style.backgroundImage = new StyleBackground(profileData.PhotoTexture);
-        }
+        cachedProfile = UserProfileService.Instance.GetUserProfile();
+        UpdateView();
     }
 
-    private async void UpdateViewFromUser(User user)
-    {
-        if (!isInitialized || user == null) return;
-
-        UserProfileData profileData = new()
-        {
-            DisplayName = user.userData.userName,
-            PhotoTexture = null
-        };
-
-        if (!string.IsNullOrEmpty(user.userData.profilePhotoUrl))
-        {
-            Texture2D texture = await UserProfileService.Instance.GetUserProfile()
-                .ContinueWith(t => t.Result.PhotoTexture);
-            profileData.PhotoTexture = texture;
-        }
-
-        cachedProfile = profileData;
-        UpdateView(profileData);
-    }
-
-    public void PreloadData(UserProfileData data)
-    {
-        cachedProfile = data;
-    }
-
+    public void PreloadData(UserProfileData profileData) => cachedProfile = profileData;
     public UserProfileData GetCachedProfile() => cachedProfile;
 }

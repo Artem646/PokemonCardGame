@@ -49,7 +49,7 @@ public class NotificationManager : MonoBehaviour
         notificationContainer.style.scale = new Scale(new Vector2(0f, 1f));
     }
 
-    public static void ShowNotification(string message, NotificationType type, float durationSeconds = 3f)
+    public static void ShowNotification(string message, NotificationType type, float durationSeconds = 1.5f)
     {
         Instance.Show(message, type, durationSeconds);
     }

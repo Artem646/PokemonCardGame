@@ -23,29 +23,27 @@ public class CollectionCardController : BaseCardController
         CollectionCardView.UnregisterClickHandlers(OnCardClicked);
     }
 
-    public void RemoveMarginsAroundCard()
-    {
-        CollectionCardView.ApplyStyleForCloneCard();
-    }
-
     private void OnCardClicked(ClickEvent evt)
     {
         CardControllerFactory.Init(template: CollectionCardView.CardTemplate);
         CollectionCardController cloneController = CardControllerFactory.Create<CollectionCardController>(CardModel);
-        cloneController?.UnregisterEvents();
-        cloneController?.RemoveMarginsAroundCard();
-        ICollectionCardView cloneCardView = cloneController?.CollectionCardView;
-        if (cloneCardView != null)
-            CardOverlayManager.Instance?.ShowCollectionCard(CollectionCardView, cloneCardView);
+        cloneController.UnregisterEvents();
+
+        ICollectionCardView cloneCardView = cloneController.CollectionCardView;
+        cloneCardView.ApplyCloneCardStyle();
+
+        CardOverlayManager.Instance.ShowCollectionCard(CollectionCardView, cloneCardView);
     }
 
     private void OnDescriptionButtonClicked(ClickEvent evt)
     {
         CardOverlayManager.Instance.HideOverlay();
-
         SelectedCardModelStorage.SelectedCardModel = CardModel;
-        SceneContext.PreviousDescriptionSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadSceneAsync("DescriptionScene", LoadSceneMode.Additive);
+
+        if (SceneManager.GetActiveScene().name != "DescriptionScene")
+            SceneContext.PreviousDescriptionSceneName = SceneManager.GetActiveScene().name;
+
+        SceneSwitcher.SwitchScene("DescriptionScene", null);
     }
 
     public override void AddToContainer(object container)

@@ -1,0 +1,2808 @@
+fileFormatVersion: 2
+guid: 12f93c3a8ee7f684eaf3c54ca54f79b4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8091276152201314219
+    second: grunges_0
+  - first:
+      213: -2431824584204291325
+    second: grunges_1
+  - first:
+      213: 9187789171141239834
+    second: grunges_2
+  - first:
+      213: -3684274099665625823
+    second: grunges_3
+  - first:
+      213: 6137288111039152776
+    second: grunges_4
+  - first:
+      213: -7686364434421671461
+    second: grunges_5
+  - first:
+      213: 6611268202442549378
+    second: grunges_6
+  - first:
+      213: -3427479590731151411
+    second: grunges_7
+  - first:
+      213: 2977341537682414974
+    second: grunges_8
+  - first:
+      213: -7441970312224003081
+    second: grunges_9
+  - first:
+      213: -2228209501911556479
+    second: grunges_10
+  - first:
+      213: 561379321103523581
+    second: grunges_11
+  - first:
+      213: -4637609749873722008
+    second: grunges_12
+  - first:
+      213: 2094765339000524212
+    second: grunges_13
+  - first:
+      213: 4040987732887716376
+    second: grunges_14
+  - first:
+      213: -6083193571940541575
+    second: grunges_15
+  - first:
+      213: 187806578057021359
+    second: grunges_16
+  - first:
+      213: -6666516388459200761
+    second: grunges_17
+  - first:
+      213: -8998101515120284648
+    second: grunges_18
+  - first:
+      213: 5630054864828106922
+    second: grunges_19
+  - first:
+      213: -215326302015885582
+    second: grunges_20
+  - first:
+      213: -2822727278718823926
+    second: grunges_21
+  - first:
+      213: 6037870255192020964
+    second: grunges_22
+  - first:
+      213: 927357696667854240
+    second: grunges_23
+  - first:
+      213: 950513061009343445
+    second: grunges_24
+  - first:
+      213: -1969865180116658061
+    second: grunges_25
+  - first:
+      213: 884460097385514050
+    second: grunges_26
+  - first:
+      213: 6462270612799708768
+    second: grunges_27
+  - first:
+      213: -4558000695629694471
+    second: grunges_28
+  - first:
+      213: 8784474186952931508
+    second: grunges_29
+  - first:
+      213: 778631520348786171
+    second: grunges_30
+  - first:
+      213: -2524083063665128750
+    second: grunges_31
+  - first:
+      213: 2283083924315525644
+    second: grunges_32
+  - first:
+      213: 6791667775628083211
+    second: grunges_33
+  - first:
+      213: 2628018763846005572
+    second: grunges_34
+  - first:
+      213: 5141904389879301373
+    second: grunges_35
+  - first:
+      213: 7155128442600035294
+    second: grunges_36
+  - first:
+      213: -6613917403814055679
+    second: grunges_37
+  - first:
+      213: -6531316108941725838
+    second: grunges_38
+  - first:
+      213: -4292239303358978869
+    second: grunges_39
+  - first:
+      213: 4660785156060660152
+    second: grunges_40
+  - first:
+      213: 5440103732615130947
+    second: grunges_41
+  - first:
+      213: 7411273150326738765
+    second: grunges_42
+  - first:
+      213: -3543387538346851976
+    second: grunges_43
+  - first:
+      213: 3449519673121581270
+    second: grunges_44
+  - first:
+      213: -5670303033711825816
+    second: grunges_45
+  - first:
+      213: -25298678438499023
+    second: grunges_46
+  - first:
+      213: 3392174330589948357
+    second: grunges_47
+  - first:
+      213: -8123886031591849145
+    second: grunges_48
+  - first:
+      213: 9118132604473078313
+    second: grunges_49
+  - first:
+      213: 1608474354941628146
+    second: grunges_50
+  - first:
+      213: -3111667285008312967
+    second: grunges_51
+  - first:
+      213: -3631811241308787352
+    second: grunges_52
+  - first:
+      213: -8273530502453078819
+    second: grunges_53
+  - first:
+      213: -4144580599769640069
+    second: grunges_54
+  - first:
+      213: 7327684752805935291
+    second: grunges_55
+  - first:
+      213: 7889563983509205124
+    second: grunges_56
+  - first:
+      213: -5485628666327832796
+    second: grunges_57
+  - first:
+      213: 7973532884043442309
+    second: grunges_58
+  - first:
+      213: -2805319774093092181
+    second: grunges_59
+  - first:
+      213: 8518925860466637334
+    second: grunges_60
+  - first:
+      213: -2829057853808777121
+    second: grunges_61
+  - first:
+      213: -6580514399425619231
+    second: grunges_62
+  - first:
+      213: -4340653387207487442
+    second: grunges_63
+  - first:
+      213: -8136392945689662365
+    second: grunges_64
+  - first:
+      213: -3207076978179276712
+    second: grunges_65
+  - first:
+      213: -5413805487489875394
+    second: grunges_66
+  - first:
+      213: -8662283711219223142
+    second: grunges_67
+  - first:
+      213: -8363608316869672291
+    second: grunges_68
+  - first:
+      213: -1477860636791483721
+    second: grunges_69
+  - first:
+      213: 1407564661007228712
+    second: grunges_70
+  - first:
+      213: 1991173254432632997
+    second: grunges_71
+  - first:
+      213: -3261831808171180154
+    second: grunges_72
+  - first:
+      213: 4643676679293612546
+    second: grunges_73
+  - first:
+      213: -9053630759625858653
+    second: grunges_74
+  - first:
+      213: -6656119911771117309
+    second: grunges_75
+  - first:
+      213: 6180292530653816595
+    second: grunges_76
+  - first:
+      213: -5681172531476542938
+    second: grunges_77
+  - first:
+      213: -211721693824135429
+    second: grunges_78
+  - first:
+      213: 3354997683951167988
+    second: grunges_79
+  - first:
+      213: 6614395405940542597
+    second: grunges_80
+  - first:
+      213: -3962691315683779875
+    second: grunges_81
+  - first:
+      213: 2807283002207520318
+    second: grunges_82
+  - first:
+      213: -9221049336834249166
+    second: grunges_83
+  - first:
+      213: 1818331724136355479
+    second: grunges_84
+  - first:
+      213: -1490274030991219181
+    second: grunges_85
+  - first:
+      213: 5852481350690602185
+    second: grunges_86
+  - first:
+      213: 1222447371425238644
+    second: grunges_87
+  - first:
+      213: -2947329175840552032
+    second: grunges_88
+  - first:
+      213: 8099454006529350613
+    second: grunges_89
+  - first:
+      213: 2002548965197545742
+    second: grunges_90
+  - first:
+      213: 6651969919308261962
+    second: grunges_91
+  - first:
+      213: -1558842403403844804
+    second: grunges_92
+  - first:
+      213: -2711437141628671205
+    second: grunges_93
+  - first:
+      213: 8771067434764908447
+    second: grunges_94
+  - first:
+      213: 4846550865567344842
+    second: grunges_95
+  - first:
+      213: -2861434900756422795
+    second: grunges_96
+  - first:
+      213: -7795413809907473401
+    second: grunges_97
+  - first:
+      213: -919288779167033605
+    second: grunges_98
+  - first:
+      213: 4361107020286127123
+    second: grunges_99
+  - first:
+      213: 5273278293564167701
+    second: grunges_100
+  - first:
+      213: 7687155355356448596
+    second: grunges_101
+  - first:
+      213: 4521514143864126857
+    second: grunges_102
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: grunges_0
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 380
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baf7c8f7accf94070800000000000000
+      internalID: 8091276152201314219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 379
+        width: 16
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 303f07ecc6c604ed0800000000000000
+      internalID: -2431824584204291325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_2
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 374
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a14ed097295918f70800000000000000
+      internalID: 9187789171141239834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_3
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 382
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12d124af934dedcc0800000000000000
+      internalID: -3684274099665625823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_4
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 371
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88287be25070c2550800000000000000
+      internalID: 6137288111039152776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_5
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 202
+        width: 155
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd99910654c845590800000000000000
+      internalID: -7686364434421671461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_6
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 370
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2886c61f661ffbb50800000000000000
+      internalID: 6611268202442549378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_7
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 375
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc78197c8752f60d0800000000000000
+      internalID: -3427479590731151411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_8
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 227
+        width: 197
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7d53989a54a15920800000000000000
+      internalID: 2977341537682414974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_9
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 365
+        width: 11
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fba2e62e6fc8b890800000000000000
+      internalID: -7441970312224003081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_10
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 374
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18e5969734fc311e0800000000000000
+      internalID: -2228209501911556479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_11
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 353
+        width: 33
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfe10aaa48b6ac700800000000000000
+      internalID: 561379321103523581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_12
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 361
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86d73ebe086e3afb0800000000000000
+      internalID: -4637609749873722008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_13
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 358
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bd4dee2af9121d10800000000000000
+      internalID: 2094765339000524212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_14
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 187
+        width: 172
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 812cb78dee8741830800000000000000
+      internalID: 4040987732887716376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_15
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 349
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97b5b8c2da7249ba0800000000000000
+      internalID: -6083193571940541575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_16
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 347
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa7029376193b9200800000000000000
+      internalID: 187806578057021359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_17
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 345
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70fb1985aa6cb73a0800000000000000
+      internalID: -6666516388459200761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_18
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 348
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81ce9529852502380800000000000000
+      internalID: -8998101515120284648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_19
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 350
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa80a0cf119f12e40800000000000000
+      internalID: 5630054864828106922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 325
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fe6b818ed1030df0800000000000000
+      internalID: -215326302015885582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_21
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 335
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a02d826de78a3d8d0800000000000000
+      internalID: -2822727278718823926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_22
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 284
+        width: 47
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e71e90d103dac350800000000000000
+      internalID: 6037870255192020964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_23
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 313
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a5ac9969e2aedc00800000000000000
+      internalID: 927357696667854240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_24
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 302
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d3c4dbc796e03d00800000000000000
+      internalID: 950513061009343445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_25
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 315
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3785cb33e02a9a4e0800000000000000
+      internalID: -1969865180116658061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 296
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 244cba2c5cb364c00800000000000000
+      internalID: 884460097385514050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_27
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 288
+        width: 33
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06e5f5e32e89ea950800000000000000
+      internalID: 6462270612799708768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_28
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 282
+        width: 19
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f93203448abeb0c0800000000000000
+      internalID: -4558000695629694471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_29
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 281
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b8faeb1bb8b8e970800000000000000
+      internalID: 8784474186952931508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_30
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 251
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfdcf4d0e314eca00800000000000000
+      internalID: 778631520348786171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_31
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 215
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2da09a6a3d7a8fcd0800000000000000
+      internalID: -2524083063665128750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_32
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 100
+        width: 123
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c025b3d9bb42faf10800000000000000
+      internalID: 2283083924315525644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_33
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 201
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0087ceabd9d04e50800000000000000
+      internalID: 6791667775628083211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_34
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 167
+        width: 30
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4433a125429987420800000000000000
+      internalID: 2628018763846005572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_35
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 191
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df407c3bcc6bb5740800000000000000
+      internalID: 5141904389879301373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_36
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 179
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed31877b86f1c4360800000000000000
+      internalID: 7155128442600035294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_37
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 148
+        width: 27
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 101b3ebc925a634a0800000000000000
+      internalID: -6613917403814055679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_38
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 196
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27fedb27a9a1c55a0800000000000000
+      internalID: -6531316108941725838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_39
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 86
+        width: 185
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc461584817ee64c0800000000000000
+      internalID: -4292239303358978869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_40
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 193
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b1c861d76f6ea040800000000000000
+      internalID: 4660785156060660152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_41
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 179
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34f2dcb95812f7b40800000000000000
+      internalID: 5440103732615130947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_42
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 170
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4f8d92e9a12ad660800000000000000
+      internalID: 7411273150326738765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_43
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 172
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8714a4bbecb53dec0800000000000000
+      internalID: -3543387538346851976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_44
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 141
+        width: 48
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d8222acdd72fdf20800000000000000
+      internalID: 3449519673121581270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_45
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 178
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86c69c2fe690f41b0800000000000000
+      internalID: -5670303033711825816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_46
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 145
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13de26a6cfe16aff0800000000000000
+      internalID: -25298678438499023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_47
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 146
+        width: 29
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c92307c49c631f20800000000000000
+      internalID: 3392174330589948357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_48
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 147
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 743c53b42b8224f80800000000000000
+      internalID: -8123886031591849145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_49
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 146
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92276883b4d1a8e70800000000000000
+      internalID: 9118132604473078313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_50
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 155
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fe0f9c57e2725610800000000000000
+      internalID: 1608474354941628146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_51
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 153
+        width: 26
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97510e1371321d4d0800000000000000
+      internalID: -3111667285008312967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_52
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 130
+        width: 26
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86de48e0be6399dc0800000000000000
+      internalID: -3631811241308787352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_53
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 27
+        width: 141
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd4dce2d7d38e2d80800000000000000
+      internalID: -8273530502453078819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_54
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 147
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7351c747ed7b76c0800000000000000
+      internalID: -4144580599769640069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_55
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 132
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb83b0d757a21b560800000000000000
+      internalID: 7327684752805935291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_56
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 124
+        width: 24
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48038cd64ac5d7d60800000000000000
+      internalID: 7889563983509205124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_57
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 124
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42764d5cac12fd3b0800000000000000
+      internalID: -5485628666327832796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_58
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 111
+        width: 32
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5882e4699eda7ae60800000000000000
+      internalID: 7973532884043442309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_59
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 131
+        width: 23
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baa5dc757808119d0800000000000000
+      internalID: -2805319774093092181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_60
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 131
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61ab0055fed493670800000000000000
+      internalID: 8518925860466637334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_61
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 126
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f58e2b6feda2db8d0800000000000000
+      internalID: -2829057853808777121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_62
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 119
+        width: 17
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ea94eec4015da4a0800000000000000
+      internalID: -6580514399425619231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_63
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 116
+        width: 33
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e20d66afdb6e2c3c0800000000000000
+      internalID: -4340653387207487442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_64
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 107
+        width: 21
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36c6c2f69b9b51f80800000000000000
+      internalID: -8136392945689662365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_65
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 109
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8508a4cea7c2e73d0800000000000000
+      internalID: -3207076978179276712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_66
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 96
+        width: 19
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e320b1bb79c4ed4b0800000000000000
+      internalID: -5413805487489875394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_67
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 102
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9530210cd269c780800000000000000
+      internalID: -8662283711219223142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_68
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 43
+        width: 37
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d920b705c8e7eeb80800000000000000
+      internalID: -8363608316869672291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_69
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 91
+        width: 11
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b2d284b4959d7be0800000000000000
+      internalID: -1477860636791483721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_70
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 92
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82f9ab10a9ca88310800000000000000
+      internalID: 1407564661007228712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_71
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 87
+        width: 31
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a037b4768112ab10800000000000000
+      internalID: 1991173254432632997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_72
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 90
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68ff2ec9045abb2d0800000000000000
+      internalID: -3261831808171180154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_73
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 99
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 202bf092657a17040800000000000000
+      internalID: 4643676679293612546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_74
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 82
+        width: 22
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a163f4daca0b5280800000000000000
+      internalID: -9053630759625858653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_75
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 77
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3096a74b436b0a3a0800000000000000
+      internalID: -6656119911771117309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_76
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 81
+        width: 26
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 317ee91ef4fc4c550800000000000000
+      internalID: 6180292530653816595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_77
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 77
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62a42a9ceab6821b0800000000000000
+      internalID: -5681172531476542938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_78
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 84
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfe4e50cd30df0df0800000000000000
+      internalID: -211721693824135429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_79
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 93
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f9ea263e985f8e20800000000000000
+      internalID: 3354997683951167988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_80
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 52
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58ccf0fb39d0bcb50800000000000000
+      internalID: 6614395405940542597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_81
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 75
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dda942e5e31b109c0800000000000000
+      internalID: -3962691315683779875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_82
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 54
+        width: 27
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e364292540975f620800000000000000
+      internalID: 2807283002207520318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_83
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 61
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23ea4adbb70480080800000000000000
+      internalID: -9221049336834249166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_84
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 74
+        width: 21
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79698f4b1130c3910800000000000000
+      internalID: 1818331724136355479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_85
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 66
+        width: 35
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31667c42aab715be0800000000000000
+      internalID: -1490274030991219181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_86
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 69
+        width: 36
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ccf28ad7c0383150800000000000000
+      internalID: 5852481350690602185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_87
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 79
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47e4962586107f010800000000000000
+      internalID: 1222447371425238644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_88
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 48
+        width: 31
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ab01edeabbf817d0800000000000000
+      internalID: -2947329175840552032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_89
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 62
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5dbdbc5918a076070800000000000000
+      internalID: 8099454006529350613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_90
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 59
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e010de38cab7acb10800000000000000
+      internalID: 2002548965197545742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_91
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 55
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4ae3f0e56b805c50800000000000000
+      internalID: 6651969919308261962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_92
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 47
+        width: 10
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c333c4cd711ed5ae0800000000000000
+      internalID: -1558842403403844804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_93
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 45
+        width: 19
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1b2c66194a0f5ad0800000000000000
+      internalID: -2711437141628671205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_94
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 54
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f97b82e5c5719b970800000000000000
+      internalID: 8771067434764908447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_95
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 22
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac8e0088558624340800000000000000
+      internalID: 4846550865567344842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_96
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 13
+        width: 33
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57f12884e142a48d0800000000000000
+      internalID: -2861434900756422795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_97
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 51
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7046a47117021d390800000000000000
+      internalID: -7795413809907473401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_98
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 40
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf61fb7d9b70e33f0800000000000000
+      internalID: -919288779167033605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_99
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 34
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31ced939ab3c58c30800000000000000
+      internalID: 4361107020286127123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_100
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 47
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5169ba14ba27e2940800000000000000
+      internalID: 5273278293564167701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_101
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 13
+        width: 28
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 457434141134eaa60800000000000000
+      internalID: 7687155355356448596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: grunges_102
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 12
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98dfce76825afbe30800000000000000
+      internalID: 4521514143864126857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      grunges_0: 8091276152201314219
+      grunges_1: -2431824584204291325
+      grunges_10: -2228209501911556479
+      grunges_100: 5273278293564167701
+      grunges_101: 7687155355356448596
+      grunges_102: 4521514143864126857
+      grunges_11: 561379321103523581
+      grunges_12: -4637609749873722008
+      grunges_13: 2094765339000524212
+      grunges_14: 4040987732887716376
+      grunges_15: -6083193571940541575
+      grunges_16: 187806578057021359
+      grunges_17: -6666516388459200761
+      grunges_18: -8998101515120284648
+      grunges_19: 5630054864828106922
+      grunges_2: 9187789171141239834
+      grunges_20: -215326302015885582
+      grunges_21: -2822727278718823926
+      grunges_22: 6037870255192020964
+      grunges_23: 927357696667854240
+      grunges_24: 950513061009343445
+      grunges_25: -1969865180116658061
+      grunges_26: 884460097385514050
+      grunges_27: 6462270612799708768
+      grunges_28: -4558000695629694471
+      grunges_29: 8784474186952931508
+      grunges_3: -3684274099665625823
+      grunges_30: 778631520348786171
+      grunges_31: -2524083063665128750
+      grunges_32: 2283083924315525644
+      grunges_33: 6791667775628083211
+      grunges_34: 2628018763846005572
+      grunges_35: 5141904389879301373
+      grunges_36: 7155128442600035294
+      grunges_37: -6613917403814055679
+      grunges_38: -6531316108941725838
+      grunges_39: -4292239303358978869
+      grunges_4: 6137288111039152776
+      grunges_40: 4660785156060660152
+      grunges_41: 5440103732615130947
+      grunges_42: 7411273150326738765
+      grunges_43: -3543387538346851976
+      grunges_44: 3449519673121581270
+      grunges_45: -5670303033711825816
+      grunges_46: -25298678438499023
+      grunges_47: 3392174330589948357
+      grunges_48: -8123886031591849145
+      grunges_49: 9118132604473078313
+      grunges_5: -7686364434421671461
+      grunges_50: 1608474354941628146
+      grunges_51: -3111667285008312967
+      grunges_52: -3631811241308787352
+      grunges_53: -8273530502453078819
+      grunges_54: -4144580599769640069
+      grunges_55: 7327684752805935291
+      grunges_56: 7889563983509205124
+      grunges_57: -5485628666327832796
+      grunges_58: 7973532884043442309
+      grunges_59: -2805319774093092181
+      grunges_6: 6611268202442549378
+      grunges_60: 8518925860466637334
+      grunges_61: -2829057853808777121
+      grunges_62: -6580514399425619231
+      grunges_63: -4340653387207487442
+      grunges_64: -8136392945689662365
+      grunges_65: -3207076978179276712
+      grunges_66: -5413805487489875394
+      grunges_67: -8662283711219223142
+      grunges_68: -8363608316869672291
+      grunges_69: -1477860636791483721
+      grunges_7: -3427479590731151411
+      grunges_70: 1407564661007228712
+      grunges_71: 1991173254432632997
+      grunges_72: -3261831808171180154
+      grunges_73: 4643676679293612546
+      grunges_74: -9053630759625858653
+      grunges_75: -6656119911771117309
+      grunges_76: 6180292530653816595
+      grunges_77: -5681172531476542938
+      grunges_78: -211721693824135429
+      grunges_79: 3354997683951167988
+      grunges_8: 2977341537682414974
+      grunges_80: 6614395405940542597
+      grunges_81: -3962691315683779875
+      grunges_82: 2807283002207520318
+      grunges_83: -9221049336834249166
+      grunges_84: 1818331724136355479
+      grunges_85: -1490274030991219181
+      grunges_86: 5852481350690602185
+      grunges_87: 1222447371425238644
+      grunges_88: -2947329175840552032
+      grunges_89: 8099454006529350613
+      grunges_9: -7441970312224003081
+      grunges_90: 2002548965197545742
+      grunges_91: 6651969919308261962
+      grunges_92: -1558842403403844804
+      grunges_93: -2711437141628671205
+      grunges_94: 8771067434764908447
+      grunges_95: 4846550865567344842
+      grunges_96: -2861434900756422795
+      grunges_97: -7795413809907473401
+      grunges_98: -919288779167033605
+      grunges_99: 4361107020286127123
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

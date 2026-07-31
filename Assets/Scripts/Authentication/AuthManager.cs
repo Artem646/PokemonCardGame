@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Firebase.Auth;
 using UnityEngine;
@@ -29,11 +30,8 @@ public class AuthManager : MonoBehaviour
     public void Initialize()
     {
         auth = FirebaseAuthService.Instance.GetAuth();
-
         if (auth.CurrentUser != null && currentProvider == null && !IsRestored)
-        {
             RestoreSession();
-        }
     }
 
     private async void RestoreSession()
@@ -60,7 +58,7 @@ public class AuthManager : MonoBehaviour
                 Debug.LogWarning("[P][AuthManager] Не удалось определить тип провайдера.");
             }
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[P][AuthManager] Ошибка восстановления токена: {e.Message}");
         }
@@ -75,9 +73,9 @@ public class AuthManager : MonoBehaviour
         foreach (IUserInfo provider in providerDataList)
         {
             if (provider.ProviderId == "google.com")
-            {
                 return AuthType.Google;
-            }
+            else if (provider.ProviderId == "password")
+                return AuthType.Email;
         }
 
         return AuthType.Unknown;
@@ -94,6 +92,27 @@ public class AuthManager : MonoBehaviour
         currentProvider.SignIn();
         Debug.Log($"[P][AuthManager] Вход через {type} запущен.");
     }
+
+    public void AuthenticateEmail(AuthType type, string email, string password, bool isLogin, Action<AuthErrorTarget, string> onErrorAction)
+    {
+        currentProvider = factory.CreateAuthProvider(type);
+        if (currentProvider == null)
+        {
+            Debug.LogError($"[P][AuthManager] Не удалось создать провайдер для типа {type}");
+            return;
+        }
+
+        EmailProvider emailProvider = currentProvider as EmailProvider;
+        emailProvider.Email = email;
+        emailProvider.Password = password;
+        emailProvider.OnErrorAction = onErrorAction;
+
+        if (isLogin) emailProvider.SignIn();
+        else emailProvider.SignUp();
+
+        Debug.Log($"[P][AuthManager] {(isLogin ? "Вход" : "Регистрация")} через {type} запущен(а).");
+    }
+
 
     public void SignOut()
     {

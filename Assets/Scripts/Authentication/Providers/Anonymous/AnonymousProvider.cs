@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class AnonymousProvider : IAuthProvider
 {
-    private readonly AnonymousSingInController anonymousController;
+    private readonly AnonymousSignInController anonymousController;
 
     public AnonymousProvider()
     {
-        anonymousController = new AnonymousSingInController();
+        anonymousController = new AnonymousSignInController();
     }
 
     public void SignIn()
     {
         try
         {
-            var anonymousSignInTask = anonymousController.SignInWithAnonymousAsync();
+            Task<AuthResult> anonymousSignInTask = anonymousController.SignInWithAnonymousAsync();
             anonymousSignInTask.ContinueWith(taskResult =>
             {
                 AuthResponseHandler.HandleAnonymousFirebaseResult(taskResult, OnAnonymousSuccess);
@@ -29,7 +29,7 @@ public class AnonymousProvider : IAuthProvider
         }
     }
 
-    private void OnAnonymousSuccess(AuthResult result)
+    private void OnAnonymousSuccess()
     {
         Localizer.LocalizeNotification(NotificationKey.AnonymousSingInSuccess, NotificationType.Success);
     }

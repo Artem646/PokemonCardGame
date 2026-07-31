@@ -2,11 +2,12 @@ public class AuthFactory : IAuthFactory
 {
     public IAuthProvider CreateAuthProvider(AuthType type)
     {
-        switch (type)
+        return type switch
         {
-            case AuthType.Google: return new GoogleProvider();
-            case AuthType.Anonymous: return new AnonymousProvider();
-            default: throw new System.NotImplementedException();
-        }
+            AuthType.Google => new GoogleProvider(),
+            AuthType.Email => new EmailProvider(),
+            AuthType.Anonymous => new AnonymousProvider(),
+            _ => throw new System.NotImplementedException(),
+        };
     }
 }

@@ -13,7 +13,7 @@ public interface IUIToolkitCardView : ICardView
     VisualTreeAsset CardTemplate { get; }
 }
 
-public interface IUGUICardView : ICardView
+public interface ICard3DView : ICardView
 {
     GameObject CardRoot { get; }
     GameObject CardPrefab { get; }
@@ -22,7 +22,9 @@ public interface IUGUICardView : ICardView
 public interface ICollectionCardView : IUIToolkitCardView
 {
     void ApplyOwnedCardStyle(bool isUserCard);
-    void ApplyStyleForCloneCard();
+    void ApplyCloneCardStyle();
+    void ApplyCardStyleForActiveScene(string nameActiveScene);
+    void RemoveAllAddedStyles();
     void SetActive(bool isActive);
     void RegisterClickHandlers(EventCallback<ClickEvent> onClick);
     void RegisterClickHandlersOnDescriptionButton(EventCallback<ClickEvent> onClick);
@@ -32,11 +34,12 @@ public interface ICollectionCardView : IUIToolkitCardView
 public interface IDeckCardView : IUIToolkitCardView
 {
     void SetSelected(bool isSelected);
+    void ApplyCloneCardStyle();
     void RegisterClickHandlers(EventCallback<ClickEvent> onClick);
     void UnregisterClickHandlers(EventCallback<ClickEvent> onClick);
 }
 
-public interface IBattleCardView : IUGUICardView
+public interface IBattleCardView : ICard3DView
 {
     void ApplyFaceDownState(bool faceDown);
     void ApplyBattleStyle(CardBattleState battleState);

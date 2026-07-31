@@ -129,8 +129,9 @@ GameObject:
   m_Component:
   - component: {fileID: 163190215}
   - component: {fileID: 163190214}
+  - component: {fileID: 163190216}
   m_Layer: 0
-  m_Name: DeckEditorController
+  m_Name: DeckEditor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6bf917d47c32de4db7633600d356cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeckEditorController
-  uiDocument: {fileID: 1559191280}
-  cardTemplate: {fileID: 9197481963319205126, guid: a6ba830796f83b547af6e2c02e20474d, type: 3}
+  uiDocument: {fileID: 163190216}
+  cardTemplate: {fileID: 9197481963319205126, guid: 9d87e140a326e584d9a7c88d2c30722f, type: 3}
 --- !u!4 &163190215
 Transform:
   m_ObjectHideFlags: 0
@@ -165,6 +166,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &163190216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163190213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 157df9b1cb8a8fd4f98cbd44b780b8ed, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: da254bc7c7af595479fb36a9885bf0b5, type: 3}
+  m_SortingOrder: 1
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!1 &306247499
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -334,7 +358,7 @@ MonoBehaviour:
   uiDocument: {fileID: 1875852629}
   deckTemplate: {fileID: 9197481963319205126, guid: 8eb0546bf0588a746ac10eea8e78d11d, type: 3}
   editorController: {fileID: 163190214}
-  deckCardTemplate: {fileID: 9197481963319205126, guid: a6ba830796f83b547af6e2c02e20474d, type: 3}
+  deckCardTemplate: {fileID: 9197481963319205126, guid: 9d87e140a326e584d9a7c88d2c30722f, type: 3}
 --- !u!4 &454841769
 Transform:
   m_ObjectHideFlags: 0
@@ -345,61 +369,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.0094, y: 2.59736, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &776724328
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 776724330}
-  - component: {fileID: 776724329}
-  m_Layer: 5
-  m_Name: SettingsUIDocument
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &776724329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776724328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 157df9b1cb8a8fd4f98cbd44b780b8ed, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 434ecefb9d751b0419bfeeede8fcfa95, type: 3}
-  m_SortingOrder: 1
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
---- !u!4 &776724330
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776724328}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -435,7 +404,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DecksSceneController
   uiDocument: {fileID: 1875852629}
-  settingsController: {fileID: 1143605769}
   editorController: {fileID: 163190214}
 --- !u!4 &992921892
 Transform:
@@ -462,8 +430,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1143605770}
   - component: {fileID: 1143605769}
+  - component: {fileID: 1143605771}
   m_Layer: 0
-  m_Name: SettingsController
+  m_Name: Settings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -481,7 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e6f3da9e99e1e842911f7fba122e197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsSceneController
-  uiDocument: {fileID: 776724329}
+  uiDocument: {fileID: 1143605771}
 --- !u!4 &1143605770
 Transform:
   m_ObjectHideFlags: 0
@@ -497,30 +466,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1559191279
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1559191281}
-  - component: {fileID: 1559191280}
-  m_Layer: 5
-  m_Name: DeckEditorUIDocument
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1559191280
+--- !u!114 &1143605771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559191279}
+  m_GameObject: {fileID: 1143605768}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
@@ -528,7 +480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: 157df9b1cb8a8fd4f98cbd44b780b8ed, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: da254bc7c7af595479fb36a9885bf0b5, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 434ecefb9d751b0419bfeeede8fcfa95, type: 3}
   m_SortingOrder: 1
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -537,21 +489,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!4 &1559191281
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559191279}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1875852628
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +552,5 @@ SceneRoots:
   - {fileID: 1875852630}
   - {fileID: 992921892}
   - {fileID: 454841769}
-  - {fileID: 1559191281}
   - {fileID: 163190215}
-  - {fileID: 776724330}
   - {fileID: 1143605770}

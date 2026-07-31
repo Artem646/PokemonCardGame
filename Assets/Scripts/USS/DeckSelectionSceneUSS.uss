@@ -1,92 +1,143 @@
-:root {
-    --bg-color: rgb(33, 35, 61);
-    --text-color: rgb(255, 255, 255);
-}
-
-.top-bar {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    background-color: rgb(17, 26, 40);
-    padding: 12px 20px;
-    height: 15%;
-    width: 100%;
-}
-
-.player-name {
-    font-size: 20px;
-    color: var(--text-color);
-}
-
-.nav-buttons {
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-grow: 1;
-    margin-left: 0;
+.main-content {
     width: 100%;
     height: 100%;
-    margin-right: 50px;
-}
-
-.nav-button {
-    background-color: transparent;
-    color: var(--text-color);
-    font-size: 20px;
-    min-width: 100px;
-    min-height: 40px;
-    width: 10%;
-    border-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-deck-selection-scene);
+    flex-grow: 1;
     padding: 0;
 }
 
-.main-content {
+.selection-panel {
+    width: 50%;
+    height: 70%;
     flex-direction: row;
-    flex-grow: 1;
-    background-color: var(--bg-color);
-    padding: 15px;
-    display: flex;
-    visibility: visible;
-    height: 100%;
-    width: 100%;
-    justify-content: flex-start;
-    align-items: stretch;
-    align-content: auto;
-    align-self: auto;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-selection-panel);
+    border-width: 5px;
+    border-color: var(--selection-panel-border-color);
+    border-radius: 50px;
 }
 
-#deckSelectField {
-    width: 220px;
-    height: 32px;
-    border-radius: 6px;
-    padding-left: 0;
-    font-size: 14px;
-    color: var(--text-color);
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
+.make-deck-field {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    background-color: var(--bg-make-deck-field);
+    border-right-width: 3px;
+    border-right-color: var(--make-deck-field-border-color);
+    border-top-left-radius: 45px;
+    border-bottom-left-radius: 45px;
+    margin-right: 50px;
+}
+
+.make-deck-label {
+    width: 456px;
+    height: 116px;
+    font-size: 70px;
+    color: var(--make-deck-label-text-color);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin: 0;
+    margin-bottom: 80px;
+    padding: 0;
+}
+
+.make-deck-button {
+    width: 335px;
+    height: 96px;
+    align-self: center;
+    background-color: var(--bg-make-deck-button);
+    font-size: 35px;
+    color: var(--make-deck-button-text-color);
+    unity-font-style: bold;
+    border-radius: 35px;
+    border-width: 4px;
+    margin: 0;
+    padding: 0;
+}
+
+.select-deck-field {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    background-color: var(--bg-select-deck-field);
+    border-left-width: 3px;
+    border-left-color: var(--make-select-field-border-color);
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
+    margin-left: 50px;
+}
+
+.select-deck-label {
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    color: var(--select-deck-label-text-color);
+    unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.confirm-deck-button {
+    width: 293px;
+    height: 75px;
+    align-self: center;
+    background-color: var(--bg-select-deck-button);
+    font-size: 35px;
+    color: var(--select-deck-button-text-color);
+    unity-font-style: bold;
+    border-width: 4px;
+    border-radius: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.deck-dropdown {
+    width: 384px; 
+    height: 82px; 
+    background-color: var(--bg-deck-dropdown); 
+    font-size: 40px; 
+    color: var(--deck-dropdown-text-color); 
+    unity-font-style: normal; 
+    -unity-text-align: middle-center; 
+    margin: 0; 
+    margin-bottom: 50px; 
+    border-radius: 30px; 
 }
 
 #deckSelectField .unity-label {
     display: none;
 }
 
-#deckSelectField .unity-base-popup-field__arrow {
-    width: 30px;
-    height: 25px;
-    margin-right: 20px;
-    margin-left: 20px;
+#deckSelectField .unity-base-field__input {
+    padding: 0;
+    margin: 0;
+    border-radius: 30px;
 }
 
 #deckSelectField .unity-base-popup-field__text {
     width: 85%;
     margin: 0;
     border-right-width: 2px;
-    border-color: black;
+    border-color: var(--deck-dropdown-line);
     padding-left: 50px;
 }
 
-#deckSelectField .unity-base-field__input {
-    color: var(--text-color);
-    padding: 0;
-    margin: 0;
+#deckSelectField .unity-base-popup-field__arrow {
+    width: 35px;
+    height: 40px;
+    margin-right: 20px;
+    margin-left: 20px;
+    -unity-background-image-tint-color: var(--deck-dropdown-arrow);
+    background-image: url("project://database/Assets/Photon/Fusion/Runtime/Statistics/StatsIcons/FusionStatsToggleArrowIcon.png?fileID=2800000&guid=330babd635d5dfc4691ae3151ffc4491&type=3#FusionStatsToggleArrowIcon");
 }

@@ -3,10 +3,14 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UIElements;
+using System.Collections;
+using System.Threading.Tasks;
 
 public class LoadingSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
+    [SerializeField] private VisualTreeAsset cardTemplate;
+
     private VisualElement root;
     private Label tapOnScreenLabel;
     private VisualElement spinner;
@@ -14,13 +18,14 @@ public class LoadingSceneController : MonoBehaviour
     private Tween spinnerRotateTween;
     private Tween spinnerScaleTween;
 
-    private bool cardsLoaded = false;
+    private bool isReadyToTap = false;
 
     private void Awake()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 90;
+        Application.targetFrameRate = 60;
         ApplySavedLocale();
+        ApplySavedTheme();
     }
 
     private void ApplySavedLocale()
@@ -33,22 +38,28 @@ public class LoadingSceneController : MonoBehaviour
         }
     }
 
-    private async void Start()
+    private void ApplySavedTheme()
+    {
+        ThemeStyleSheet darkTheme = Resources.Load<ThemeStyleSheet>("Themes/DarkTheme");
+        ThemeStyleSheet lightTheme = Resources.Load<ThemeStyleSheet>("Themes/LightTheme");
+
+        string currentThemeString = PlayerPrefs.GetString("SelectedTheme", "Dark");
+        switch (currentThemeString)
+        {
+            case "Dark":
+                uiDocument.panelSettings.themeStyleSheet = darkTheme;
+                break;
+            case "Light":
+                uiDocument.panelSettings.themeStyleSheet = lightTheme;
+                break;
+        }
+    }
+
+    private void Start()
     {
         InitializeUI();
-
         LocalizeElements();
-
-        StartBlinkTextAnimation();
-        StartSpinnerAnimation();
-
-        root.RegisterCallback<PointerDownEvent>(OnScreenTap);
-
-        if (!cardsLoaded)
-        {
-            await CardRepository.Instance.GetAllGameCards();
-            cardsLoaded = true;
-        }
+        StartCoroutine(LoadingRoutine());
     }
 
     private void InitializeUI()
@@ -64,17 +75,26 @@ public class LoadingSceneController : MonoBehaviour
         Localizer.LocalizeElement(root, "tapOnScreenLabel", "TapOnScreenLabel", "ElementsText");
     }
 
-    private void StartBlinkTextAnimation()
+    private IEnumerator LoadingRoutine()
     {
-        tapOnScreenLabel.style.opacity = 1f;
+        StartSpinnerAnimation();
 
-        blinkTextTween = DOTween.To(
-            () => tapOnScreenLabel.resolvedStyle.opacity,
-            x => tapOnScreenLabel.style.opacity = x,
-            0f, 1f
-        )
-        .SetLoops(-1, LoopType.Yoyo)
-        .SetEase(Ease.InOutQuad);
+        Task loadCardsTask = CardRepository.Instance.LoadGameCards();
+        yield return new WaitForSeconds(2);
+        yield return new WaitUntil(() => loadCardsTask.IsCompleted);
+
+        CardRepository.Instance.PreBuildGameCollectionCardControllers(cardTemplate);
+
+        StopSpinnerAnimation();
+
+        spinner.style.display = DisplayStyle.None;
+        tapOnScreenLabel.style.display = DisplayStyle.Flex;
+
+        StartBlinkTextAnimation();
+
+        isReadyToTap = true;
+
+        root.RegisterCallback<PointerDownEvent>(OnScreenTap);
     }
 
     private void StartSpinnerAnimation()
@@ -91,21 +111,38 @@ public class LoadingSceneController : MonoBehaviour
 
         spinnerScaleTween = DOTween.To(
             () => spinner.resolvedStyle.scale.value.x,
-            x => spinner.style.scale = new Scale(new Vector3(x, x, 10f)),
+            x => spinner.style.scale = new Scale(new Vector3(x, x, 1f)),
             1.15f, 1.2f
         )
         .SetEase(Ease.Linear)
         .SetLoops(-1, LoopType.Yoyo);
     }
 
-    private void OnScreenTap(PointerDownEvent evt)
+    private void StopSpinnerAnimation()
     {
-        blinkTextTween?.Kill();
         spinnerRotateTween?.Kill();
         spinnerScaleTween?.Kill();
+    }
 
+    private void StartBlinkTextAnimation()
+    {
         tapOnScreenLabel.style.opacity = 1f;
-        spinner.style.scale = new Scale(new Vector3(1f, 1f, 1f));
+
+        blinkTextTween = DOTween.To(
+            () => tapOnScreenLabel.resolvedStyle.opacity,
+            x => tapOnScreenLabel.style.opacity = x,
+            0.2f, 1f
+        )
+        .SetLoops(-1, LoopType.Yoyo)
+        .SetEase(Ease.InOutQuad);
+    }
+
+    private void OnScreenTap(PointerDownEvent evt)
+    {
+        if (!isReadyToTap) return;
+
+        blinkTextTween?.Kill();
+        tapOnScreenLabel.style.opacity = 1f;
 
         InternetChecker.Instance.VerifyInternetConnection();
     }

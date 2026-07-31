@@ -6,14 +6,19 @@ using UnityEngine.UIElements;
 public partial class ParallelogramButton : Button
 {
     [UxmlAttribute] public string TargetSceneName { get; set; } = "";
-    public Color FillColor { get; set; } = Color.clear;
-    public Color BorderColor { get; set; } = Color.whiteSmoke;
-    public float BorderWidth { get; set; } = 2f;
-    public float ActiveSceneBorderWidth { get; set; } = 4f;
-    public float SkewOffset { get; set; } = 30f;
-    public Color HoverColor { get; set; } = new Color(0.3f, 0.8f, 0.4f, 0.3f);
-    public Color PressedColor { get; set; } = new Color(0.1f, 0.4f, 0.2f);
-    public Color ActiveSceneBorderColor { get; set; } = Color.aquamarine;
+    [UxmlAttribute] public Color FillColor { get; set; } = Color.clear;
+    [UxmlAttribute] public Color BorderColor { get; set; } = Color.whiteSmoke;
+    [UxmlAttribute] public float BorderWidth { get; set; } = 2f;
+    [UxmlAttribute] public float ActiveSceneBorderWidth { get; set; } = 4f;
+    [UxmlAttribute] public float SkewOffset { get; set; } = 30f;
+    [UxmlAttribute] public Color HoverColor { get; set; } = new Color(0.3f, 0.8f, 0.4f, 0.3f);
+    [UxmlAttribute] public Color PressedColor { get; set; } = new Color(0.1f, 0.4f, 0.2f);
+    [UxmlAttribute] public Color ActiveSceneBorderColor { get; set; } = Color.aquamarine;
+
+    private CustomStyleProperty<Color> FillColorUSS = new("--parallelogram-btn-fill-color");
+    private CustomStyleProperty<Color> HoverColorUSS = new("--parallelogram-btn-hover-color");
+    private CustomStyleProperty<Color> BorderColorUSS = new("--parallelogram-btn-border-color");
+    private CustomStyleProperty<Color> ActiveBorderColorUSS = new("--parallelogram-btn-active-color");
 
     private bool isHovered = false;
     private bool isPressed = false;
@@ -26,6 +31,8 @@ public partial class ParallelogramButton : Button
         RegisterCallback<MouseLeaveEvent>(evt => { isHovered = false; isPressed = false; MarkDirtyRepaint(); });
         RegisterCallback<MouseDownEvent>(evt => { isPressed = true; MarkDirtyRepaint(); });
         RegisterCallback<MouseUpEvent>(evt => { isPressed = false; MarkDirtyRepaint(); });
+
+        RegisterCallback<CustomStyleResolvedEvent>(evt => MarkDirtyRepaint());
     }
 
     private void OnGenerateVisualContent(MeshGenerationContext ctx)
@@ -34,6 +41,11 @@ public partial class ParallelogramButton : Button
         float w = resolvedStyle.width;
         float h = resolvedStyle.height;
         float halfBorder = BorderWidth / 2f;
+
+        if (customStyle.TryGetValue(FillColorUSS, out var fillColor)) FillColor = fillColor;
+        if (customStyle.TryGetValue(HoverColorUSS, out var hoverColor)) HoverColor = hoverColor;
+        if (customStyle.TryGetValue(BorderColorUSS, out var borderColor)) BorderColor = borderColor;
+        if (customStyle.TryGetValue(ActiveBorderColorUSS, out var activeSceneBorderColor)) ActiveSceneBorderColor = activeSceneBorderColor;
 
         Color currentColor = FillColor;
         if (isPressed) currentColor = PressedColor;

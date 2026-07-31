@@ -1,78 +1,98 @@
-:root {
-    --bg-color: rgb(14, 20, 32);
-    --text-color: rgb(255, 255, 255);
-}
-
-.top-bar {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    background-color: rgb(17, 26, 40);
-    padding: 12px 20px;
-    height: 15%;
-    width: 100%;
-}
-
-.player-name {
-    font-size: 20px;
-    color: var(--text-color);
-}
-
-.nav-buttons {
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-grow: 1;
-    margin-left: 0;
-    width: 100%;
-    height: 100%;
-    margin-right: 50px;
-}
-
-.nav-button {
-    background-color: transparent;
-    color: var(--text-color);
-    font-size: 20px;
-    min-width: 100px;
-    min-height: 40px;
-    width: 10%;
-    border-width: 0;
-    padding: 0;
-}
-
 .main-content {
-    flex-direction: row;
-    flex-grow: 1;
-    background-color: var(--bg-color);
-    padding: 15px;
-    display: flex;
-    visibility: visible;
-    height: 100%;
     width: 100%;
-    justify-content: flex-start;
-    align-items: stretch;
-    align-content: auto;
-    align-self: auto;
+    height: 100%;
+    flex-grow: 1;
+    background-color: var(--bg-main);
+    padding: 20px 0 10px 15px;
 }
 
-.element-icon {
-    width: 111px;
-    height: 111px;
-    background-color: rgba(188, 188, 188, 0);
-    border-width: 0;
-    padding: 0;
-    margin: 0;
-    margin-right: 40px;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    flex-shrink: 1;
+.cards-scroll {
+    width: 100%;
+    height: 100%;
 }
 
 #unity-content-container {
-    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+.cards-container {
+    width: 100%;
+    height: 100%;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
+}
+
+.filter-panel {
+    width: 350px;
+    height: 100%;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    background-color: var(--bg-main);
+    margin-left: -252px;
+}
+
+.elements-container {
+    width: 70%;
+    height: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: rgb(28, 36, 51);
+    border-width: 2px;
+    border-left-width: 0;
+    border-color: rgb(0, 209, 197);
+    border-top-right-radius: 150px;
+    border-bottom-right-radius: 150px;
+}
+
+.element-icon {
+    width: 100px;
+    height: 100px;
+    border-width: 2px;
+    border-radius: 50px;
+    border-color: rgb(0, 209, 197);
+    margin: 10px;
+    margin-top: 2px;
+    padding: 0;
+}
+
+.open-filter-button-container {
+    width: 100px;
+    height: 100%;
+    justify-content: center;
+    padding-right: 10px;
+}
+
+.open-filter-button {
+    width: 100%;
+    height: 25%;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-open-filter-button);
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-width: 2px;
+    border-left-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.filters-label {
+    rotate: 90deg; 
+    font-size: 30px;
+}
+
+.overlay {
+    width: 100%; 
+    height: 100%; 
+    position: absolute;
+    flex-direction: row; 
+    justify-content: center; 
+    align-items: center; 
+    background-color: rgba(0, 0, 0, 0.39); 
 }
 
 .overlay-none {
@@ -81,4 +101,12 @@
 
 .overlay-active {
     display: flex;
+}
+
+.fade-overlay {
+    width: 100%; 
+    height: 100%; 
+    position: absolute;
+    opacity: 0;
+    background-color: rgb(0, 0, 0); 
 }

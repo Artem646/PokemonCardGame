@@ -1,73 +1,52 @@
 using UnityEngine;
 using DG.Tweening;
-using UGUI = UnityEngine.UI;
+using UnityEngine.UI;
 
 public static class BattleCardScaleAnimator
 {
-    private static RectTransform clone;
-    private static Vector2 lastLocalPos;
+    private static Vector3 startLocalPos;
+    private static Quaternion startRot;
+    private static Vector3 startScale;
+    private static GameObject cloneCard;
     private static Sequence currentSequence;
 
-    private const float TARGET_SCALE = 3.7f;
-    private const float DURATION = 0.45f;
+    private const float DURATION = 0.5f;
 
-    public static void ShowCard(RectTransform sourceCard, RectTransform cloneCard, GameObject overlay, Canvas canvas)
+    public static void ShowCard(GameObject clone, GameObject overlayBackground, Canvas canvas)
     {
         if (currentSequence != null) return;
 
-        RectTransform overlayRectTransform = overlay.GetComponent<RectTransform>();
+        cloneCard = clone;
+        cloneCard.transform.SetParent(canvas.transform);
 
-        Vector3 worldPos = sourceCard.position;
+        startLocalPos = cloneCard.transform.localPosition;
+        startRot = cloneCard.transform.rotation;
+        startScale = cloneCard.transform.localScale;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            overlayRectTransform,
-            RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, worldPos),
-            canvas.worldCamera,
-            out Vector2 localPos
-        );
-
-        clone = cloneCard;
-        cloneCard.transform.SetParent(overlayRectTransform, false);
-        clone.anchoredPosition = localPos;
-        clone.sizeDelta = sourceCard.sizeDelta;
-        clone.localScale = Vector3.one;
-
-        lastLocalPos = localPos;
-
-        Vector2 targetPos = Vector2.zero;
-
-        overlay.SetActive(true);
+        overlayBackground.SetActive(true);
 
         currentSequence = DOTween.Sequence();
-
-        currentSequence.Join(clone.DOAnchorPos(targetPos, DURATION).SetEase(Ease.InQuad));
-        currentSequence.Join(clone.DOScale(TARGET_SCALE, DURATION).SetEase(Ease.InQuad));
-        currentSequence.Join(overlay.GetComponent<UGUI.Image>().DOFade(0.6f, DURATION));
-
-        currentSequence.OnComplete(() =>
-        {
-            currentSequence = null;
-        });
+        currentSequence.Append(cloneCard.transform.DOLocalMove(new Vector3(0, -27f, -240f), DURATION).SetEase(Ease.OutQuad));
+        currentSequence.Join(cloneCard.transform.DORotate(new Vector3(-45f, 0, 0), DURATION, RotateMode.WorldAxisAdd).SetEase(Ease.OutQuad));
+        currentSequence.Join(cloneCard.transform.DOScale(new Vector3(6000f, 14260f, 13120f), DURATION).SetEase(Ease.OutQuad));
+        currentSequence.Insert(DURATION * 0.62f, overlayBackground.GetComponent<Image>().DOFade(0.6f, DURATION).SetEase(Ease.OutQuad));
+        currentSequence.OnComplete(() => { currentSequence = null; });
     }
 
-    public static void HideCard(GameObject overlay)
+    public static void HideCard(GameObject overlayBackground)
     {
-        RectTransform overlayRectTransform = overlay.GetComponent<RectTransform>();
-
-        if (overlayRectTransform.childCount == 0 || clone == null || currentSequence != null) return;
+        if (currentSequence != null) return;
 
         currentSequence = DOTween.Sequence();
-
-        currentSequence.Join(clone.DOAnchorPos(lastLocalPos, DURATION).SetEase(Ease.InQuad));
-        currentSequence.Join(clone.DOScale(1f, DURATION).SetEase(Ease.InQuad));
-        currentSequence.Join(clone.DORotate(new Vector3(0, 0, 10f), DURATION * 0.5f).SetLoops(2, LoopType.Yoyo));
-        currentSequence.Join(overlayRectTransform.GetComponent<UGUI.Image>().DOFade(0f, DURATION));
-
+        currentSequence.Append(cloneCard.transform.DOLocalMove(startLocalPos, DURATION).SetEase(Ease.OutQuad));
+        currentSequence.Join(cloneCard.transform.DORotateQuaternion(startRot, DURATION).SetEase(Ease.OutQuad));
+        currentSequence.Join(cloneCard.transform.DOScale(startScale, DURATION).SetEase(Ease.OutQuad));
+        currentSequence.Join(overlayBackground.GetComponent<Image>().DOFade(0, DURATION).SetEase(Ease.OutQuad));
         currentSequence.OnComplete(() =>
         {
-            overlay.SetActive(false);
+            overlayBackground.SetActive(false);
             CardStateInteractionManager.EndRaise();
-            Object.Destroy(clone.gameObject);
+            Object.Destroy(cloneCard);
             currentSequence = null;
         });
     }

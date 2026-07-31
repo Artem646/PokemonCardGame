@@ -1,74 +1,100 @@
+using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using DG.Tweening;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using System.Collections;
-using System;
 
 public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Transform DefaultParent { get; set; }
-    public Transform DefaultTempCardParent { get; set; }
+    [SerializeField] private LayerMask dragSurfaceMask;
 
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private RectTransform rectTransform;
+    private Camera mainCamera;
 
-    private GameManagerScript gameManager;
-    private BotTurnManager botTurnManager;
-    private NetworkGameTurnManager networkTurnManager;
-    private NetworkGameController networkGameController;
+    private CardSlot startSlot;
+    private CardSlot highlightedSlot;
 
-    private Canvas canvas;
-    private Vector3 originalScale;
-    private GameObject tempCard;
-
-    private FieldType prevFieldType;
-    private FieldType currentFieldType;
     private bool isDraggable;
+    private Vector3 dragOffset;
+    private float dragHeight = 0.2f;
+
+    private Bounds tableBounds;
+    private float cardHalfWidth;
+    private float cardHalfLength;
+
+    private static RaycastHit[] rayHits = new RaycastHit[10];
+
+    private GameManager gameManager;
+    private GameInterfaceController gameInterfaceController;
+    private CameraViewManager cameraViewManager;
+    private BotTurnManager botTurnManager;
+    private NetworkGameTurnManager networkGameTurnManager;
+    private NetworkGameController networkGameController;
 
     private GameType currentType = GameTypeConfig.CurrentType;
 
-    private void Awake()
+    private void InitObjectsIfNeeded()
     {
-        canvas = GetComponentInParent<Canvas>();
-        originalScale = rectTransform.localScale;
-        tempCard = GameObject.Find("TempSlot");
-        gameManager = FindAnyObjectByType<GameManagerScript>();
-        botTurnManager = FindAnyObjectByType<BotTurnManager>();
-        networkTurnManager = FindAnyObjectByType<NetworkGameTurnManager>();
-        networkGameController = FindAnyObjectByType<NetworkGameController>();
+        if (mainCamera == null) mainCamera = Camera.main;
+        if (cameraViewManager == null) cameraViewManager = FindAnyObjectByType<CameraViewManager>();
+        if (gameManager == null) gameManager = FindAnyObjectByType<GameManager>();
+        if (gameInterfaceController == null) gameInterfaceController = FindAnyObjectByType<GameInterfaceController>();
+        if (currentType == GameType.Bot)
+        {
+            if (botTurnManager == null)
+                botTurnManager = FindAnyObjectByType<BotTurnManager>();
+        }
+        else if (currentType == GameType.Multiplayer)
+        {
+            if (networkGameController == null || networkGameTurnManager == null)
+            {
+                networkGameController = FindAnyObjectByType<NetworkGameController>();
+                networkGameTurnManager = FindAnyObjectByType<NetworkGameTurnManager>();
+            }
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        DefaultParent = DefaultTempCardParent = transform.parent;
+        InitObjectsIfNeeded();
 
-        if (DefaultParent.TryGetComponent<DropPlaceScript>(out var originDrop))
-        {
-            currentFieldType = originDrop.type;
-            prevFieldType = originDrop.type;
-        }
+        if (transform.parent.TryGetComponent<CardSlot>(out var slot))
+            startSlot = slot;
         else
-        {
-            currentFieldType = FieldType.NONE;
-            prevFieldType = FieldType.NONE;
-        }
+            startSlot = null;
 
-        isDraggable = gameManager.IsMyTurn && currentFieldType == FieldType.SELF_HAND
+        isDraggable = gameManager.IsMyTurn && startSlot.type == FieldSlotType.SelfHandSlot
             && (currentType == GameType.Multiplayer ?
-                networkTurnManager.CurrentPhase == TurnPhase.PlayCard :
-                botTurnManager.CurrentPhase == TurnPhase.PlayCard);
+            networkGameTurnManager.CurrentPhase == TurnPhase.PlayCard :
+            botTurnManager.CurrentPhase == TurnPhase.PlayCard);
+
+        if (isDraggable && cameraViewManager.IsZoomView)
+            return;
+
+        if (isDraggable && cameraViewManager.CurrentViewMode != CameraViewMode.Default)
+        {
+            NotificationManager.ShowNotification(@"Перемещать объекты можно только в виде ""Под углом""", NotificationType.Info, 1f);
+            return;
+        }
 
         if (isDraggable && CardStateInteractionManager.TryBeginDrag(this))
         {
-            tempCard.transform.SetParent(DefaultTempCardParent);
-            tempCard.transform.SetSiblingIndex(transform.GetSiblingIndex());
+            Ray ray = mainCamera.ScreenPointToRay(eventData.position);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, dragSurfaceMask))
+            {
+                tableBounds = hit.collider.bounds;
 
-            transform.SetParent(canvas.transform, true);
+                BoxCollider cardBoxCollider = gameObject.GetComponent<BoxCollider>();
+                cardHalfWidth = cardBoxCollider.bounds.extents.x + 0.4f;
+                cardHalfLength = cardBoxCollider.bounds.extents.z + 0.4f;
 
-            canvasGroup.blocksRaycasts = false;
-            rectTransform.DOScale(originalScale * 1.15f, 0.1f);
+                dragOffset = transform.position - hit.point;
+                dragOffset.y = 0;
+
+                CardStateInteractionManager.LockCard(this, transform);
+
+                transform.DOMove(transform.position + Vector3.up * dragHeight, 0.15f);
+                transform.DOScale(transform.localScale * 1.1f, 0.1f);
+            }
         }
     }
 
@@ -76,138 +102,213 @@ public class CardMovemantScript : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (isDraggable && CardStateInteractionManager.IsDraggingBy(this))
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform, eventData.position,
-            canvas.worldCamera, out Vector2 localPoint);
+            Plane tablePlane = new(Vector3.up, new Vector3(0, tableBounds.max.y, 0));
 
-            rectTransform.localPosition = localPoint;
+            Ray ray = mainCamera.ScreenPointToRay(eventData.position);
+            if (tablePlane.Raycast(ray, out float distance))
+            {
+                Vector3 mouseWorldPoint = ray.GetPoint(distance);
+                Vector3 desiredPos = mouseWorldPoint + dragOffset;
 
-            if (tempCard.transform.parent != DefaultTempCardParent)
-                tempCard.transform.SetParent(DefaultTempCardParent);
+                float clampedX = Mathf.Clamp(desiredPos.x, tableBounds.min.x + cardHalfWidth, tableBounds.max.x - cardHalfWidth);
+                float clampedZ = Mathf.Clamp(desiredPos.z, tableBounds.min.z + cardHalfLength, tableBounds.max.z - cardHalfLength);
 
-            UpdateTempCardPosition();
+                transform.position = new Vector3(clampedX, tableBounds.max.y + dragHeight, clampedZ);
+            }
+
+            UpdateSlotHighlight(eventData);
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (isDraggable && CardStateInteractionManager.IsDraggingBy(this))
-        {
-            CardStateInteractionManager.EndDrag();
-            canvasGroup.blocksRaycasts = true;
-            StartCoroutine(OnEndDragRoutine());
-        }
+            StartCoroutine(OnEndDragRoutine(eventData));
     }
 
-    private IEnumerator OnEndDragRoutine()
+    private IEnumerator OnEndDragRoutine(PointerEventData eventData)
     {
-        yield return transform.DOMove(tempCard.transform.position, 0.3f).SetEase(Ease.OutQuad).WaitForCompletion();
-
-        transform.SetParent(DefaultParent, true);
-        transform.SetSiblingIndex(tempCard.transform.GetSiblingIndex());
-
-        UpdateCardIndexInHandListController(transform.GetSiblingIndex());
-
-        tempCard.transform.SetParent(canvas.transform);
-        tempCard.transform.localPosition = new Vector3(2600, 0);
-
-        rectTransform.DOScale(originalScale, 0.1f);
-
-        if (DefaultParent.TryGetComponent<DropPlaceScript>(out var dropPlace))
+        if (highlightedSlot != null)
         {
-            if (prevFieldType != dropPlace.type)
+            highlightedSlot.Highlight(false);
+            highlightedSlot = null;
+        }
+
+        CardSlot targetSlot = TryGetSlotUnderCard(eventData);
+
+        // if (targetSlot != null && targetSlot.IsEmpty &&
+        //     (targetSlot.type == FieldSlotType.SELF_FIELD_SLOT || targetSlot.type == FieldSlotType.SELF_HAND_SLOT))
+        // {
+        //     yield return PlaceToSlot(targetSlot);
+        //     startSlot.Clear();
+
+        //     // OnCardPlayed(controller, targetSlot);
+
+        //     if (startSlot.type != targetSlot.type)
+        //     {
+        //         if (TryGetComponent<Card3DControllerLink>(out var link))
+        //             MoveCardOnField(link.Controller, (int)startSlot.indexSlotInField, (int)targetSlot.indexSlotInField, false);
+        //     }
+        // }
+        // else
+        //     yield return PlaceToSlot(startSlot);
+
+        if (targetSlot != null && !targetSlot.IsEmpty && targetSlot.type == FieldSlotType.SelfHandSlot && startSlot != targetSlot)
+        {
+            yield return startSlot.SwapWith(targetSlot);
+
+            int startSlotIndex = (int)startSlot.indexSlotInField;
+            int targetSlotIndex = (int)targetSlot.indexSlotInField;
+
+            if (TryGetComponent<CardControllerLink>(out var startLink) &&
+                targetSlot.CurrentCard.TryGetComponent<CardControllerLink>(out var targetLink))
             {
-                if (TryGetComponent<CardControllerLink>(out var link))
-                {
-                    MoveCardOnField(link.Controller, transform.GetSiblingIndex(), false);
-                }
+                gameManager.CurrentGame.PlayerHandControllers[targetSlotIndex] = startLink.Controller;
+                gameManager.CurrentGame.PlayerHandControllers[startSlotIndex] = targetLink.Controller;
             }
         }
+        else if (targetSlot != null && targetSlot.IsEmpty && targetSlot.type == FieldSlotType.SelfHandSlot)
+        {
+            yield return PlaceToSlot(targetSlot);
+            startSlot.Clear();
+
+            int startSlotIndex = (int)startSlot.indexSlotInField;
+            int targetSlotIndex = (int)targetSlot.indexSlotInField;
+
+            if (TryGetComponent<CardControllerLink>(out var link))
+            {
+                gameManager.CurrentGame.PlayerHandControllers[startSlotIndex] = null;
+                gameManager.CurrentGame.PlayerHandControllers[targetSlotIndex] = link.Controller;
+            }
+        }
+        else if (targetSlot != null && targetSlot.IsEmpty && targetSlot.type == FieldSlotType.SelfFieldSlot)
+        {
+            yield return PlaceToSlot(targetSlot);
+            startSlot.Clear();
+
+            if (TryGetComponent<CardControllerLink>(out var link))
+            {
+                MoveCardOnField(link.Controller, (int)startSlot.indexSlotInField, (int)targetSlot.indexSlotInField, false);
+                // yield return ReorganizeHandCoroutine();
+            }
+        }
+        else yield return PlaceToSlot(startSlot);
+
+        CardStateInteractionManager.UnlockCard(this, transform);
+        CardStateInteractionManager.EndDrag();
     }
 
-    public void MoveCardOnField(BattleCardController cardController, int siblingIndex, bool isAutoMoveCard)
+    private IEnumerator PlaceToSlot(CardSlot slot)
     {
-        gameManager.CurrentGame.PlayerHandListController.CardControllers.Remove(cardController);
-        int index = Mathf.Clamp(siblingIndex, 0, gameManager.CurrentGame.PlayerFieldListController.CardControllers.Count);
-        gameManager.CurrentGame.PlayerFieldListController.CardControllers.Insert(index, cardController);
+        yield return transform.DOMove(slot.transform.position, 0.3f).SetEase(Ease.OutQuad).WaitForCompletion();
+        if (TryGetComponent<CardControllerLink>(out var link))
+            yield return slot.PlaceCard(link.Controller);
+    }
+
+    public void MoveCardOnField(BattleCardController cardController, int startSlotIndex, int targetSlotIndex, bool isAutoMoveCard)
+    {
+        InitObjectsIfNeeded();
+
+        gameManager.CurrentGame.PlayerHandControllers[startSlotIndex] = null;
+        gameManager.CurrentGame.PlayerFieldControllers[targetSlotIndex] = cardController;
 
         cardController.MarkAsPlayedInThisTurn(CardOwner.Player);
         cardController.BattleCardView.ApplyBattleStyle(cardController.BattleState);
 
         if (currentType == GameType.Multiplayer)
         {
-            networkGameController.RpcRequestPlayCard(cardController.CardModel.id, index);
-            if (!isAutoMoveCard) networkTurnManager.GoToAttackPhase();
+            int cardId = cardController.CardModel.id;
+            networkGameController.RequestPlayCard(startSlotIndex, targetSlotIndex, cardId);
+            if (!isAutoMoveCard) networkGameTurnManager.GoToAttackPhase();
         }
         else if (currentType == GameType.Bot && !isAutoMoveCard)
             botTurnManager.GoToAttackPhase();
     }
 
-    private void UpdateTempCardPosition()
+    private CardSlot TryGetSlotUnderCard(PointerEventData eventData)
     {
-        int newIndex = DefaultTempCardParent.childCount;
+        Ray ray = mainCamera.ScreenPointToRay(eventData.position);
 
-        for (int i = 0; i < DefaultTempCardParent.childCount; i++)
+        int hitCount = Physics.RaycastNonAlloc(ray, rayHits, 100f);
+        if (hitCount == 0) return null;
+
+        for (int i = 0; i < hitCount; i++)
         {
-            if (transform.position.x < DefaultTempCardParent.GetChild(i).position.x)
+            RaycastHit hit = rayHits[i];
+            if (hit.collider.TryGetComponent<CardSlot>(out var slot))
+                return slot;
+        }
+
+        return null;
+    }
+
+    private void UpdateSlotHighlight(PointerEventData eventData)
+    {
+        CardSlot slot = TryGetSlotUnderCard(eventData);
+        if (slot != highlightedSlot)
+        {
+            if (highlightedSlot != null) highlightedSlot.Highlight(false);
+            if (slot != null) slot.Highlight(true);
+            highlightedSlot = slot;
+        }
+    }
+
+    public IEnumerator MoveCardTransformToField(CardSlot fieldSlot)
+    {
+        CardStateInteractionManager.LockCard(this, transform);
+
+        if (TryGetComponent<CardControllerLink>(out var link))
+        {
+            if (ConnectionConfig.IsSpectator)
+                yield return fieldSlot.PlaceCardWithMoveAndFlip(link.Controller);
+            else
             {
-                newIndex = i;
-
-                if (tempCard.transform.GetSiblingIndex() < newIndex)
-                    newIndex--;
-
-                break;
+                if (fieldSlot.type == FieldSlotType.SelfFieldSlot)
+                    yield return fieldSlot.PlaceCardWithMove(link.Controller);
+                else if (fieldSlot.type == FieldSlotType.EnemyFieldSlot)
+                    yield return fieldSlot.PlaceCardWithMoveAndFlip(link.Controller);
             }
         }
 
-        tempCard.transform.SetSiblingIndex(newIndex);
+        CardStateInteractionManager.UnlockCard(this, transform);
     }
 
-    private void UpdateCardIndexInHandListController(int newIndex)
+    public IEnumerator ReorganizeHandCoroutine()
     {
-        if (TryGetComponent<CardControllerLink>(out var link))
+        BattleCardController[] handControllers = gameManager.CurrentGame.PlayerHandControllers;
+        List<BattleCardController> activeCards = new();
+
+        for (int i = 0; i < handControllers.Length; i++)
         {
-            List<BattleCardController> list = gameManager.CurrentGame.PlayerHandListController.CardControllers;
-
-            list.Remove(link.Controller);
-            newIndex = Mathf.Clamp(newIndex, 0, list.Count);
-            list.Insert(newIndex, link.Controller);
+            if (handControllers[i] != null)
+            {
+                activeCards.Add(handControllers[i]);
+                handControllers[i] = null;
+            }
         }
-    }
 
-    public IEnumerator MoveCardTransformToAnotherField(Transform fieldTransform, int siblingIndexInField, Transform attackingCardtransform = null)
-    {
-        GameObject placeholder = null;
-        yield return CreatePlaceholder(fieldTransform, siblingIndexInField, p => placeholder = p);
+        if (activeCards.Count == 0) yield break;
 
-        transform.SetParent(canvas.transform, true);
+        CardSlot[] handSlots = gameManager.PlayerHandManager.HandSlots;
+        foreach (CardSlot slot in handSlots)
+            slot.Clear();
 
-        if (attackingCardtransform != null)
-            attackingCardtransform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
+        int startIndex = (5 - activeCards.Count) / 2;
 
-        Sequence moveSequence = DOTween.Sequence();
-        moveSequence.Append(transform.DOScale(1.15f, 0.1f).SetEase(Ease.OutQuad));
-        moveSequence.Append(transform.DOMove(placeholder.transform.position, 0.5f).SetEase(Ease.OutQuad));
-        moveSequence.Append(transform.DOScale(1f, 0.1f).SetEase(Ease.OutQuad));
-        yield return moveSequence.WaitForCompletion();
+        List<Coroutine> moveCardsCoroutines = new();
 
-        transform.SetParent(fieldTransform, false);
-        transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
+        for (int i = 0; i < activeCards.Count; i++)
+        {
+            int newIndex = startIndex + i;
+            BattleCardController card = activeCards[i];
+            CardSlot targetSlot = handSlots[newIndex];
 
-        Destroy(placeholder);
-    }
+            handControllers[newIndex] = card;
 
-    private IEnumerator CreatePlaceholder(Transform fieldTransform, int siblingIndex, Action<GameObject> onCreated)
-    {
-        GameObject placeholder = Instantiate(tempCard);
-        placeholder.GetComponent<Image>().enabled = false;
+            moveCardsCoroutines.Add(StartCoroutine(targetSlot.PlaceCard(card)));
+        }
 
-        placeholder.transform.SetParent(fieldTransform, false);
-        placeholder.transform.SetSiblingIndex(siblingIndex);
-
-        LayoutRebuilder.ForceRebuildLayoutImmediate(fieldTransform.GetComponent<RectTransform>());
-        yield return null;
-
-        onCreated?.Invoke(placeholder);
+        foreach (var coroutine in moveCardsCoroutines)
+            yield return coroutine;
     }
 }

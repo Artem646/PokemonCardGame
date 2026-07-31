@@ -14,14 +14,20 @@ public class CardBattleState : MonoBehaviour
     public bool HasAttacked { get; private set; }
 
     public int CurrentHP { get; set; }
+    public int CurrentDamage { get; set; }
 
-    public event Action<float> OnXPChanged;
+    // public int AttackModifier { get; private set; } = 0;
+    // public int DefenseModifier { get; private set; } = 0;
+
+    public event Action<float> OnHPChanged;
 
     public void Init(CardOwner owner)
     {
         Owner = owner;
         IsFresh = true;
         HasAttacked = false;
+        // AttackModifier = 0;
+        // DefenseModifier = 0;
     }
 
     public void MarkAsReady()
@@ -37,7 +43,30 @@ public class CardBattleState : MonoBehaviour
     public void ApplyDamage(int damage)
     {
         CurrentHP -= damage;
+        CurrentDamage = damage;
         if (CurrentHP < 0) CurrentHP = 0;
-        OnXPChanged?.Invoke(CurrentHP);
+        OnHPChanged?.Invoke(CurrentHP);
     }
+
+    public void SetHP(int hp)
+    {
+        CurrentHP = hp;
+        OnHPChanged?.Invoke(CurrentHP);
+    }
+
+    // public void AddAttackModifier(int amount)
+    // {
+    //     AttackModifier += amount;
+    // }
+
+    // public void AddDefenseModifier(int amount)
+    // {
+    //     DefenseModifier += amount;
+    // }
+
+    // public void ClearModifiers()
+    // {
+    //     AttackModifier = 0;
+    //     DefenseModifier = 0;
+    // }
 }

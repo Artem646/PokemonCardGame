@@ -13,33 +13,36 @@ public class FilterPanelView
     public readonly List<PokemonElement> pokemonElements = new() {
             PokemonElement.Grass, PokemonElement.Fire, PokemonElement.Water,
             PokemonElement.Bug, PokemonElement.Psychic, PokemonElement.Fighting,
-            PokemonElement.Flying, PokemonElement.electric, PokemonElement.Ground,
-            PokemonElement.Fairy, PokemonElement.Normal, PokemonElement.Poison};
+            PokemonElement.Flying, PokemonElement.Electric, PokemonElement.Ground,
+            PokemonElement.Fairy, PokemonElement.Normal, PokemonElement.Poison,
+            PokemonElement.Steel };
 
     public FilterPanelView(VisualElement root)
     {
-        elementIconsContainer = root.Q<VisualElement>("elementsFilterPanel");
-        var icons = elementIconsContainer.Children().ToList();
+        elementIconsContainer = root.Q<VisualElement>("elementsContainer");
+        List<VisualElement> wrappers = elementIconsContainer.Children().ToList();
 
-        for (int i = 0; i < icons.Count && i < pokemonElements.Count; i++)
+        for (int i = 0; i < wrappers.Count && i < pokemonElements.Count; i++)
         {
-            VisualElement icon = icons[i];
+            VisualElement wrapper = wrappers[i];
             PokemonElement type = pokemonElements[i];
 
-            icon.userData = type;
+            wrapper.userData = type;
 
-            icon.RegisterCallback<ClickEvent>(evt =>
+            wrapper.RegisterCallback<ClickEvent>(evt =>
             {
-                if (icon.userData is PokemonElement PokemonElement)
-                    ToggleFilter(PokemonElement, icon);
+                if (wrapper.userData is PokemonElement element)
+                    ToggleFilter(element, wrapper);
             });
 
+            VisualElement icon = wrapper.Q<VisualElement>(className: "element-icon");
             SetIconInactive(icon);
         }
     }
 
-    private void ToggleFilter(PokemonElement element, VisualElement icon)
+    private void ToggleFilter(PokemonElement element, VisualElement wrapper)
     {
+        VisualElement icon = wrapper.Q<VisualElement>(className: "element-icon");
         if (activeFilters.Contains(element))
         {
             activeFilters.Remove(element);

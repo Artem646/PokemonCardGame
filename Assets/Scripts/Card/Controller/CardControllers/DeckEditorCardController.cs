@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DeckEditorCardController : BaseCardController
@@ -35,7 +34,10 @@ public class DeckEditorCardController : BaseCardController
     public override void AddToContainer(object container)
     {
         if (container is VisualElement visualElement)
+        {
+            DeckCardView.CardRoot.AddToClassList("deck-editor-card");
             visualElement.Add(DeckCardView.CardRoot);
+        }
     }
 
     public override void RemoveFromContainer()

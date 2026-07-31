@@ -6,23 +6,23 @@ using System.Collections.Generic;
 public class CardControllerFactory
 {
     private static VisualTreeAsset uxmlTemplate;
-    private static GameObject uguiPrefab;
-    private static readonly Dictionary<Type, Func<CardModel, Transform, bool, ICardController>> registry = new();
+    private static GameObject uguiPrefab3D;
+    private static readonly Dictionary<Type, Func<CardModel, ICardController>> registry = new();
 
-    public static void Init(VisualTreeAsset template = null, GameObject prefab = null)
+    public static void Init(VisualTreeAsset template = null, GameObject prefab3D = null)
     {
         uxmlTemplate = template;
-        uguiPrefab = prefab;
+        uguiPrefab3D = prefab3D;
 
-        registry[typeof(CollectionCardController)] = (model, parent, faceDown) => CreateCollection(model);
-        registry[typeof(DeckCardController)] = (model, parent, faceDown) => CreateDeck(model);
-        registry[typeof(BattleCardController)] = (model, parent, faceDown) => CreateBattle(model, parent, faceDown);
+        registry[typeof(CollectionCardController)] = (model) => CreateCollection(model);
+        registry[typeof(DeckCardController)] = (model) => CreateDeck(model);
+        registry[typeof(BattleCardController)] = (model) => CreateBattle3D(model);
     }
 
-    public static T Create<T>(CardModel model, Transform parent = null, bool faceDown = false) where T : ICardController
+    public static T Create<T>(CardModel model) where T : ICardController
     {
         if (registry.TryGetValue(typeof(T), out var factory))
-            return (T)factory(model, parent, faceDown);
+            return (T)factory(model);
 
         throw new NotSupportedException($"CardControllerFactory: Unknown controller type {typeof(T).Name}");
     }
@@ -39,9 +39,12 @@ public class CardControllerFactory
         return new DeckCardController(model, view);
     }
 
-    private static BattleCardController CreateBattle(CardModel model, Transform uguiParent, bool faceDown)
+    private static BattleCardController CreateBattle3D(CardModel model)
     {
-        BattleCardView view = new(model, uguiPrefab, uguiParent, faceDown);
-        return new BattleCardController(model, view);
+        BattleCardView view = new(model, uguiPrefab3D);
+        BattleCardController controller = new(model, view);
+        if (view.CardRoot.TryGetComponent<CardControllerLink>(out var link))
+            link.Controller = controller;
+        return controller;
     }
 }

@@ -1,0 +1,16 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/FriendsSceneUSS.uss?fileID=7433441132597879392&amp;guid=84ece4adbf16ca44ba02283856d95e66&amp;type=3#FriendsSceneUSS"/>
+    <TopButtonPanel style="height: 15%;"/>
+    <ui:VisualElement class="main-content">
+        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" horizontal-page-size="-1" mode="Vertical" name="friendsScrollView" style="background-size: 100% 100%; width: 82%; height: 100%; margin-left: 0; margin-right: 0; padding-right: 0; padding-left: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(28, 0, 184); border-right-color: rgb(28, 0, 184); border-top-color: rgb(28, 0, 184); border-bottom-color: rgb(28, 0, 184); flex-direction: row; align-items: flex-start; align-content: flex-start; align-self: auto; justify-content: center; flex-wrap: nowrap;"/>
+        <ui:VisualElement class="add-friend-button-container">
+            <ui:Button text="Add new friend" name="addFriendButton" class="add-friend-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28466027093753856)"/>
+                </Bindings>
+            </ui:Button>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

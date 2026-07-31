@@ -3,11 +3,11 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class AnonymousSingInController
+public class AnonymousSignInController
 {
     private readonly FirebaseAuth auth;
 
-    public AnonymousSingInController()
+    public AnonymousSignInController()
     {
         auth = FirebaseAuthService.Instance.GetAuth();
     }

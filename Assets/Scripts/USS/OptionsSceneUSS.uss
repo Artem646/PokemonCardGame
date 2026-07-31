@@ -1,0 +1,61 @@
+.main-content {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; 
+    background-color: var(--bg-options-scene);
+    padding: 0; 
+}
+
+.option-blocks-container {
+    width: 95%; 
+    height: 89%; 
+    flex-direction: row;
+    align-items: center; 
+    justify-content: space-evenly; 
+    background-color: var(--bg-options-blocks-container);
+    border-radius: 50px; 
+}
+
+.unity-radio-button {
+    margin: 0;
+}
+
+.unity-base-field__input {
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.unity-radio-button-group__container {
+    width: 45%;
+}
+
+.unity-radio-button-group .unity-base-field__label {
+    color: rgb(255, 255, 255);
+    min-width: 130px;
+}
+
+.unity-radio-button-group .unity-radio-button__checkmark-background {
+    width: 35px;
+    height: 35px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    margin-right: 0;
+    padding-top: 0;
+}
+
+.unity-radio-button-group .unity-radio-button__checkmark {
+    width: 19px;
+    height: 19px;
+    border-radius: 15px;
+}
+
+#unity-text-input {
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+}

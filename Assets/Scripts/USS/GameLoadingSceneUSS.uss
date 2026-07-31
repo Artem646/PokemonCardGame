@@ -1,0 +1,141 @@
+.main-container {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-image: none;
+    background-color: rgb(95, 170, 176);
+}
+
+.title-container {
+    width: 45%;
+    height: 20%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(166, 124, 96);
+    border-width: 3px;
+    border-color: rgb(0, 0, 0);
+    border-radius: 50px;
+    top: 15%;
+    display: none;
+}
+
+.title {
+    font-size: 65px;
+    -unity-font-definition: url("project://database/Assets/Photon/Fusion/Runtime/RuntimeAssets/JetBrainsMono-Regular.ttf?fileID=12800000&guid=a4ed52b30ac954791b7f3c691f1a348e&type=3#JetBrainsMono-Regular");
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+    text-shadow: 3px 3px 50px rgba(0, 0, 0, 0.2);
+}
+
+.opponents-info-panel {
+    width: 50%;
+    height: 47%;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: rgb(0, 0, 0);
+    border-radius: 40px;
+    top: auto;
+}
+
+.opponent {
+    width: 30%;
+    height: 68%;
+    border-color: rgb(26, 187, 74);
+    border-width: 2px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.opponent-image {
+    width: 67%;
+    height: 67%;
+    border-color: rgb(205, 40, 40);
+    border-width: 2px;
+    border-radius: 20px;
+}
+
+.opponent-name {
+    width: 80%;
+    height: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    color: rgb(255, 254, 254);
+    -unity-text-align: middle-center;
+    font-size: 40px;
+    white-space: normal;
+}
+
+.VS-label-container {
+    width: 16%;
+    height: 38%;
+}
+
+.VS-label {
+    width: 100%;
+    height: 100%;
+    color: rgb(255, 255, 255);
+    font-size: 159px;
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Fonts/ShiftyNotesRegular-BWZ6d.ttf?fileID=12800000&guid=a584b2cad7b2d6b47bfa56f79c464ffd&type=3#ShiftyNotesRegular-BWZ6d");
+}
+
+.loading-container {
+    width: 90%;
+    height: 20%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(99, 130, 77, 0.59);
+    border-width: 3px;
+    border-color: rgb(0, 0, 0);
+    border-radius: 50px;
+    bottom: auto;
+    top: 5%;
+}
+
+.status-label {
+    color: rgb(33, 68, 23);
+    font-size: 65px;
+    -unity-font-definition: url("project://database/Assets/Photon/Fusion/Runtime/RuntimeAssets/JetBrainsMono-Regular.ttf?fileID=12800000&guid=a4ed52b30ac954791b7f3c691f1a348e&type=3#JetBrainsMono-Regular");
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+    text-shadow: 3px 3px 50px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.3%;
+}
+
+.progress-bar {
+    width: 90%;
+    height: 20%;
+}
+
+.unity-progress-bar__container {
+    height: 100%;
+    min-height: auto;
+    max-height: none;
+}
+
+.unity-progress-bar__background {
+    background-color: rgb(73, 174, 173);
+    border-width: 3px;
+    border-color: rgb(0, 0, 0);
+    border-radius: 15px;
+}
+
+.unity-progress-bar__progress {
+    height: 100%;
+    background-color: rgb(213, 133, 192);
+    border-radius: 15px;
+    margin: 0;
+}

@@ -7,4 +7,5 @@ public class User
     public UserData userData;
     public List<int> cardsInCollection = new();
     public List<Deck> decks = new();
+    public List<Friend> friends = new();
 }

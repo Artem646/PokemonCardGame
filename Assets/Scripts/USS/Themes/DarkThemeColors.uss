@@ -1,0 +1,87 @@
+:root {
+    --bg-main: rgb(14, 20, 32);
+
+    /* CardTemplate */
+    --border-color: rgba(0, 0, 0, 0);
+    
+    /* CollectionScene */
+    --bg-open-filter-button: rgb(0, 209, 197);
+
+    /* TopButtonPanel */
+    --bg-top-panel: rgb(17, 26, 40);
+    --top-nav-button-text-color: rgb(255, 255, 255);
+    --player-name-text-color: rgb(255, 255, 255);
+    --bg-profile-field: rgb(85, 103, 105); 
+    --profile-field-border-color: rgb(105, 55, 55); 
+    --top-panel-border-color: rgb(255, 255, 255);
+
+    /* StartPlayScene */
+    --bg-start-play-scene: rgb(85, 91, 123);
+
+    /* OptionsScene */
+    --bg-options-scene: rgb(85, 91, 123);
+    --bg-options-blocks-container: rgb(31, 35, 54); 
+
+    /* BestiaryScene */
+    /* DeckEditor */
+    /* DeckSelectionDialog */
+
+    /* DecksScene */
+    --bg-add-deck-button: rgb(132, 107, 48); 
+    --add-deck-button-text-color: rgb(0, 0, 0);
+
+    /* DeckTamplate */
+    --bg-deck: rgba(75, 80, 99, 0);
+    --bg-top-deck-panel: rgb(54, 126, 113);
+    --deck-name-text-color: rgb(0, 0, 0);
+    --bg-edit-deck-button: rgb(163, 113, 86);
+    --edit-deck-button-text-color: rgb(0, 0, 0);
+    --bg-delete-deck-button: rgb(141, 33, 33);
+    --delete-deck-button-text-color: rgb(246, 255, 65);
+    --bg-deck-cards-container:rgb(27, 30, 51);
+
+    /* DeckSelectionScene */
+    --bg-deck-selection-scene: rgb(33, 35, 61);
+    --bg-selection-panel: rgb(147, 73, 73);
+    --selection-panel-border-color: rgb(20, 22, 27);
+    --bg-make-deck-field: rgb(66, 73, 91);
+    --make-deck-field-border-color: rgb(0, 0, 0);
+    --make-deck-label-text-color: rgb(255, 255, 255);
+    --bg-make-deck-button: rgb(122, 44, 99);
+    --make-deck-button-text-color: rgb(255, 255,255);
+    --bg-select-deck-field: rgb(66, 73, 91);
+    --make-select-field-border-color: rgb(0, 0, 0);
+    --select-deck-label-text-color: rgb(255, 255, 255);
+    --bg-select-deck-button: rgb(122, 44, 99);
+    --select-deck-button-text-color: rgb(255, 255,255);
+    --bg-deck-dropdown: rgba(51, 51, 51, 0);
+    --deck-dropdown-text-color: rgb(255, 255,255);
+    --deck-dropdown-arrow: rgb(122, 44, 99);
+    --deck-dropdown-line: rgb(0, 0, 0);
+
+    /* DiscriptionScene */
+
+    /* FriendsScene */
+    --bg-add-friend-button: rgb(132, 107, 48); 
+    --add-friend-button-text-color: rgb(0, 0, 0);
+
+    /* FriendTamplate */
+    --bg-friend: rgba(75, 80, 99, 0);
+    --bg-top-friend-panel: rgb(54, 126, 113);
+    --bg-edit-friend-button: rgb(163, 113, 86);
+    --edit-friend-button-text-color: rgb(0, 0, 0);
+    --bg-delete-friend-button: rgb(141, 33, 33);
+    --delete-friend-button-text-color: rgb(246, 255, 65);
+    --content-container:rgb(27, 30, 51);
+    --bg-update-photo-button: rgb(161, 117, 55); 
+    --update-photo-button-text-color: rgb(255, 255, 255);
+    --nickname-label-text-color: rgb(68, 215, 188); 
+    --friend-name-text-color: rgb(255, 255, 255);
+}
+
+.nav-button {
+    --parallelogram-btn-fill-color:rgba(0, 0, 0, 0);
+    --parallelogram-btn-hover-color:rgba(76, 204, 102, 0.3);
+    --parallelogram-btn-border-color:rgb(245, 245, 245);
+    --parallelogram-btn-active-color:rgb(127, 255, 212);
+}

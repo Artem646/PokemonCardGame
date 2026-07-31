@@ -82,10 +82,7 @@ public class GoogleProvider : IAuthProvider
         }
     }
 
-    private void OnFirebaseSuccess(FirebaseUser user)
-    {
-        Localizer.LocalizeNotification(NotificationKey.GoogleSingInSuccess, NotificationType.Success, user.DisplayName);
-    }
+    private void OnFirebaseSuccess(FirebaseUser user) { }
 
     public void SignOut()
     {

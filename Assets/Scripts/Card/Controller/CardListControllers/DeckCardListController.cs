@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
 
@@ -11,14 +10,20 @@ public class DeckCardListController : CardListController<DeckCardController>
     public async Task LoadCardsToDeckContainer(Deck deck)
     {
         Clear();
-        UserCardModelList userCards = CardRepository.Instance.GetUserCards();
-        List<CardModel> deckCards = userCards.cards.Where(card => deck.cards.Contains(card.id)).ToList();
-        await AddCardsToContainer(deckCards);
+
+        List<CardModel> result = new();
+        foreach (int id in deck.cards)
+        {
+            CardModel model = CardRepository.Instance.GetGameCardModelById(id);
+            if (model != null) result.Add(model);
+        }
+
+        await AddCardsToContainer(result);
     }
 
     protected override DeckCardController CreateController(CardModel cardModel)
     {
-        var controller = CardControllerFactory.Create<DeckCardController>(cardModel);
+        DeckCardController controller = CardControllerFactory.Create<DeckCardController>(cardModel);
         return controller;
     }
 }

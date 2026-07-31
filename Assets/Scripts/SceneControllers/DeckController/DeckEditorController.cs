@@ -19,7 +19,7 @@ public class DeckEditorController : MonoBehaviour
     private VisualElement root;
     private VisualElement overlay;
     private TextField deckTitleTextField;
-    private ScrollView deckCardsScrollView;
+    private VisualElement cardsContainer;
     private Button performActionButton;
     private Button closeDeckEditorButton;
 
@@ -32,13 +32,15 @@ public class DeckEditorController : MonoBehaviour
 
     public event Action<Deck> OnDeckMaked;
     public event Action<Deck> OnDeckAdded;
-    public event Action<Deck> OnDeckUpdate;
+    public event Action<Deck> OnDeckUpdated;
 
     private void Start()
     {
         InitializeUI();
 
-        deckCardListController = new DeckEditorCardListController(deckCardsScrollView, cardTemplate, selectedCards, this);
+        cardsContainer.Clear();
+
+        deckCardListController = new DeckEditorCardListController(cardsContainer, cardTemplate, selectedCards, this);
         _ = deckCardListController.LoadUserCardsToDeckScrollView();
 
         closeDeckEditorButton.clicked += OnCloseDeckEditor;
@@ -50,7 +52,7 @@ public class DeckEditorController : MonoBehaviour
         root = uiDocument.rootVisualElement;
         overlay = root.Q<VisualElement>("overlay");
         deckTitleTextField = root.Q<TextField>("deckTitle");
-        deckCardsScrollView = root.Q<ScrollView>("deckCardsScrollView");
+        cardsContainer = root.Q<VisualElement>("cardsContainer");
         closeDeckEditorButton = root.Q<Button>("closeDeckEditorButton");
         performActionButton = root.Q<Button>("performActionButton");
     }
@@ -131,7 +133,7 @@ public class DeckEditorController : MonoBehaviour
                         currentDeck.cards = newCards;
 
                         await FirebaseFirestoreService.Instance.UpdateDeck(UserSession.Instance.ActiveUser, currentDeck);
-                        OnDeckUpdate?.Invoke(currentDeck);
+                        OnDeckUpdated?.Invoke(currentDeck);
                     }
                     else
                         Localizer.LocalizeNotification(NotificationKey.NoChanges, NotificationType.Info);

@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Threading.Tasks;
 using System;
-using UnityEngine.Localization.Settings;
-using UnityEngine.Localization;
+using WebSocketSharp;
 
 public class SettingsController : MonoBehaviour
 {
@@ -12,41 +10,25 @@ public class SettingsController : MonoBehaviour
     private VisualElement root;
     private VisualElement overlay;
     private VisualElement userImage;
-    private TextField userNameField;
-    private TextField profilePhotoUrlField;
-    private TextField userIdField;
-    private TextField emailField;
-    private Button saveProfileButton;
+    private Label userNameLabel;
+    private Label userIdLabel;
+    private Label emailLabel;
+    private Label accountCreationDateLabel;
     private Button closeButton;
     private CustomizableButton singOutButton;
-    private RadioButtonGroup languageGroup;
-    // private Button googleLinkButton;
+    private Button updatePhotoButton;
 
     private User user;
 
-    public event Action<User> OnProfileUpdated;
+    private const int MaxImageSize = 256;
 
     private void Start()
     {
         InitializeUI();
 
-        // user = UserSession.Instance.ActiveUser;
-        // FillUIFromUser(user);
-
-        // if (user.userData.email == "")
-        // {
-        //     googleLinkButton.style.display = DisplayStyle.Flex;
-        //     googleLinkButton.clicked += OnGoogleLinkClicked;
-        // }
-        // else
-        // {
-        //     googleLinkButton.style.display = DisplayStyle.None;
-        // }
-
-        saveProfileButton.clicked += OnSaveSettingsClicked;
-        singOutButton.RegisterCallback<ClickEvent>(OnSignOutClicked);
-        closeButton.clicked += OnCloseClicked;
-        languageGroup.RegisterValueChangedCallback(OnLanguageChanged);
+        singOutButton.RegisterCallback<ClickEvent>(OnSignOutButtonClicked);
+        closeButton.clicked += OnCloseButtonClicked;
+        updatePhotoButton.clicked += OnUpdatePhotoButtonClicked;
     }
 
     private void InitializeUI()
@@ -54,121 +36,112 @@ public class SettingsController : MonoBehaviour
         root = uiDocument.rootVisualElement;
         overlay = root.Q<VisualElement>("overlay");
         userImage = root.Q<VisualElement>("userImage");
-        userNameField = root.Q<TextField>("userNameField");
-        profilePhotoUrlField = root.Q<TextField>("profilePhotoUrlField");
-        userIdField = root.Q<TextField>("userIdField");
-        emailField = root.Q<TextField>("emailField");
-        saveProfileButton = root.Q<Button>("saveProfileButton");
+        userNameLabel = root.Q<Label>("userNameLabel");
+        userIdLabel = root.Q<Label>("userIdLabel");
+        emailLabel = root.Q<Label>("emailLabel");
+        accountCreationDateLabel = root.Q<Label>("accountCreationDateLabel");
         closeButton = root.Q<Button>("closeButton");
         singOutButton = root.Q<CustomizableButton>("singOutButton");
-        languageGroup = root.Q<RadioButtonGroup>("languageGroup");
-        // googleLinkButton = root.Q<Button>("googleLinkButton");
+        updatePhotoButton = root.Q<Button>("updatePhotoButton");
     }
-
-    private void OnLanguageChanged(ChangeEvent<int> evt)
-    {
-        int selectedIndex = evt.newValue;
-        string selectedCode = selectedIndex switch
-        {
-            0 => "ru",
-            1 => "en",
-            2 => "be",
-            _ => "en"
-        };
-
-        SetLocale(selectedCode);
-    }
-
-    private void SetLocale(string code)
-    {
-        Locale locale = LocalizationSettings.AvailableLocales.GetLocale(code);
-        LocalizationSettings.SelectedLocale = locale;
-    }
-
-    private void SyncLanguageGroupWithCurrentLocale()
-    {
-        Locale currentLocale = LocalizationSettings.SelectedLocale;
-        switch (currentLocale.Identifier.Code)
-        {
-            case "ru":
-                languageGroup.value = 0;
-                break;
-            case "en":
-                languageGroup.value = 1;
-                break;
-            case "be":
-                languageGroup.value = 2;
-                break;
-        }
-    }
-
-    private async void OnSaveSettingsClicked()
-    {
-        string newUserName = userNameField.value;
-        string newProfilePhotoUrl = profilePhotoUrlField.value;
-
-        await FirebaseFirestoreService.Instance.UpdateUserProfile(user, newUserName, newProfilePhotoUrl);
-        await UpdateUserImage(user.userData.profilePhotoUrl);
-
-        userIdField.value = $"UserID: {user.userData.userId}";
-        emailField.value = $"Email: {user.userData.email}";
-
-        OnProfileUpdated?.Invoke(user);
-    }
-
-    // private async void OnGoogleLinkClicked()
-    // {
-    //     string idToken = await GoogleIdTokenGetter.GetIdTokenAsync();
-    //     await FirebaseAuthService.Instance.LinkAnonymousToGoogle(idToken);
-
-    //     var currentUser = FirebaseAuthService.Instance.GetAuth().CurrentUser;
-
-    //     if (currentUser != null)
-    //     {
-    //         await currentUser.ReloadAsync();
-    //         emailField.value = $"Email: {currentUser.Email}";
-    //     }
-
-    //     googleLinkButton.style.display = DisplayStyle.None;
-    // }
 
     public void OpenSettings()
     {
         user = UserSession.Instance.ActiveUser;
         FillUIFromUser(user);
-        SyncLanguageGroupWithCurrentLocale();
         overlay.style.display = DisplayStyle.Flex;
-    }
-
-    private void OnCloseClicked()
-    {
-        overlay.style.display = DisplayStyle.None;
-    }
-
-    private void OnSignOutClicked(ClickEvent evt)
-    {
-        CardRepository.Instance.ClearUserCards();
-        AuthManager.Instance.SignOut();
     }
 
     private void FillUIFromUser(User user)
     {
-        userNameField.value = user.userData.userName;
-        profilePhotoUrlField.value = user.userData.profilePhotoUrl;
-        userIdField.value = $"UserID: {user.userData.userId}";
-        emailField.value = $"Email: {user.userData.email}";
-        _ = UpdateUserImage(user.userData.profilePhotoUrl);
+        userNameLabel.text = user.userData.userName;
+        userIdLabel.text = user.userData.userId;
+        emailLabel.text = !user.userData.email.IsNullOrEmpty() ? user.userData.email : "Anonim";
+        accountCreationDateLabel.text = user.userData.createdAt.ToString();
+
+        userIdLabel.RegisterCallback<ClickEvent>(evt =>
+        {
+            GUIUtility.systemCopyBuffer = userIdLabel.text;
+            NotificationManager.ShowNotification($"Скопировано: {userIdLabel.text}", NotificationType.Info, 1);
+        });
+
+        UpdateUserImage();
     }
 
-    private async Task UpdateUserImage(string url)
+    private void UpdateUserImage()
     {
-        if (string.IsNullOrWhiteSpace(url))
-            return;
+        static Texture2D BytesToTexture(byte[] bytes)
+        {
+            Texture2D texture = new(2, 2);
+            if (texture.LoadImage(bytes)) return texture;
+            return null;
+        }
 
-        Texture2D texture = await UserProfileService.Instance.GetUserProfile()
-            .ContinueWith(tex => tex.Result.PhotoTexture);
+        Texture2D photoTexture = BytesToTexture(user.userData.profilePhotoData);
+        if (photoTexture != null)
+            userImage.style.backgroundImage = new StyleBackground(photoTexture);
+    }
 
-        if (texture != null)
-            userImage.style.backgroundImage = new StyleBackground(texture);
+    public void OnUpdatePhotoButtonClicked()
+    {
+        NativeGallery.GetImageFromGallery((path) =>
+        {
+            if (path != null)
+            {
+                Texture2D texture = NativeGallery.LoadImageAtPath(path, markTextureNonReadable: false);
+                if (texture == null) return;
+                ProcessAndUploadPhoto(texture);
+            }
+        }, "Выберите фото профиля", "image/*");
+    }
+
+    public async void ProcessAndUploadPhoto(Texture2D originalTexture)
+    {
+        Texture2D resizedTexture = ResizeTexture(originalTexture, MaxImageSize, MaxImageSize);
+        byte[] photoBytes = resizedTexture.EncodeToJPG(75);
+
+        string userId = UserSession.Instance.ActiveUser.userData.userId;
+
+        try
+        {
+            await FirebaseFirestoreService.Instance.UpdateUserPhoto(userId, photoBytes);
+            UserSession.Instance.ActiveUser.userData.profilePhotoData = photoBytes;
+            UpdateUserImage();
+            UserProfileService.Instance.NotifyAvatarUpdated();
+            NotificationManager.ShowNotification("Аватар успешно обновлён!", NotificationType.Success);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Ошибка загрузки фото: " + e.Message);
+        }
+
+        Destroy(originalTexture);
+        Destroy(resizedTexture);
+    }
+
+    private Texture2D ResizeTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+        RenderTexture renderTexture = RenderTexture.GetTemporary(targetWidth, targetHeight);
+        Graphics.Blit(source, renderTexture);
+
+        Texture2D result = new(targetWidth, targetHeight);
+        RenderTexture.active = renderTexture;
+        result.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = null;
+        RenderTexture.ReleaseTemporary(renderTexture);
+        return result;
+    }
+
+    private void OnCloseButtonClicked()
+    {
+        overlay.style.display = DisplayStyle.None;
+    }
+
+    private void OnSignOutButtonClicked(ClickEvent evt)
+    {
+        CardRepository.Instance.ClearUserCards();
+        AuthManager.Instance.SignOut();
     }
 }

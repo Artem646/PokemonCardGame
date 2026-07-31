@@ -1,0 +1,33 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/RoomCreationDialogUSS.uss?fileID=7433441132597879392&amp;guid=ac32336a6deaa2c46ba846866ab68c42&amp;type=3#RoomCreationDialogUSS"/>
+    <ui:VisualElement name="overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.49); display: none; align-items: center; justify-content: center; flex-direction: column; width: auto; height: auto;">
+        <ui:VisualElement name="" style="flex-grow: 0; flex-shrink: 0; height: 55%; width: 28%; background-color: rgb(147, 73, 73); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(20, 22, 27); border-right-color: rgb(20, 22, 27); border-top-color: rgb(20, 22, 27); border-bottom-color: rgb(20, 22, 27); align-items: center; justify-content: center; flex-direction: row; border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px;">
+            <ui:VisualElement name="roomSettingsPanel" style="flex-grow: 0; width: 100%; background-color: rgb(66, 73, 91); border-width: 3px; border-color: rgb(0, 0, 0); margin-right: 0; padding: 30px; align-items: center; justify-content: flex-start; border-radius: 40px; height: 100%; border-top-right-radius: 45px; border-bottom-right-radius: 45px; display: flex; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 45px; border-bottom-left-radius: 45px;">
+                <ui:Label text="ROOM SETTINGS" name="roomSettingsLabel" style="unity-font-style: bold; font-size: 45px; color: rgb(255, 255, 255); margin-bottom: 15px; -unity-text-align: middle-center; height: auto; width: 100%; margin-top: 15px; margin-right: 18px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28500457900408832)"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:VisualElement style="flex-grow: 0; flex-direction: column; width: 100%; height: 20%; margin-bottom: 20px;">
+                    <ui:Label text="Room name:" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 35px; color: rgb(255, 255, 255); -unity-text-align: middle-center; height: 50%;">
+                        <Bindings>
+                            <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28255077321342976)"/>
+                        </Bindings>
+                    </ui:Label>
+                    <ui:TextField name="roomNameTextField" label="" value="" style="width: 100%; color: white; font-size: 30px; margin-bottom: 0; height: 50%; margin-top: 0; margin-right: 0; margin-left: 0; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+                </ui:VisualElement>
+                <ui:RadioButtonGroup name="roomVisibilityRadioButtonGroup" label="Access:" choices="Public,Private" value="0" style="width: 348px; color: white; font-size: 30px; margin-bottom: 0; flex-direction: row; margin-top: 0; margin-right: 0; margin-left: 0; align-self: flex-start;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28476321039843328)"/>
+                    </Bindings>
+                </ui:RadioButtonGroup>
+                <ui:Button name="createRoomButton" text="CREATE ROOM" style="width: 452px; align-self: auto; background-color: rgb(122, 44, 99); color: white; unity-font-style: bold; border-radius: 4px; font-size: 35px; margin-bottom: 0; height: 85px; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 35px; border-top-right-radius: 35px; border-bottom-right-radius: 35px; border-bottom-left-radius: 35px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; align-content: auto; align-items: stretch; justify-content: flex-start; top: 100px;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(675660592250880)"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button name="closeRoomCreationDialogButton" text="✕" selectable="false" focusable="false" style="position: absolute; top: 20px; right: 15px; width: 70px; height: 70px; font-size: 45px; color: white; background-color: rgb(161, 63, 63); border-radius: 15px; text-overflow: ellipsis; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; overflow: visible; background-image: url(&quot;project://database/Assets/Photon/Fusion/Runtime/Statistics/StatsIcons/FusionStatsCancelIcon.png?fileID=2800000&amp;guid=5853bc00e6bfda84ea9030e0486a1c44&amp;type=3#FusionStatsCancelIcon&quot;); background-size: 90% 90%;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

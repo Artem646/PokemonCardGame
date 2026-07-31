@@ -16,21 +16,15 @@ public static class GameTypeConfig
 public class StartPlaySceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
-    [SerializeField] private SettingsController settingsController;
 
     private VisualElement root;
     private CustomizableButton singlePlayerButton;
     private CustomizableButton multyPlayerButton;
-    private CustomizableButton decksButton;
-    private VisualElement profileField;
+    private CustomizableButton bestiaryButton;
 
-    private async void Start()
+    private void Start()
     {
         InitializeUI();
-
-        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
-        await UserProfileView.Instance.LoadUserData();
-
         RegisterCallbacks();
     }
 
@@ -39,43 +33,27 @@ public class StartPlaySceneController : MonoBehaviour
         root = uiDocument.rootVisualElement;
         singlePlayerButton = root.Q<CustomizableButton>("singlePlayerButton");
         multyPlayerButton = root.Q<CustomizableButton>("multyPlayerButton");
-        decksButton = root.Q<CustomizableButton>("decksButton");
-        profileField = root.Q<VisualElement>("profileField");
+        bestiaryButton = root.Q<CustomizableButton>("bestiaryButton");
     }
 
     private void RegisterCallbacks()
     {
-        root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
-            SceneSwitcher.SwitchScene("BestiaryScene", root);
-        });
-
-        root.Q<Button>("collectionButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("CollectionScene", root);
-        });
-
-        multyPlayerButton.RegisterCallback<ClickEvent>(evt =>
-        {
-            GameTypeConfig.CurrentType = GameType.Multiplayer;
-            SceneSwitcher.SwitchScene("DeckSelectionScene", root);
-        });
-
         singlePlayerButton.RegisterCallback<ClickEvent>(evt =>
         {
             GameTypeConfig.CurrentType = GameType.Bot;
             SceneSwitcher.SwitchScene("DeckSelectionScene", root);
         });
 
-        decksButton.RegisterCallback<ClickEvent>(evt =>
+        multyPlayerButton.RegisterCallback<ClickEvent>(evt =>
         {
-            SceneSwitcher.SwitchScene("DecksScene", root);
+            GameTypeConfig.CurrentType = GameType.Multiplayer;
+            SceneManager.LoadScene("RoomManagerScene");
         });
 
-        profileField.RegisterCallback<ClickEvent>(evt =>
+        bestiaryButton.RegisterCallback<ClickEvent>(evt =>
         {
-            settingsController.OpenSettings();
+            SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
+            SceneSwitcher.SwitchScene("BestiaryScene", root);
         });
     }
 }

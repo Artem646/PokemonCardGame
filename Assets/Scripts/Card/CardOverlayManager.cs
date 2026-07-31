@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -10,12 +9,9 @@ public class CardOverlayManager
     public static CardOverlayManager Instance => _instance ??= new CardOverlayManager();
 
     private readonly Dictionary<string, VisualElement> overlaysVisualElement = new();
-    private readonly Dictionary<string, GameObject> overlaysGameObject = new();
 
-    private RectTransform lastCardRectTransform;
-
-    private const float COLLECTION_TARGET_SCALE = 2.35f;
-    private const float DECK_TARGET_SCALE = 2.35f;
+    private const float COLLECTION_TARGET_SCALE = 2.1f;
+    private const float DECK_TARGET_SCALE = 1.55f;
     private const float DURATION = 0.4f;
 
     private CardOverlayManager() { }
@@ -24,17 +20,6 @@ public class CardOverlayManager
     {
         overlay.RegisterCallback<ClickEvent>(evt => CardScaleAnimatorUIToolkit.HideCard(overlay));
         overlaysVisualElement[sceneName] = overlay;
-    }
-
-    public void RegisterOverlayGameObject(string sceneName, GameObject overlay)
-    {
-        overlaysGameObject[sceneName] = overlay;
-        if (overlay.TryGetComponent<EventTrigger>(out var trigger))
-        {
-            EventTrigger.Entry entry = new() { eventID = EventTriggerType.PointerClick };
-            entry.callback.AddListener((data) => BattleCardScaleAnimator.HideCard(overlay));
-            trigger.triggers.Add(entry);
-        }
     }
 
     public void ShowCollectionCard(ICollectionCardView originalCardView, ICollectionCardView cloneCardView)
@@ -72,23 +57,6 @@ public class CardOverlayManager
         else
         {
             Debug.LogWarning($"[OverlayManager] OverlayVE для сцены {sceneName} не найден!");
-        }
-    }
-
-    public void ShowBattleCard(IBattleCardView originalCardView, IBattleCardView cloneCardView)
-    {
-        string sceneName = SceneManager.GetActiveScene().name;
-
-        if (overlaysGameObject.TryGetValue(sceneName, out var overlay))
-        {
-            RectTransform originalRectTransform = originalCardView.CardRoot.GetComponent<RectTransform>();
-            lastCardRectTransform = cloneCardView.CardRoot.GetComponent<RectTransform>();
-            Canvas canvas = overlay.GetComponentInParent<Canvas>();
-            BattleCardScaleAnimator.ShowCard(originalRectTransform, lastCardRectTransform, overlay, canvas);
-        }
-        else
-        {
-            Debug.LogWarning($"[OverlayManager] OverlayGO для сцены {sceneName} не найден!");
         }
     }
 

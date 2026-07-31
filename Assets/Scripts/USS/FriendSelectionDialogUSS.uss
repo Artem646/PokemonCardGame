@@ -1,0 +1,63 @@
+DropdownField .unity-label {
+    display: none;
+}
+
+DropdownField .unity-base-field__input {
+    padding: 0;
+    margin: 0;
+    border-radius: 30px;
+}
+
+DropdownField .unity-base-popup-field__text {
+    width: 85%;
+    margin: 0;
+    border-right-width: 2px;
+    border-color: black;
+    padding-left: 50px;
+}
+
+DropdownField .unity-base-popup-field__arrow {
+    width: 35px;
+    height: 40px;
+    margin-right: 20px;
+    margin-left: 20px;
+    -unity-background-image-tint-color: rgb(122, 44, 99);
+    background-image: url("project://database/Assets/Photon/Fusion/Runtime/Statistics/StatsIcons/FusionStatsToggleArrowIcon.png?fileID=2800000&guid=330babd635d5dfc4691ae3151ffc4491&type=3#FusionStatsToggleArrowIcon");
+}
+
+#unity-text-input {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+}
+
+.unity-toggle .unity-label {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    min-width: auto;
+    width: 100%;
+    -unity-text-align: middle-center;
+    color: rgb(255, 255, 255);
+}
+
+.unity-toggle .unity-toggle__checkmark {
+    width: 30px;
+    height: 30px;
+    background-size: 125% 155%;
+}

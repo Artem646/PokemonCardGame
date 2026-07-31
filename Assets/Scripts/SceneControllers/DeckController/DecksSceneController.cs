@@ -6,57 +6,28 @@ using UnityEngine.UIElements;
 public class DecksSceneController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
-    [SerializeField] private SettingsController settingsController;
     [SerializeField] private DeckEditorController editorController;
 
     private VisualElement root;
-    private VisualElement profileField;
     private VisualElement cardOverlay;
     private Button addDeckButton;
 
-    private async void Start()
+    private void Start()
     {
         InitializeUI();
-
         CardOverlayManager.Instance.RegisterCardOverlay(SceneManager.GetActiveScene().name, cardOverlay);
-
-        UserProfileView.Instance.SetUIDocument(uiDocument, settingsController);
-        await UserProfileView.Instance.LoadUserData();
-
         RegisterCallbacks();
     }
 
     private void InitializeUI()
     {
         root = uiDocument.rootVisualElement;
-        profileField = root.Q<VisualElement>("profileField");
         cardOverlay = root.Q<VisualElement>("overlay");
         addDeckButton = root.Q<Button>("addDeckButton");
     }
 
     private void RegisterCallbacks()
     {
-        root.Q<Button>("playButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("StartPlayScene", root);
-        });
-
-        root.Q<Button>("bestiaryButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneContext.PreviousMenuSceneName = SceneManager.GetActiveScene().name;
-            SceneSwitcher.SwitchScene("BestiaryScene", root);
-        });
-
-        root.Q<Button>("collectionButton").RegisterCallback<ClickEvent>(evt =>
-        {
-            SceneSwitcher.SwitchScene("CollectionScene", root);
-        });
-
-        profileField.RegisterCallback<ClickEvent>(evt =>
-        {
-            settingsController.OpenSettings();
-        });
-
         addDeckButton.RegisterCallback<ClickEvent>(evt =>
         {
             Deck newDeck = new() { name = "New deck", cards = new List<int>() };

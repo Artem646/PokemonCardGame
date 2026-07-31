@@ -1,27 +1,27 @@
-using System.Threading.Tasks;
-using Firebase.Auth;
+using System;
 using UnityEngine;
-using UnityEngine.Networking;
+
+public class UserProfileData
+{
+    public string DisplayName;
+    public Texture2D PhotoTexture;
+}
 
 public class UserProfileService
 {
     private static UserProfileService _instance;
     public static UserProfileService Instance => _instance ??= new UserProfileService();
 
+    public static event Action OnAvatarUpdated;
+
     private UserProfileService() { }
 
-    public FirebaseUser CurrentUser => FirebaseAuthService.Instance.GetAuth().CurrentUser;
+    public void NotifyAvatarUpdated() => OnAvatarUpdated?.Invoke();
 
-    public async Task<UserProfileData> GetUserProfile()
+    public UserProfileData GetUserProfile()
     {
         User user = UserSession.Instance.ActiveUser;
-
-        Texture2D photoTexture = null;
-        string photoUrl = user.userData.profilePhotoUrl;
-
-        if (!string.IsNullOrEmpty(photoUrl))
-            photoTexture = await LoadUserImage(photoUrl);
-
+        Texture2D photoTexture = BytesToTexture(user.userData.profilePhotoData);
         return new UserProfileData
         {
             DisplayName = user.userData.userName,
@@ -29,27 +29,11 @@ public class UserProfileService
         };
     }
 
-    private async Task<Texture2D> LoadUserImage(string url)
+    private Texture2D BytesToTexture(byte[] bytes)
     {
-        using UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
-        var operation = request.SendWebRequest();
-
-        while (!operation.isDone)
-            await Task.Yield();
-
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError("[P][UserProfileService] Ошибка загрузки изображения: " + request.error);
-            return null;
-        }
-
-        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-        return texture;
+        if (bytes == null || bytes.Length == 0) return null;
+        Texture2D texture = new(2, 2);
+        if (texture.LoadImage(bytes)) return texture;
+        return null;
     }
-}
-
-public class UserProfileData
-{
-    public string DisplayName;
-    public Texture2D PhotoTexture;
 }

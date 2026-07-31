@@ -19,9 +19,6 @@ public partial class CustomizableButton : Button
     [UxmlAttribute] public float AngleLeftBottom { get; set; } = 0f;
     [UxmlAttribute] public float AngleRightTop { get; set; } = 0f;
     [UxmlAttribute] public float AngleRightBottom { get; set; } = 0f;
-    [UxmlAttribute] public string ButtonText { get; set; } = "PLAY";
-
-    private Label textLabel;
 
     private bool isHovered = false;
     private bool isPressed = false;

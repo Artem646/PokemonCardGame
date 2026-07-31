@@ -1,0 +1,48 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/TopButtonPanelUSS.uss?fileID=7433441132597879392&amp;guid=4b917c5e4ff1a51499c20875ea00b138&amp;type=3#TopButtonPanelUSS"/>
+    <ui:VisualElement class="top-bar">
+        <ui:VisualElement name="profileField" class="profile-field">
+            <ui:VisualElement name="userImage" class="user-image"/>
+            <ui:Label name="userName" class="player-name"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="nav-buttons">
+            <ParallelogramButton name="playButton" target-scene-name="StartPlayScene" class="nav-button">
+                <ui:Label name="playButtonLabel" class="nav-button_text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(20381630464)"/>
+                    </Bindings>
+                </ui:Label>
+            </ParallelogramButton>
+            <ParallelogramButton enabled="true" name="decksButton" target-scene-name="DecksScene" class="nav-button">
+                <ui:Label name="decksButtonLabel" class="nav-button_text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(26702446592)"/>
+                    </Bindings>
+                </ui:Label>
+            </ParallelogramButton>
+            <ParallelogramButton name="collectionButton" target-scene-name="CollectionScene" class="nav-button">
+                <ui:Label name="collectionButtonLabel" class="nav-button_text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(22688497664)"/>
+                    </Bindings>
+                </ui:Label>
+            </ParallelogramButton>
+            <ParallelogramButton enabled="true" name="friendsButton" target-scene-name="FriendsScene" class="nav-button">
+                <ui:Label name="collectionButtonLabel" class="nav-button_text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28247739977891840)"/>
+                    </Bindings>
+                </ui:Label>
+            </ParallelogramButton>
+            <ParallelogramButton name="optionsButton" target-scene-name="OptionsScene" class="nav-button">
+                <ui:Label name="optionsButtonLabel" class="nav-button_text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28247792821927936)"/>
+                    </Bindings>
+                </ui:Label>
+            </ParallelogramButton>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,34 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/FriendSelectionDialogUSS.uss?fileID=7433441132597879392&amp;guid=2e69be989e26c9c43b0d7429522fadd1&amp;type=3#FriendSelectionDialogUSS"/>
+    <ui:VisualElement name="overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.49); display: none; align-items: center; justify-content: center; flex-direction: column; width: auto; height: auto;">
+        <ui:VisualElement name="" style="flex-grow: 0; width: 28%; height: 50%; background-color: rgb(66, 73, 91); border-left-width: 3px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 0; align-items: center; justify-content: flex-start; align-content: auto; border-top-right-radius: 45px; border-bottom-right-radius: 45px; flex-shrink: 0; border-top-left-radius: 45px; border-bottom-left-radius: 45px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px;">
+            <ui:Label text="SELECT FRIEND" name="selectFriendLabel" style="unity-font-style: bold; font-size: 60px; color: rgb(255, 255, 255); margin-bottom: 15px; align-self: auto; justify-content: center; align-items: center; margin-top: 30px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; white-space: normal; -unity-text-align: middle-center; margin-right: 0; margin-left: 0;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28255074909618176)"/>
+                </Bindings>
+            </ui:Label>
+            <ui:VisualElement style="flex-grow: 0; flex-direction: column; width: 100%; height: 20%; margin-bottom: 40px;">
+                <ui:Label text="Room name:" name="RoomNameLabel" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 35px; color: rgb(255, 255, 255); -unity-text-align: middle-center; height: 50%;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28255077321342976)"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:TextField name="roomNameTextField" label="" value="" style="width: 90%; color: white; font-size: 30px; margin-bottom: 0; height: 50%; margin-top: 0; margin-right: 0; margin-left: 0; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); align-self: center;"/>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 0; flex-direction: row; width: 100%; height: 17%; margin-bottom: 40px; margin-top: 0; margin-right: 0; margin-left: 0; justify-content: space-between;">
+                <ui:DropdownField name="friendSelectField" label="Колода" style="width: 55%; margin-bottom: 0; color: white; unity-font-style: normal; background-color: rgba(51, 51, 51, 0); border-radius: 4px; height: 100%; margin-top: 0; margin-right: 0; margin-left: 0; font-size: 40px; -unity-text-align: middle-center; border-top-right-radius: 30px; border-top-left-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; align-self: flex-start; left: 35px;"/>
+                <ui:Toggle label="Spectator" name="spectatorToggle" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; right: 6px; height: 100%; width: 255px; align-items: center; justify-content: center; flex-direction: column; flex-wrap: nowrap; font-size: 30px; align-self: auto; color: rgb(255, 255, 255);">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="label" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28255079431077888)"/>
+                    </Bindings>
+                </ui:Toggle>
+            </ui:VisualElement>
+            <ui:Button name="joinFriendRoomButton" text="Join to friend room" style="width: 512px; align-self: center; background-color: rgb(122, 44, 99); color: white; unity-font-style: bold; border-radius: 4px; font-size: 40px; margin-bottom: 0; height: 100px; margin-top: 0; margin-right: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 35px; border-top-right-radius: 35px; border-bottom-right-radius: 35px; border-bottom-left-radius: 35px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; white-space: normal;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28255081981214720)"/>
+                </Bindings>
+            </ui:Button>
+            <ui:Button name="closeFriendDialogButton" text="✕" selectable="false" focusable="false" style="position: absolute; top: 10px; right: 12px; width: 70px; height: 70px; font-size: 45px; color: white; background-color: rgb(161, 63, 63); border-radius: 15px; text-overflow: ellipsis; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; overflow: visible; background-size: 90% 90%; background-image: url(&quot;project://database/Assets/Photon/Fusion/Runtime/Statistics/StatsIcons/FusionStatsCancelIcon.png?fileID=2800000&amp;guid=5853bc00e6bfda84ea9030e0486a1c44&amp;type=3#FusionStatsCancelIcon&quot;);"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

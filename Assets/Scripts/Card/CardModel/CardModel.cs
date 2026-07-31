@@ -35,12 +35,56 @@ public class CardColors
     public Color borderColor2;
 }
 
+[JsonObject]
+public class Evolutions
+{
+    public int? prev;
+    public int? next;
+}
+
+[JsonObject]
+public class Stats
+{
+    public int attack;
+    public int defense;
+    public int specialAttack;
+    public int specialDefense;
+}
+
+[JsonObject]
+public class Abilities
+{
+    public Ability firstAbility;
+    public Ability secondAbility;
+    public Ability thirdAbility;
+    public Ability fourthAbility;
+}
+
+[JsonObject]
+public class Ability
+{
+    public string name;
+    public string discription;
+
+    [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
+    public PokemonElement? element;
+
+    public AbilityType? type;
+    public int? power;
+}
+
 public enum PokemonElement
 {
     Grass, Fire, Water,
-    electric, Bug, Ground,
-    Poison, Flying, Fighting,
-    Normal, Psychic, Fairy
+    Bug, Psychic, Fighting,
+    Flying, Electric, Ground,
+    Fairy, Normal, Poison,
+    Steel
+}
+
+public enum AbilityType
+{
+    Physical, Special, Status
 }
 
 [Serializable]
@@ -56,14 +100,12 @@ public class CardModel
     [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
     public PokemonElement? secondaryElement;
 
+    public Evolutions evolutions;
     public CardColors colors;
-
-    public int attack;
+    public Stats stats;
     public int health;
+    public Abilities abilities;
 
-    // Раскомментируй по необходимости
-    // public string ultimateDescription;
-    // public int defense;
-    // public int specialAttack;
-    // public int physicalAttack;
+    [NonSerialized] public CardVisualDataSO visualData;
+    [NonSerialized] public CardUIToolkitVisualDataSO uiToolkitVisualData;
 }

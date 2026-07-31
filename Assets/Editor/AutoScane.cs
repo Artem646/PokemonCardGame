@@ -5,6 +5,7 @@ using UnityEditor.SceneManagement;
 public static class AutoStartScene
 {
     private const string loadingScenePath = "Assets/Scenes/LoadingScene.unity";
+    // private const string loadingScenePath = "Assets/Scenes/AnimationTestScene.unity";
 
     static AutoStartScene()
     {

@@ -20,5 +20,12 @@ public enum NotificationKey
     FirebaseAuthCanceled, FirebaseAuthSuccess,
 
     AnonymousAuthError, AnonymousUserDataError,
-    AnonymousAuthCanceled, AnonymousAuthSuccess
+    AnonymousAuthCanceled, AnonymousAuthSuccess,
+
+    MissingEmail, InvalidEmail, EmailUserNotFound,
+    EmailAlreadyInUse, EmailUserDisabled, EmailMissingPassword,
+    EmailWrongPassword, EmailWeakPassword, EmailNetworkRequestFailed,
+    EmailTooManyRequests, EmailOperationNotAllowed, EmailInvalidCredential,
+    EmailAccountExistsWithDifferentCredentials, EmailUnknownError,
+    EmailAuthCanceled, EmailAuthError, EmailAuthSuccess
 }

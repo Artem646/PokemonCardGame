@@ -1,21 +1,27 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System;
 
 public class CardClickScript : MonoBehaviour, IPointerClickHandler
 {
-    public event Action OnCardClicked;
-
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (transform.parent.TryGetComponent<DropPlaceScript>(out var dropPlace))
+        if (FindAnyObjectByType<CameraViewManager>().IsSwitching) return;
+        if (CardStateInteractionManager.IsAnyCardAnimating) return;
+
+        if (transform.parent.TryGetComponent<CardSlot>(out var slot))
         {
-            if (dropPlace.type == FieldType.SELF_HAND ||
-                dropPlace.type == FieldType.SELF_FIELD ||
-                dropPlace.type == FieldType.ENEMY_FIELD)
+            if ((!ConnectionConfig.IsSpectator && slot.type == FieldSlotType.SelfHandSlot) ||
+                slot.type == FieldSlotType.SelfFieldSlot ||
+                slot.type == FieldSlotType.EnemyFieldSlot)
             {
-                if (CardStateInteractionManager.TryRaise(this))
-                    OnCardClicked?.Invoke();
+                if (CardStateInteractionManager.IsRaisedBy(this))
+                    FindAnyObjectByType<GameInterfaceController>().CloseZoomOnCardView();
+                else if (CardStateInteractionManager.CanBeginNewInteraction())
+                {
+                    CardStateInteractionManager.EndRaise();
+                    if (CardStateInteractionManager.TryRaise(this))
+                        FindAnyObjectByType<GameInterfaceController>().MoveToZoomOnCard(slot);
+                }
             }
         }
     }

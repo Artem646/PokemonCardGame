@@ -1,0 +1,32 @@
+:root {
+    --bg-color: rgb(33, 35, 61);
+}
+
+.main-content {
+    flex-direction: row;
+    flex-grow: 1;
+    background-color: var(--bg-color);
+    padding: 15px;
+    display: flex;
+    visibility: visible;
+    height: 100%;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: auto;
+    align-self: auto;
+}
+
+#unity-content-viewport {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+}
+
+#unity-content-container {
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: flex-start;
+}

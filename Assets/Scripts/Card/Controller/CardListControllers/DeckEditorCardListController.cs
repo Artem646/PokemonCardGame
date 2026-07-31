@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
 
@@ -19,8 +20,9 @@ public class DeckEditorCardListController : CardListController<DeckEditorCardCon
     public async Task LoadUserCardsToDeckScrollView()
     {
         Clear();
-        UserCardModelList userCards = CardRepository.Instance.GetUserCards();
-        await AddCardsToContainer(userCards.cards);
+        UserCardModelList userCards = CardRepository.Instance.GetUserCardsList();
+        List<CardModel> baseCards = userCards.cards.Where(card => card.evolutions.prev == null).ToList();
+        await AddCardsToContainer(baseCards);
     }
 
     protected override DeckEditorCardController CreateController(CardModel cardModel)

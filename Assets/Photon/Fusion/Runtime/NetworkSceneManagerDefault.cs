@@ -1,4 +1,5 @@
-namespace Fusion {
+namespace Fusion
+{
   using System;
   using System.Collections;
   using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace Fusion {
   using UnityEngine.ResourceManagement.ResourceProviders;
 #endif
 
-  public class NetworkSceneManagerDefault : Fusion.Behaviour, INetworkSceneManager {
+  public class NetworkSceneManagerDefault : Fusion.Behaviour, INetworkSceneManager
+  {
     /// <summary>
     /// If enabled and there is an already loaded scene that matches what the scene manager has intended to load,
     /// that scene will be used instead and load will be avoided.
@@ -38,7 +40,7 @@ namespace Fusion {
     [InlineHelp]
     [ToggleLeft]
     public bool DestroySpawnedPrefabsOnSceneUnload = true;
-    
+
     /// <summary>
     /// All the scenes loaded by all the managers. Used when <see cref="IsSceneTakeOverEnabled"/> is enabled.
     /// </summary>
@@ -80,43 +82,49 @@ namespace Fusion {
     private bool _isLoading;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void ClearStatics() {
+    static void ClearStatics()
+    {
       _allOwnedScenes.Clear();
     }
 
-    static NetworkSceneManagerDefault() {
+    static NetworkSceneManagerDefault()
+    {
       SceneManager.sceneUnloaded += (s) => _allOwnedScenes.Remove(s);
     }
 
     #region INetworkSceneManager
 
-    public virtual void Initialize(NetworkRunner runner) {
+    [Obsolete]
+    public virtual void Initialize(NetworkRunner runner)
+    {
       Log.TraceSceneManager(runner, $"Initialize with {runner}");
-      
+
 #if FUSION_ENABLE_ADDRESSABLES && !FUSION_DISABLE_ADDRESSABLES
       LoadAddressableScenePathsAsync();
 #endif
 
       Debug.Assert(Runner == null);
       Runner = runner;
-      
+
       // assign an empty scene with a separate physics stage immediately, so that they won't spawn anything on the currently active scene
       // an lose track of it
-      if (IsMultiplePeer) {
+      if (IsMultiplePeer)
+      {
         var scene = SceneManager.CreateScene($"{runner.name}_{runner.LocalPlayer}",
           new CreateSceneParameters(LocalPhysicsMode.Physics2D | LocalPhysicsMode.Physics3D));
         Log.TraceSceneManager(Runner, $"Assigned an initial scene: {scene.Dump()}");
 
-        MultiPeerScene                 = scene;
+        MultiPeerScene = scene;
         MultiPeerDontDestroyOnLoadRoot = new GameObject("[DontDestroyOnLoad]").transform;
         SceneManager.MoveGameObjectToScene(MultiPeerDontDestroyOnLoadRoot.gameObject, MultiPeerScene);
       }
     }
 
-    public virtual void Shutdown() {
-      
+    public virtual void Shutdown()
+    {
+
       Log.TraceSceneManager(Runner, $"Shutdown with {Runner}");
-      
+
       Runner = null;
 
       // clear owned scenes in case this manager is reused
@@ -124,34 +132,41 @@ namespace Fusion {
                        .Where(x => x.Value == this)
                        .Select(x => x.Key)
                        .ToList();
-      
-      foreach (var ownedScene in ownedScenes) {
+
+      foreach (var ownedScene in ownedScenes)
+      {
         _allOwnedScenes.Remove(ownedScene);
       }
-      
+
       _multiPeerSceneRoots.Clear();
       _multiPeerActiveRoot = null;
-      
+
       MultiPeerDontDestroyOnLoadRoot = null;
 
       var sceneToUnload = MultiPeerScene;
       MultiPeerScene = default;
-      
-      if (sceneToUnload.isLoaded) {
-        if (!sceneToUnload.CanBeUnloaded()) {
+
+      if (sceneToUnload.isLoaded)
+      {
+        if (!sceneToUnload.CanBeUnloaded())
+        {
           SceneManager.CreateScene($"FusionSceneManager_TempEmptyScene");
         }
         SceneManager.UnloadSceneAsync(sceneToUnload);
       }
     }
 
-    public virtual bool IsBusy {
-      get {
-        if (_isLoading) {
+    public virtual bool IsBusy
+    {
+      get
+      {
+        if (_isLoading)
+        {
           return true;
         }
-        
-        if (IsMultiplePeer && _multiPeerSceneRoots.Count == 0) {
+
+        if (IsMultiplePeer && _multiPeerSceneRoots.Count == 0)
+        {
           // nothing to spawn on
           return true;
         }
@@ -160,92 +175,125 @@ namespace Fusion {
       }
     }
 
-    public virtual Scene MainRunnerScene {
-      get {
-        if (IsMultiplePeer) {
+    public virtual Scene MainRunnerScene
+    {
+      get
+      {
+        if (IsMultiplePeer)
+        {
           return MultiPeerScene;
-        } else {
+        }
+        else
+        {
           return SceneManager.GetActiveScene();
         }
       }
     }
 
-    public virtual bool IsRunnerScene(Scene scene) {
-      if (IsMultiplePeer) {
+    public virtual bool IsRunnerScene(Scene scene)
+    {
+      if (IsMultiplePeer)
+      {
         return scene == MultiPeerScene;
-      } else {
+      }
+      else
+      {
         return true;
       }
     }
 
-    public virtual bool TryGetPhysicsScene2D(out PhysicsScene2D scene2D) {
+    public virtual bool TryGetPhysicsScene2D(out PhysicsScene2D scene2D)
+    {
       var mainScene = MainRunnerScene;
-      if (mainScene.IsValid()) {
+      if (mainScene.IsValid())
+      {
         scene2D = mainScene.GetPhysicsScene2D();
         return true;
-      } else {
+      }
+      else
+      {
         scene2D = default;
         return false;
       }
     }
 
-    public virtual bool TryGetPhysicsScene3D(out PhysicsScene scene3D) {
+    public virtual bool TryGetPhysicsScene3D(out PhysicsScene scene3D)
+    {
       var mainScene = MainRunnerScene;
-      if (mainScene.IsValid()) {
+      if (mainScene.IsValid())
+      {
         scene3D = mainScene.GetPhysicsScene();
         return true;
-      } else {
+      }
+      else
+      {
         scene3D = default;
         return false;
       }
     }
-    
-    public virtual void MakeDontDestroyOnLoad(GameObject obj) {
-      if (IsMultiplePeer) {
+
+    public virtual void MakeDontDestroyOnLoad(GameObject obj)
+    {
+      if (IsMultiplePeer)
+      {
         Debug.Assert(obj.transform.parent == null || obj.transform.parent == MultiPeerDontDestroyOnLoadRoot);
         obj.transform.SetParent(MultiPeerDontDestroyOnLoadRoot, true);
-      } else {
+      }
+      else
+      {
         DontDestroyOnLoad(obj);
       }
     }
-    
-    public bool MoveGameObjectToScene(GameObject gameObject, SceneRef sceneRef) {
-      if (IsMultiplePeer) {
+
+    public bool MoveGameObjectToScene(GameObject gameObject, SceneRef sceneRef)
+    {
+      if (IsMultiplePeer)
+      {
         // find the first matching scene ref
-        foreach (var root in _multiPeerSceneRoots) {
-          if (sceneRef != default && root.SceneRef != sceneRef) {
+        foreach (var root in _multiPeerSceneRoots)
+        {
+          if (sceneRef != default && root.SceneRef != sceneRef)
+          {
             continue;
           }
 
-          if (sceneRef == default) {
+          if (sceneRef == default)
+          {
             // if scene ref is not specified, use the active root, if it exists
-            if (_multiPeerActiveRoot && root != _multiPeerActiveRoot) {
+            if (_multiPeerActiveRoot && root != _multiPeerActiveRoot)
+            {
               continue;
             }
           }
 
-          if (gameObject.scene != MultiPeerScene) {
+          if (gameObject.scene != MultiPeerScene)
+          {
             gameObject.transform.SetParent(null, true);
             SceneManager.MoveGameObjectToScene(gameObject, MultiPeerScene);
-            
+
             if (Application.isBatchMode == false)
               Runner.AddVisibilityNodes(gameObject);
           }
-          
+
           gameObject.transform.SetParent(root.transform, true);
           return true;
         }
 
         return false;
-      } else {
-        if (sceneRef == default) {
+      }
+      else
+      {
+        if (sceneRef == default)
+        {
           // do nothing, all scenes belong to the runner
           return true;
-        } 
-        
-        for (int i = 0; i < SceneManager.sceneCount; ++i) {
+        }
+
+        for (int i = 0; i < SceneManager.sceneCount; ++i)
+        {
           var scene = SceneManager.GetSceneAt(i);
-          if (scene.isLoaded && GetSceneRef(scene.path) == sceneRef) {
+          if (scene.isLoaded && GetSceneRef(scene.path) == sceneRef)
+          {
             SceneManager.MoveGameObjectToScene(gameObject, scene);
             return true;
           }
@@ -255,31 +303,39 @@ namespace Fusion {
       }
     }
 
-    public virtual NetworkSceneAsyncOp LoadScene(SceneRef sceneRef, NetworkLoadSceneParameters parameters) {
+    [Obsolete]
+    public virtual NetworkSceneAsyncOp LoadScene(SceneRef sceneRef, NetworkLoadSceneParameters parameters)
+    {
       Log.TraceSceneManager(Runner, $"Load scene {sceneRef} called with parameters: {parameters}");
       return NetworkSceneAsyncOp.FromCoroutine(sceneRef, StartTracedCoroutine(LoadSceneCoroutine(sceneRef, parameters)));
     }
-    
-    public virtual NetworkSceneAsyncOp UnloadScene(SceneRef sceneRef) {
+
+    [Obsolete]
+    public virtual NetworkSceneAsyncOp UnloadScene(SceneRef sceneRef)
+    {
       Log.TraceSceneManager(Runner, $"Unload scene {sceneRef} called");
       return NetworkSceneAsyncOp.FromCoroutine(sceneRef, StartTracedCoroutine(UnloadSceneCoroutine(sceneRef)));
     }
 
-    public virtual SceneRef GetSceneRef(string sceneNameOrPath) {
+    public virtual SceneRef GetSceneRef(string sceneNameOrPath)
+    {
       int buildIndex = FusionUnitySceneManagerUtils.GetSceneBuildIndex(sceneNameOrPath);
-      if (buildIndex >= 0) {
+      if (buildIndex >= 0)
+      {
         return SceneRef.FromIndex(buildIndex);
       }
-      
+
 #if FUSION_ENABLE_ADDRESSABLES && !FUSION_DISABLE_ADDRESSABLES
       // this may be a blocking call due to WaitForCompletion being used internally
-      if (!TryGetAddressableScenes(out var addressableScenes)) {
+      if (!TryGetAddressableScenes(out var addressableScenes))
+      {
         Log.Error(this, $"Failed to resolve addressable scene paths, won't be able to resolve {sceneNameOrPath} or any other addressable scene.");
         addressableScenes = Array.Empty<string>();
       }
 
       var index = FusionUnitySceneManagerUtils.GetSceneIndex(addressableScenes, sceneNameOrPath);
-      if (index >= 0) {
+      if (index >= 0)
+      {
         return SceneRef.FromPath(addressableScenes[index]);
       }
 #endif
@@ -287,69 +343,89 @@ namespace Fusion {
       return SceneRef.None;
     }
 
-    public SceneRef GetSceneRef(GameObject gameObject) {
-      if (IsMultiplePeer) {
-        if (gameObject.scene != MultiPeerScene) {
+    public SceneRef GetSceneRef(GameObject gameObject)
+    {
+      if (IsMultiplePeer)
+      {
+        if (gameObject.scene != MultiPeerScene)
+        {
           // not a part of this scene
           return default;
         }
-        
+
         // find among scene roots
         var sceneRoot = gameObject.transform.root;
-        foreach (var root in _multiPeerSceneRoots) {
-          if (root.transform == sceneRoot) {
+        foreach (var root in _multiPeerSceneRoots)
+        {
+          if (root.transform == sceneRoot)
+          {
             return root.SceneRef;
           }
         }
 
         return default;
-      } else {
+      }
+      else
+      {
         var scene = gameObject.scene;
         return GetSceneRef(scene.path);
       }
     }
-    
-    public bool OnSceneInfoChanged(NetworkSceneInfo sceneInfo, NetworkSceneInfoChangeSource changeSource) {
+
+    public bool OnSceneInfoChanged(NetworkSceneInfo sceneInfo, NetworkSceneInfoChangeSource changeSource)
+    {
       // implement this method and return true if you want to handle scene info changes manually
       return false;
     }
 
     #endregion
 
-    protected virtual IEnumerator LoadSceneCoroutine(SceneRef sceneRef, NetworkLoadSceneParameters sceneParams) {
+    [Obsolete]
+    protected virtual IEnumerator LoadSceneCoroutine(SceneRef sceneRef, NetworkLoadSceneParameters sceneParams)
+    {
       Runner.InvokeSceneLoadStart(sceneRef);
 
       Scene scene = default;
 
-      using (MakeLoadingScope()) {
+      using (MakeLoadingScope())
+      {
         Log.TraceSceneManager(Runner, $"LoadSceneCoroutine called with {sceneRef}, {sceneParams}");
         var localPhysicsMode = sceneParams.LocalPhysicsMode;
-        var loadSceneMode    = sceneParams.LoadSceneMode;
+        var loadSceneMode = sceneParams.LoadSceneMode;
 
-        if (IsMultiplePeer) {
-          if (localPhysicsMode != LocalPhysicsMode.None) {
+        if (IsMultiplePeer)
+        {
+          if (localPhysicsMode != LocalPhysicsMode.None)
+          {
             throw new ArgumentException($"Local physics mode is not supported in multiple peer mode",
               nameof(sceneParams));
           }
 
-          if (loadSceneMode == LoadSceneMode.Single) {
+          if (loadSceneMode == LoadSceneMode.Single)
+          {
             // all the current scenes need to be "unloaded", except possibly for the one
             // that matches the sceneRef, if scene take over is enabled
             loadSceneMode = LoadSceneMode.Additive;
 
-            try {
-              foreach (var root in _multiPeerSceneRoots) {
+            try
+            {
+              foreach (var root in _multiPeerSceneRoots)
+              {
                 Log.TraceSceneManager(Runner, $"Destroying scene {sceneRef} root {root.name} due to single-mode load");
                 Destroy(root.gameObject);
               }
 
               // wait for each root to be destroyed
-              foreach (var root in _multiPeerSceneRoots) {
-                while (root != null) {
+              foreach (var root in _multiPeerSceneRoots)
+              {
+                while (root != null)
+                {
                   yield return null;
                 }
               }
-            } finally {
+            }
+            finally
+            {
               _multiPeerSceneRoots.Clear();
             }
           }
@@ -358,37 +434,45 @@ namespace Fusion {
         {
           if (DestroySpawnedPrefabsOnSceneUnload && loadSceneMode == LoadSceneMode.Single)
           {
-            for (int i = 0; i < SceneManager.sceneCount; i++) {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
               // find the scene to unload
               var sceneToBeUnloaded = SceneManager.GetSceneAt(i); // will be unloaded by Unity on scene load
               var sceneRefToBeUnloaded = GetSceneRef(sceneToBeUnloaded.path);
 
-              if (sceneRefToBeUnloaded != SceneRef.None) {
+              if (sceneRefToBeUnloaded != SceneRef.None)
+              {
                 DestroyAllRuntimeSpawnedObjectsInScene(sceneToBeUnloaded, sceneRefToBeUnloaded);
               }
             }
           }
         }
 
-        if (IsSceneTakeOverEnabled) {
+        if (IsSceneTakeOverEnabled)
+        {
           // check if a loaded scene can be taken over
           Scene candidate = FindSceneToTakeOver(sceneRef);
-          if (candidate.IsValid()) {
+          if (candidate.IsValid())
+          {
             Log.TraceSceneManager(Runner, $"Taking over {sceneRef}: {candidate.Dump()}");
 
-            if (candidate.GetLocalPhysicsMode() != localPhysicsMode) {
+            if (candidate.GetLocalPhysicsMode() != localPhysicsMode)
+            {
               throw new InvalidOperationException($"Tried to take over {candidate.Dump()} for {sceneRef}, but physics mode were different: {candidate.GetLocalPhysicsMode()} != {localPhysicsMode}");
             }
 
             scene = candidate;
             MarkSceneAsOwned(sceneRef, candidate);
 
-            if (loadSceneMode == LoadSceneMode.Single && !IsMultiplePeer) {
+            if (loadSceneMode == LoadSceneMode.Single && !IsMultiplePeer)
+            {
               // need to unload scenes manually, multiple peer mode is handled at the beginning of this method, because
               // it always needs to the manual cleanup for single mode
-              for (int i = 0; i < SceneManager.sceneCount; i++) {
+              for (int i = 0; i < SceneManager.sceneCount; i++)
+              {
                 var toUnload = SceneManager.GetSceneAt(i);
-                if (toUnload != candidate) {
+                if (toUnload != candidate)
+                {
                   Log.TraceSceneManager(Runner, $"Unloading {sceneRef} ({toUnload.Dump()}) due to single-mode take over of {candidate.Dump()}");
                   yield return SceneManager.UnloadSceneAsync(toUnload);
                 }
@@ -397,19 +481,23 @@ namespace Fusion {
           }
         }
 
-        if (!scene.IsValid()) {
+        if (!scene.IsValid())
+        {
 #if FUSION_ENABLE_ADDRESSABLES && !FUSION_DISABLE_ADDRESSABLES
-          if (loadSceneMode == LoadSceneMode.Single) {
+          if (loadSceneMode == LoadSceneMode.Single)
+          {
             // single mode unloads all the scenes anyway
             _addressableOperations.Clear();
           }
 #endif
 
-          if (sceneRef.IsIndex) {
+          if (sceneRef.IsIndex)
+          {
             Log.TraceSceneManager(Runner, $"Loading scene {sceneRef} with build index {sceneRef.AsIndex} with mode {loadSceneMode}");
             var op = SceneManager.LoadSceneAsync(sceneRef.AsIndex,
               new LoadSceneParameters(loadSceneMode, localPhysicsMode));
-            if (op == null) {
+            if (op == null)
+            {
               throw new InvalidOperationException($"Scene not found: {sceneRef.AsIndex}");
             }
 
@@ -419,26 +507,33 @@ namespace Fusion {
 
             Debug.Assert(scene.buildIndex == sceneRef.AsIndex);
 
-            while (!op.isDone) {
+            while (!op.isDone)
+            {
               OnLoadSceneProgress(sceneRef, op.progress);
               yield return null;
             }
-          } else {
+          }
+          else
+          {
 #if FUSION_ENABLE_ADDRESSABLES && !FUSION_DISABLE_ADDRESSABLES
-            if (!TryGetAddressableScenes(out var addressableScenes)) {
+            if (!TryGetAddressableScenes(out var addressableScenes))
+            {
               Log.Error(this, $"Failed to resolve addressable scene paths, won't be able to resolve {sceneRef}");
               addressableScenes = Array.Empty<string>();
             }
 
             string sceneAddress = null;
-            foreach (var path in addressableScenes) {
-              if (sceneRef.IsPath(path)) {
+            foreach (var path in addressableScenes)
+            {
+              if (sceneRef.IsPath(path))
+              {
                 sceneAddress = path;
                 break;
               }
             }
-            
-            if (sceneAddress == null) {
+
+            if (sceneAddress == null)
+            {
               throw new InvalidOperationException($"Unable to find addressable scene path for {sceneRef}");
             }
 
@@ -457,32 +552,39 @@ namespace Fusion {
             // to get the scene a callback is used, as it fires immediately when loading finished,
             // compared to waiting for the coroutine to resume
             scene = default;
-            op.Completed += op => {
-              if (op.Status == AsyncOperationStatus.Succeeded) {
+            op.Completed += op =>
+            {
+              if (op.Status == AsyncOperationStatus.Succeeded)
+              {
                 scene = op.Result.Scene;
                 MarkSceneAsOwned(sceneRef, scene);
               }
             };
 
-            op.Destroyed += _ => {
+            op.Destroyed += _ =>
+            {
               // this will happen in MP mode when scenes are merged or when a scene is loaded in a single mode
-              if (_addressableOperations.Remove(sceneRef)) {
+              if (_addressableOperations.Remove(sceneRef))
+              {
                 Log.TraceSceneManager(Runner, $"Destroyed Addressables op for {sceneRef}");
               }
             };
 
             _addressableOperations.Add(sceneRef, op);
 
-            while (!op.IsDone) {
+            while (!op.IsDone)
+            {
               OnLoadSceneProgress(sceneRef, op.PercentComplete);
               yield return null;
             }
 
-            if (!op.IsValid()) {
+            if (!op.IsValid())
+            {
               throw new InvalidOperationException($"Loading operation for {sceneRef} has been destroyed");
             }
 
-            if (op.Status == AsyncOperationStatus.Failed) {
+            if (op.Status == AsyncOperationStatus.Failed)
+            {
               Addressables.Release(op);
               throw new InvalidOperationException($"Failed to load scene from addressable: {sceneAddress}");
             }
@@ -496,26 +598,34 @@ namespace Fusion {
       yield return StartCoroutine(OnSceneLoaded(sceneRef, scene, sceneParams));
     }
 
-    protected virtual IEnumerator UnloadSceneCoroutine(SceneRef sceneRef) {
+    [Obsolete]
+    protected virtual IEnumerator UnloadSceneCoroutine(SceneRef sceneRef)
+    {
       Log.TraceSceneManager(Runner, $"UnloadSceneCoroutine called for {sceneRef}");
 
-      using (MakeLoadingScope()) {
-        if (IsMultiplePeer) {
+      using (MakeLoadingScope())
+      {
+        if (IsMultiplePeer)
+        {
           // in multiple peer, the unload simply destroys the scene root
-          for (int i = 0; i < _multiPeerSceneRoots.Count; ++i) {
+          for (int i = 0; i < _multiPeerSceneRoots.Count; ++i)
+          {
             var root = _multiPeerSceneRoots[i];
-            if (root.SceneRef == sceneRef) {
+            if (root.SceneRef == sceneRef)
+            {
 
-              if (root == _multiPeerActiveRoot) {
+              if (root == _multiPeerActiveRoot)
+              {
                 _multiPeerActiveRoot = null;
               }
-              
+
               _multiPeerSceneRoots.RemoveAt(i);
               Log.TraceSceneManager(Runner, $"Destroying scene root {root.name} for {sceneRef}");
 
               Log.TraceSceneManager(Runner, $"Started unloading {root.Scene.ToString()} for {sceneRef}");
               Destroy(root.gameObject);
-              while (root != null) {
+              while (root != null)
+              {
                 yield return null;
               }
 
@@ -525,45 +635,55 @@ namespace Fusion {
           }
 
           throw new ArgumentOutOfRangeException($"Did not find a scene to unload: {sceneRef}", nameof(sceneRef));
-        } else {
+        }
+        else
+        {
           Scene sceneToUnload = default;
 
           // find the scene to unload
-          for (int i = 0; i < SceneManager.sceneCount; ++i) {
+          for (int i = 0; i < SceneManager.sceneCount; ++i)
+          {
             var scene = SceneManager.GetSceneAt(i);
-            if (GetSceneRef(scene.path) == sceneRef) {
+            if (GetSceneRef(scene.path) == sceneRef)
+            {
               sceneToUnload = scene;
               break;
             }
           }
 
-          if (!sceneToUnload.IsValid()) {
+          if (!sceneToUnload.IsValid())
+          {
             throw new ArgumentOutOfRangeException($"Did not find a scene to unload: {sceneRef}", nameof(sceneRef));
           }
 
-          if (DestroySpawnedPrefabsOnSceneUnload) {
+          if (DestroySpawnedPrefabsOnSceneUnload)
+          {
             DestroyAllRuntimeSpawnedObjectsInScene(sceneToUnload, sceneRef);
           }
 
 
           Log.TraceSceneManager(Runner, $"Started unloading {sceneToUnload.Dump()} for {sceneRef}");
 
-          if (!sceneToUnload.CanBeUnloaded()) {
+          if (!sceneToUnload.CanBeUnloaded())
+          {
             Log.Warn(Runner, $"Scene {sceneToUnload.Dump()} can't be unloaded for {sceneRef}, creating a temporary scene to unload it");
             Debug.Assert(!_tempUnloadScene.IsValid());
             _tempUnloadScene = SceneManager.CreateScene($"FusionSceneManager_TempEmptyScene");
           }
 
 #if FUSION_ENABLE_ADDRESSABLES && !FUSION_DISABLE_ADDRESSABLES
-          if (_addressableOperations.TryGetValue(sceneRef, out var asyncOp)) {
+          if (_addressableOperations.TryGetValue(sceneRef, out var asyncOp))
+          {
             Log.TraceSceneManager(Runner, $"Unloading addressable scene {sceneToUnload.Dump()} for {sceneRef}");
             yield return Addressables.UnloadSceneAsync(asyncOp);
-          } else
+          }
+          else
 #endif
           {
             Log.TraceSceneManager(Runner, $"Unloading {sceneToUnload.Dump()} for {sceneRef}");
             var op = SceneManager.UnloadSceneAsync(sceneToUnload);
-            if (op == null) {
+            if (op == null)
+            {
               throw new InvalidOperationException($"Failed to unload {sceneToUnload.Dump()}");
             }
 
@@ -575,7 +695,9 @@ namespace Fusion {
       }
     }
 
-    protected virtual IEnumerator OnSceneLoaded(SceneRef sceneRef, Scene scene, NetworkLoadSceneParameters sceneParams) {
+    [Obsolete]
+    protected virtual IEnumerator OnSceneLoaded(SceneRef sceneRef, Scene scene, NetworkLoadSceneParameters sceneParams)
+    {
       Log.TraceSceneManager(Runner, $"Finished loading, starting processing {scene.Dump()} for {sceneRef}");
 
       var sceneObjects = scene.GetComponents<NetworkObject>(includeInactive: true, out var rootObjects);
@@ -584,17 +706,19 @@ namespace Fusion {
       // scene objects need to be sorted by something that will guarantee the order
       Array.Sort(sceneObjects, NetworkObjectSortKeyComparer.Instance);
 
-      if (IsMultiplePeer) {
+      if (IsMultiplePeer)
+      {
         // create a root GO for all the gameObjects in the newly loaded scene
         var newSceneRoot = new GameObject($"[{scene.name}]").AddComponent<MultiPeerSceneRoot>();
-        newSceneRoot.SceneRef    = sceneRef;
+        newSceneRoot.SceneRef = sceneRef;
         newSceneRoot.SceneHandle = scene.handle;
-        newSceneRoot.Scene       = scene;
-        newSceneRoot.ScenePath   = scene.path;
+        newSceneRoot.Scene = scene;
+        newSceneRoot.ScenePath = scene.path;
 
         SceneManager.MoveGameObjectToScene(newSceneRoot.gameObject, scene);
 
-        foreach (var rootGameObject in rootObjects) {
+        foreach (var rootGameObject in rootObjects)
+        {
           rootGameObject.transform.SetParent(newSceneRoot.transform, true);
         }
 
@@ -604,57 +728,74 @@ namespace Fusion {
         Log.TraceSceneManager(Runner, $"Merging {scene.Dump()} to {MultiPeerScene.Dump()} for {sceneRef}");
         SceneManager.MergeScenes(scene, MultiPeerScene);
 
-        if (sceneParams.IsActiveOnLoad) {
+        if (sceneParams.IsActiveOnLoad)
+        {
           _multiPeerActiveRoot = newSceneRoot;
         }
-      } else {
-        if (sceneParams.IsActiveOnLoad) {
+      }
+      else
+      {
+        if (sceneParams.IsActiveOnLoad)
+        {
           SceneManager.SetActiveScene(scene);
         }
       }
-      
+
       // register scene objects; this will deactivate GameObjects for clients
       // the additional loadId parameter is passed to ensure each scene load
       // yields unique type ids for scene objects
       Runner.RegisterSceneObjects(sceneRef, sceneObjects, loadId: sceneParams.LoadId);
-      
+
       Log.TraceSceneManager(Runner, $"Finished loading & processing {scene.Dump()} for {sceneRef}");
       Runner.InvokeSceneLoadDone(new SceneLoadDoneArgs(sceneRef, sceneObjects, scene, rootObjects));
       yield break;
     }
 
-    protected virtual void OnLoadSceneProgress(SceneRef sceneRef, float progress) {
+    protected virtual void OnLoadSceneProgress(SceneRef sceneRef, float progress)
+    {
       Log.TraceSceneManager(Runner, $"Loading scene progress {sceneRef} ({progress:P2})");
     }
 
-    private void DestroyAllRuntimeSpawnedObjectsInScene(Scene scene, SceneRef sceneRef) {
+    [Obsolete]
+    private void DestroyAllRuntimeSpawnedObjectsInScene(Scene scene, SceneRef sceneRef)
+    {
       Log.TraceSceneManager(Runner, $"destroying runtime spawned NetworkObjects in scene {scene.Dump()} for {sceneRef}");
-      foreach (var networkObject in Runner.GetAllNetworkObjects()) {
+      foreach (var networkObject in Runner.GetAllNetworkObjects())
+      {
         // This exists to ensure all object meta is destroyed when unloading the scene to prevent objects from getting despawned and spawned again repeadetly on scene unload.
         // Scene objects are ignored as they can't be spawned again when the scene is unloaded.
-        if (networkObject.gameObject.scene == scene && networkObject.NetworkTypeId.IsSceneObject == false) {
-          if (networkObject.HasStateAuthority) {
+        if (networkObject.gameObject.scene == scene && networkObject.NetworkTypeId.IsSceneObject == false)
+        {
+          if (networkObject.HasStateAuthority)
+          {
             // despawn to ensure the object is immediately added to destroy queue. (Unity destroy callback is delayed until end of Update()
-            Runner.Despawn(networkObject); 
-          } else {
+            Runner.Despawn(networkObject);
+          }
+          else
+          {
             Destroy(networkObject.gameObject);
           }
         }
       }
     }
-    
-    private Scene FindSceneToTakeOver(SceneRef sceneRef) {
-      for (int i = 0; i < SceneManager.sceneCount; ++i) {
+
+    private Scene FindSceneToTakeOver(SceneRef sceneRef)
+    {
+      for (int i = 0; i < SceneManager.sceneCount; ++i)
+      {
         var candidate = SceneManager.GetSceneAt(i);
-        if (!candidate.isLoaded) {
+        if (!candidate.isLoaded)
+        {
           continue;
         }
 
-        if (GetSceneRef(candidate.path) != sceneRef) {
+        if (GetSceneRef(candidate.path) != sceneRef)
+        {
           continue;
         }
 
-        if (_allOwnedScenes.ContainsKey(candidate)) {
+        if (_allOwnedScenes.ContainsKey(candidate))
+        {
           continue;
         }
 
@@ -664,53 +805,68 @@ namespace Fusion {
       return default;
     }
 
-    private ICoroutine StartTracedCoroutine(IEnumerator inner) {
+    private ICoroutine StartTracedCoroutine(IEnumerator inner)
+    {
       var coro = new FusionCoroutine(inner);
 
       _runningCoroutines.Add(coro);
 
-      coro.Completed += x => {
+      coro.Completed += x =>
+      {
 
-        if (LogSceneLoadErrors && x.Error != null) {
+        if (LogSceneLoadErrors && x.Error != null)
+        {
           Log.Error(Runner, $"Failed async op: {x.Error.SourceException}");
         }
-        
+
         // remove this one from the list
         var index = _runningCoroutines.IndexOf((ICoroutine)x);
         Debug.Assert(index == 0, "Expected the completed coroutine to be the first in the list");
         _runningCoroutines.RemoveAt(index);
 
         // start the next one
-        if (index < _runningCoroutines.Count) {
+        if (index < _runningCoroutines.Count)
+        {
           Log.TraceSceneManager(Runner, $"Starting enqueued coroutine {index} of {_runningCoroutines.Count}");
           StartCoroutine(_runningCoroutines[index]);
         }
       };
 
-      if (_runningCoroutines.Count == 1) {
+      if (_runningCoroutines.Count == 1)
+      {
         // start immediately
         StartCoroutine(coro);
-      } else {
+      }
+      else
+      {
         Log.TraceSceneManager(Runner, $"Enqueued coroutine, there are already {_runningCoroutines.Count - 1} running");
       }
 
       return coro;
     }
 
-    protected LoadingScope MakeLoadingScope() {
+    protected LoadingScope MakeLoadingScope()
+    {
       return new LoadingScope(this);
     }
 
-    protected void MarkSceneAsOwned(SceneRef sceneRef, Scene scene) {
-      if (_allOwnedScenes.TryGetValue(scene, out var manager)) {
+    [Obsolete]
+    protected void MarkSceneAsOwned(SceneRef sceneRef, Scene scene)
+    {
+      if (_allOwnedScenes.TryGetValue(scene, out var manager))
+      {
         Log.Warn(Runner, $"Scene {scene.Dump()} (for {sceneRef}) already owned by {manager}");
-      } else {
+      }
+      else
+      {
         _allOwnedScenes.Add(scene, this);
       }
     }
 
-    private NetworkSceneAsyncOp FailOp(SceneRef sceneRef, Exception exception) {
-      if (LogSceneLoadErrors) {
+    private NetworkSceneAsyncOp FailOp(SceneRef sceneRef, Exception exception)
+    {
+      if (LogSceneLoadErrors)
+      {
         Log.Error(Runner, $"Failed with: {exception}");
       }
 
@@ -723,15 +879,17 @@ namespace Fusion {
     /// </summary>
     [InlineHelp]
     public string AddressableScenesLabel = "FusionScenes";
-    
-    public NetworkSceneManagerDefault() {
+
+    public NetworkSceneManagerDefault()
+    {
       _addressableScenesTask = new(() => GetAddressableScenes());
     }
-    
-    public Task LoadAddressableScenePathsAsync() {
+
+    public Task LoadAddressableScenePathsAsync()
+    {
       return _addressableScenesTask.Value.Task;
     }
-    
+
     /// <summary>
     /// Creates a task that resolves addressable scene paths. By default, this method locates all the addressable scenes with
     /// <see cref="AddressableScenesLabel"/> label. Override this method to provide a custom implementation. For example, user
@@ -747,33 +905,44 @@ namespace Fusion {
     /// </summary>
     /// <returns>A task representing resolve operation and optionally a delegate to be invoked before the task is going to be
     /// awaited synchronously</returns>
-    protected virtual GetAddressableScenesResult GetAddressableScenes() {
+    protected virtual GetAddressableScenesResult GetAddressableScenes()
+    {
       Log.TraceSceneManager(Runner, $"Locating addressable scenes with label: {AddressableScenesLabel}");
-      
-      var tcs    = new TaskCompletionSource<string[]>();
+
+      var tcs = new TaskCompletionSource<string[]>();
       var result = Addressables.LoadResourceLocationsAsync(AddressableScenesLabel, typeof(SceneInstance));
-        
-      result.Completed += op => {
-        try {
-          if (op.Status == AsyncOperationStatus.Failed) {
+
+      result.Completed += op =>
+      {
+        try
+        {
+          if (op.Status == AsyncOperationStatus.Failed)
+          {
             tcs.SetException(op.OperationException);
-          } else {
+          }
+          else
+          {
             var paths = op.Result.Select(x => x.PrimaryKey).ToArray();
             Log.TraceSceneManager(Runner, $"Found {paths.Length} addressable scenes: {string.Join(", ", paths)}");
             tcs.SetResult(paths);
           }
-        } finally {
+        }
+        finally
+        {
           Addressables.Release(op);
         }
       };
-      
-      return new GetAddressableScenesResult {
+
+      return new GetAddressableScenesResult
+      {
         Task = tcs.Task,
-        
+
         // awaiting tasks synchronously does not play well with addressables; simply waiting will block the main thread and that's it.
         // addressables *need* to have WaitForCompletion called
-        BeforeWaitForCompletion = () => {
-          if (result.IsValid()) {
+        BeforeWaitForCompletion = () =>
+        {
+          if (result.IsValid())
+          {
             result.WaitForCompletion();
           }
         },
@@ -784,20 +953,25 @@ namespace Fusion {
     /// Returns the timeout for addressable scene paths to be resolved. By default, this method returns 10 seconds.
     /// </summary>
     /// <returns></returns>
-    protected virtual TimeSpan GetAddressableScenePathsTimeout() {
+    protected virtual TimeSpan GetAddressableScenePathsTimeout()
+    {
       return TimeSpan.FromSeconds(10);
     }
-    
-    private bool TryGetAddressableScenes(out string[] addressableScenes) {
-      if (!_addressableScenesTask.IsValueCreated) {
+
+    private bool TryGetAddressableScenes(out string[] addressableScenes)
+    {
+      if (!_addressableScenesTask.IsValueCreated)
+      {
         Log.Warn(Runner, $"Going to block the thread in wait for addressable scene paths being resolved, call and await {nameof(LoadAddressableScenePathsAsync)} to avoid this.");
       }
 
       var t = _addressableScenesTask.Value;
-      if (!t.Task.IsCompleted) {
+      if (!t.Task.IsCompleted)
+      {
         t.BeforeWaitForCompletion?.Invoke();
-        
-        if (!t.Task.Wait(GetAddressableScenePathsTimeout())) {
+
+        if (!t.Task.Wait(GetAddressableScenePathsTimeout()))
+        {
           addressableScenes = null;
           return false;
         }
@@ -807,37 +981,44 @@ namespace Fusion {
       return true;
     }
 
-    protected struct GetAddressableScenesResult {
+    protected struct GetAddressableScenesResult
+    {
       public Task<string[]> Task;
-      public Action         BeforeWaitForCompletion;
-      public static implicit operator GetAddressableScenesResult(Task<string[]> task) {
-        return new GetAddressableScenesResult {
+      public Action BeforeWaitForCompletion;
+      public static implicit operator GetAddressableScenesResult(Task<string[]> task)
+      {
+        return new GetAddressableScenesResult
+        {
           Task = task,
         };
       }
     }
 
-    private Lazy<GetAddressableScenesResult>                          _addressableScenesTask;
+    private Lazy<GetAddressableScenesResult> _addressableScenesTask;
     private Dictionary<SceneRef, AsyncOperationHandle<SceneInstance>> _addressableOperations = new();
 #endif
 
-    protected sealed class MultiPeerSceneRoot : MonoBehaviour {
+    protected sealed class MultiPeerSceneRoot : MonoBehaviour
+    {
       public SceneRef SceneRef;
-      public string   ScenePath;
-      public int      SceneHandle;
-      public Scene    Scene;
+      public string ScenePath;
+      public int SceneHandle;
+      public Scene Scene;
     }
 
-    protected struct LoadingScope : IDisposable {
+    protected struct LoadingScope : IDisposable
+    {
       private readonly NetworkSceneManagerDefault _manager;
 
-      public LoadingScope(NetworkSceneManagerDefault manager) {
-        _manager            = manager;
+      public LoadingScope(NetworkSceneManagerDefault manager)
+      {
+        _manager = manager;
         _manager._isLoading = true;
         Log.TraceSceneManager(manager.Runner, "Loading scope started");
       }
 
-      public void Dispose() {
+      public void Dispose()
+      {
         _manager._isLoading = false;
         Log.TraceSceneManager(_manager.Runner, "Loading scope ended");
       }

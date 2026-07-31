@@ -1,0 +1,35 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/USS/FriendTemplateUSS.uss?fileID=7433441132597879392&amp;guid=9b7faaf13f5a8fc4f9c20fbe3628bab6&amp;type=3#FriendTemplateUSS"/>
+    <ui:VisualElement name="friend" class="friend">
+        <ui:VisualElement class="top-friend-panel">
+            <ui:Button text="Edit" name="editFriendNameButton" class="edit-friend-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28466886372425728)"/>
+                </Bindings>
+            </ui:Button>
+            <ui:Button text="Удалить" name="deleteFriendButton" class="delete-friend-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(23392972898304)"/>
+                </Bindings>
+            </ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement class="content-container">
+            <ui:Button name="updatePhotoButton" class="update-photo-button">
+                <ui:Label class="update-photo-button-label">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28521831842906112)"/>
+                    </Bindings>
+                </ui:Label>
+            </ui:Button>
+            <ui:VisualElement name="friendImage" class="friend-image"/>
+            <ui:VisualElement class="info-name-panel">
+                <ui:Label class="nickname">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:fa451ded8096eb749bdc86ea6ed569b7" entry="Id(28252776720433152)"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:Label text="FriendName" name="friendNameLabel" class="friend-name"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

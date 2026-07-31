@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: 157df9b1cb8a8fd4f98cbd44b780b8ed, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 5919c837df756c041bba88b1181d646b, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 513d005aebab46f44b3e91d13ea36938, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -204,6 +204,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DescriptionSceneController
   uiDocument: {fileID: 1423972214}
+  deckCardTemplate: {fileID: 9197481963319205126, guid: 9d87e140a326e584d9a7c88d2c30722f, type: 3}
+  cardPrefab3D: {fileID: 9197205212334985640, guid: 6da7955536f99de47a470d444c1ee790, type: 3}
 --- !u!4 &1719567607
 Transform:
   m_ObjectHideFlags: 0
@@ -324,7 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0

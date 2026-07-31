@@ -15,7 +15,7 @@ public class DeckController : MonoBehaviour
     private VisualElement root;
     private ScrollView decksScrollView;
     private VisualElement deckRoot;
-    private Label deckName;
+    private Label deckNameLabel;
     private Button editDeckButton;
     private Button deleteDeckButton;
     private VisualElement deckCardsContainer;
@@ -23,9 +23,7 @@ public class DeckController : MonoBehaviour
     private void Start()
     {
         InitializeUI();
-
         AddDecksToContainer(UserSession.Instance.ActiveUser.decks);
-
         RegisterEvent();
     }
 
@@ -39,9 +37,7 @@ public class DeckController : MonoBehaviour
     {
         decksScrollView.Clear();
         foreach (Deck deck in decks)
-        {
             AddDeckToContainer(deck);
-        }
     }
 
     private void AddDeckToContainer(Deck deck)
@@ -52,7 +48,7 @@ public class DeckController : MonoBehaviour
         InitializeDeckUI();
 
         deckRoot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-        deckName.text = deck.name;
+        deckNameLabel.text = deck.name;
 
         deckCardsContainer.Clear();
 
@@ -67,7 +63,7 @@ public class DeckController : MonoBehaviour
 
     private void InitializeDeckUI()
     {
-        deckName = deckRoot.Q<Label>("deckName");
+        deckNameLabel = deckRoot.Q<Label>("deckNameLabel");
         editDeckButton = deckRoot.Q<Button>("editDeckButton");
         deleteDeckButton = deckRoot.Q<Button>("deleteDeckButton");
         deckCardsContainer = deckRoot.Q<VisualElement>("deckCardsContainer");
@@ -92,26 +88,21 @@ public class DeckController : MonoBehaviour
 
     private void RegisterEvent()
     {
-        editorController.OnDeckUpdate += deck =>
-        {
-            VisualElement deckRoot = decksScrollView.Children().FirstOrDefault(child => (string)child.userData == deck.deckId);
-            if (deckRoot != null)
-            {
-                Label label = deckRoot.Q<Label>("deckName");
-                label.text = deck.name;
-
-                deckCardsContainer = deckRoot.Q<VisualElement>("deckCardsContainer");
-                deckCardsContainer.Clear();
-
-                deckCardListController = null;
-                deckCardListController = new DeckCardListController(deckCardsContainer);
-                _ = deckCardListController.LoadCardsToDeckContainer(deck);
-            }
-        };
-
         editorController.OnDeckAdded += newDeck =>
         {
             AddDeckToContainer(newDeck);
+        };
+
+        editorController.OnDeckUpdated += deck =>
+        {
+            deckRoot = decksScrollView.Children().FirstOrDefault(child => (string)child.userData == deck.deckId);
+            deckNameLabel = deckRoot.Q<Label>("deckNameLabel");
+            deckCardsContainer = deckRoot.Q<VisualElement>("deckCardsContainer");
+
+            deckNameLabel.text = deck.name;
+            deckCardsContainer.Clear();
+            deckCardListController = new DeckCardListController(deckCardsContainer);
+            _ = deckCardListController.LoadCardsToDeckContainer(deck);
         };
     }
 }

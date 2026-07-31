@@ -3,179 +3,40 @@ using UnityEngine.UIElements;
 using System.Xml;
 using TMPro;
 
-public struct ElementLayout
-{
-    public string borderBodyFileName;
-    public string borderElementsFileName;
-    public float Width;
-    public float Height;
-    public float Left;
-    public float Top;
-    public float MainLeft;
-    public float MainTop;
-    public float SecondaryLeft;
-    public float SecondaryTop;
-}
-
-public enum CardElementLayoutModeConfig
-{
-    Collection,
-    Deck,
-    Description
-}
-
-public static class CardElementLayoutConfigForCollection
-{
-    public static ElementLayout OneElementLayout = new()
-    {
-        borderBodyFileName = "borderWithLinearGradientForOneElement",
-        borderElementsFileName = "borderForOneElement",
-        Width = 63,
-        Height = 32,
-        Left = 190,
-        Top = 224,
-        MainLeft = 24,
-        MainTop = 5,
-        SecondaryLeft = 0,
-        SecondaryTop = 0
-    };
-
-    public static ElementLayout TwoElementLayout = new()
-    {
-        borderBodyFileName = "borderWithLinearGradientForTwoElement",
-        borderElementsFileName = "borderForTwoElements",
-        Width = 75,
-        Height = 32,
-        Left = 178,
-        Top = 223,
-        MainLeft = 16,
-        MainTop = 5,
-        SecondaryLeft = 43,
-        SecondaryTop = 5
-    };
-}
-
-public static class CardElementLayoutConfigForDeck
-{
-    public static ElementLayout OneElementLayout = new()
-    {
-        borderBodyFileName = "borderWithLinearGradientForOneElement",
-        borderElementsFileName = "borderForOneElement",
-        Width = 58,
-        Height = 30,
-        Left = 207,
-        Top = 235,
-        MainLeft = 22,
-        MainTop = 4,
-        SecondaryLeft = 0,
-        SecondaryTop = 0
-    };
-
-    public static ElementLayout TwoElementLayout = new()
-    {
-        borderBodyFileName = "borderWithLinearGradientForTwoElement",
-        borderElementsFileName = "borderForTwoElements",
-        Width = 70,
-        Height = 30,
-        Left = 195,
-        Top = 235,
-        MainLeft = 13,
-        MainTop = 4,
-        SecondaryLeft = 41,
-        SecondaryTop = 4
-    };
-}
-
-public static class CardElementLayoutConfigForDescription
-{
-    public static ElementLayout OneElementLayout = new()
-    {
-        borderBodyFileName = "borderWithLinearGradientForOneElement",
-        borderElementsFileName = "borderForOneElement",
-        Width = 130,
-        Height = 50,
-        Left = 304,
-        Top = 429,
-        MainLeft = 29,
-        MainTop = 7,
-        SecondaryLeft = 0,
-        SecondaryTop = 0
-    };
-
-    public static ElementLayout TwoElementLayout = new()
-    {
-        borderBodyFileName = "borderWithLinearGradientForTwoElement",
-        borderElementsFileName = "borderForTwoElements",
-        Width = 130,
-        Height = 50,
-        Left = 304,
-        Top = 429,
-        MainLeft = 29,
-        MainTop = 7,
-        SecondaryLeft = 79,
-        SecondaryTop = 7
-    };
-}
-
 public static class CardViewHelper
 {
-    public static void UpdateBodyUIToolkit(VisualElement cardRoot, CardModel cardModel, CardElementLayoutModeConfig mode)
+    public static void UpdateBodyUIToolkit(VisualElement cardRoot, CardModel cardModel)
     {
         VisualElement bodyContainer = cardRoot.Q<VisualElement>("body");
         VisualElement elementsArea = cardRoot.Q<VisualElement>("elementsArea");
-        VisualElement mainElement = cardRoot.Q<VisualElement>("mainElement");
-        VisualElement secondaryElement = cardRoot.Q<VisualElement>("secondaryElement");
+        XmlDocument bodyBorderXmlDocument;
 
-        XmlDocument bodyBorderXmlDocument, elementsAreaBorderXmlDocument;
-        ElementLayout layout;
-
-        switch (mode)
+        if (cardModel.secondaryElement != null)
         {
-            case CardElementLayoutModeConfig.Deck:
-                layout = cardModel.secondaryElement != null
-                    ? CardElementLayoutConfigForDeck.TwoElementLayout
-                    : CardElementLayoutConfigForDeck.OneElementLayout;
-                break;
-            case CardElementLayoutModeConfig.Description:
-                layout = cardModel.secondaryElement != null
-                    ? CardElementLayoutConfigForDescription.TwoElementLayout
-                    : CardElementLayoutConfigForDescription.OneElementLayout;
-                break;
-            default:
-                layout = cardModel.secondaryElement != null
-                    ? CardElementLayoutConfigForCollection.TwoElementLayout
-                    : CardElementLayoutConfigForCollection.OneElementLayout;
-                break;
+            string borderBodyFileName = "borderWithLinearGradientForTwoElement";
+            bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
+            elementsArea.RemoveFromClassList("one-element");
+            elementsArea.AddToClassList("two-elements");
         }
-
-        elementsArea.style.width = new StyleLength(layout.Width);
-        elementsArea.style.height = new StyleLength(layout.Height);
-        elementsArea.style.left = new StyleLength(layout.Left);
-        elementsArea.style.top = new StyleLength(layout.Top);
-
-        mainElement.style.left = new StyleLength(layout.MainLeft);
-        mainElement.style.top = new StyleLength(layout.MainTop);
-
-        secondaryElement.style.left = new StyleLength(layout.SecondaryLeft);
-        secondaryElement.style.top = new StyleLength(layout.SecondaryTop);
-
-        if (cardModel.secondaryElement == null)
-            secondaryElement.style.opacity = 0f;
-
-        bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(layout.borderBodyFileName);
-        elementsAreaBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(layout.borderElementsFileName);
+        else
+        {
+            string borderBodyFileName = "borderWithLinearGradientForOneElement";
+            bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
+            elementsArea.RemoveFromClassList("two-elements");
+            elementsArea.AddToClassList("one-element");
+        }
 
         UpdateGradientStops(bodyBorderXmlDocument, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
         BindVisualElementWithSvg(bodyContainer, bodyBorderXmlDocument.OuterXml);
-        BindVisualElementWithSvg(elementsArea, elementsAreaBorderXmlDocument.OuterXml);
     }
 
-    public static void UpdateBodyUGUI(GameObject cardRoot, CardModel cardModel)
+    public static void UpdateBody3D(GameObject cardRoot, CardModel cardModel)
     {
-        GameObject bodyContainer = cardRoot.transform.Find("Body").gameObject;
-        GameObject elementsArea = cardRoot.transform.Find("Body/ElementsArea").gameObject;
-        GameObject mainElement = cardRoot.transform.Find("Body/ElementsArea/MainElement").gameObject;
-        GameObject secondaryElement = cardRoot.transform.Find("Body/ElementsArea/SecondaryElement").gameObject;
+        MeshRenderer сardBodyBorderMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Body/CardBodyBorder").GetComponent<MeshRenderer>();
+        GameObject elementsArea = cardRoot.transform.Find("FrontUIContainer/Body/DefenseElements/ElementsAreaBorder").gameObject;
+        MeshRenderer elementsAreaBorderMeshRenderer = elementsArea.GetComponent<MeshRenderer>();
+        GameObject mainElement = cardRoot.transform.Find("FrontUIContainer/Body/DefenseElements/MainElementImage").gameObject;
+        GameObject secondaryElement = cardRoot.transform.Find("FrontUIContainer/Body/DefenseElements/SecondaryElementImage").gameObject;
 
         XmlDocument bodyBorderXmlDocument, elementsAreaBorderXmlDocument;
         string borderBodyFileName, borderElementsFileName;
@@ -192,77 +53,232 @@ public static class CardViewHelper
             borderElementsFileName = "borderForOneElement";
             bodyBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderBodyFileName);
 
-            RectTransform rectElementArea = elementsArea.GetComponent<RectTransform>();
-            rectElementArea.sizeDelta = new Vector2(37.8f, rectElementArea.sizeDelta.y);
+            Transform elementAreaTransform = elementsArea.GetComponent<Transform>();
+            elementAreaTransform.localPosition = new Vector3(elementAreaTransform.localPosition.x, -0.01572f, elementAreaTransform.localPosition.z);
+            elementAreaTransform.localScale = new Vector3(0.01015f, elementAreaTransform.localScale.y, elementAreaTransform.localScale.z);
 
-            RectTransform main = mainElement.GetComponent<RectTransform>();
-            main.anchoredPosition = new Vector2(2.7f, main.anchoredPosition.y);
-
-            secondaryElement.GetComponent<UnityEngine.UI.Image>().color = new Color(1f, 1f, 1f, 0f);
+            Transform mainElementTransform = mainElement.GetComponent<Transform>();
+            mainElementTransform.localPosition = new Vector3(mainElementTransform.localPosition.x, -0.01648f, mainElementTransform.localPosition.z);
+            secondaryElement.SetActive(false);
         }
 
         elementsAreaBorderXmlDocument = XMLDocumentCreater.CreateXmlDocument(borderElementsFileName);
         UpdateGradientStops(bodyBorderXmlDocument, cardModel.colors.borderColor1, cardModel.colors.borderColor2);
-        BindGameObjectWithSvg(bodyContainer, bodyBorderXmlDocument.OuterXml);
-        BindGameObjectWithSvg(elementsArea, elementsAreaBorderXmlDocument.OuterXml);
+        Texture2D cardBodyBorderTexture = SvgRenderer.SvgToTexture(bodyBorderXmlDocument.OuterXml);
+        сardBodyBorderMeshRenderer.materials[2].SetTexture("_BaseMap", cardBodyBorderTexture);
+        Texture2D elementsAreaBorderTexture = SvgRenderer.SvgToTexture(elementsAreaBorderXmlDocument.OuterXml);
+        elementsAreaBorderMeshRenderer.material.SetTexture("_BaseMap", elementsAreaBorderTexture);
     }
 
     public static void UpdateStatsUIToolkit(VisualElement cardRoot, CardModel cardModel)
     {
-        Label healthValue = cardRoot.Q<Label>("healthValue");
-        healthValue.text = cardModel.health.ToString();
-
         Label attackValue = cardRoot.Q<Label>("attackValue");
-        attackValue.text = cardModel.attack.ToString();
+        Label defenseValue = cardRoot.Q<Label>("defenseValue");
+        Label specialAttackValue = cardRoot.Q<Label>("specialAttackValue");
+        Label physicalAttackValue = cardRoot.Q<Label>("physicalAttackValue");
+
+        attackValue.text = cardModel.stats.attack.ToString();
+        defenseValue.text = cardModel.stats.defense.ToString();
+        specialAttackValue.text = cardModel.stats.specialAttack.ToString();
+        physicalAttackValue.text = cardModel.stats.specialDefense.ToString();
     }
 
-    // public static void UpdateStatsUGUI(GameObject cardRoot, CardModel cardModel)
-    // {
-
-    // }
-
-    public static void BindHPWithBattleState(GameObject cardRoot, CardModel cardModel)
+    public static void UpdateStats3D(GameObject cardRoot, CardModel cardModel)
     {
-        TextMeshProUGUI healthValue = cardRoot.transform.Find("Health/HealthValue").GetComponent<TextMeshProUGUI>();
-        if (cardRoot.TryGetComponent<CardBattleState>(out var battleState))
-        {
-            battleState.CurrentHP = cardModel.health;
-            battleState.OnXPChanged += (newXP) =>
-            {
-                healthValue.text = newXP.ToString();
-            };
-            healthValue.text = battleState.CurrentHP.ToString();
-        }
+        TextMeshPro attackValue = cardRoot.transform.Find("FrontUIContainer/Footer/Stats/Attack/AttackValue").GetComponent<TextMeshPro>();
+        TextMeshPro defenseValue = cardRoot.transform.Find("FrontUIContainer/Footer/Stats/Defense/DefenseValue").GetComponent<TextMeshPro>();
+        TextMeshPro specialAttackValue = cardRoot.transform.Find("FrontUIContainer/Footer/Stats/SpecialAttack/SpecialAttackValue").GetComponent<TextMeshPro>();
+        TextMeshPro physicalAttackValue = cardRoot.transform.Find("FrontUIContainer/Footer/Stats/PhysicalAttack/PhysicalAttackValue").GetComponent<TextMeshPro>();
+
+        attackValue.text = cardModel.stats.attack.ToString();
+        defenseValue.text = cardModel.stats.defense.ToString();
+        specialAttackValue.text = cardModel.stats.specialAttack.ToString();
+        physicalAttackValue.text = cardModel.stats.specialDefense.ToString();
     }
 
-    public static void BindCloneHPWithOriginal(GameObject cardRoot, int HP)
+    public static void UpdateAbilitiesUIToolkit(VisualElement cardRoot, CardModel cardModel)
     {
-        TextMeshProUGUI healthValue = cardRoot.transform.Find("Health/HealthValue").GetComponent<TextMeshProUGUI>();
-        healthValue.text = HP.ToString();
+        Label firstAbilityName = cardRoot.Q<Label>("firstAbilityName");
+        Label firstAbilityDiscription = cardRoot.Q<Label>("firstAbilityDiscription");
+        Label firstAbilityType = cardRoot.Q<Label>("firstAbilityType");
+        firstAbilityName.text = cardModel.abilities.firstAbility.name;
+        firstAbilityDiscription.text = cardModel.abilities.firstAbility.discription;
+        firstAbilityType.text = cardModel.abilities.firstAbility.type.ToString();
+
+        Label secondAbilityName = cardRoot.Q<Label>("secondAbilityName");
+        Label secondAbilityDiscription = cardRoot.Q<Label>("secondAbilityDiscription");
+        Label secondAbilityType = cardRoot.Q<Label>("secondAbilityType");
+        secondAbilityName.text = cardModel.abilities.secondAbility.name;
+        secondAbilityDiscription.text = cardModel.abilities.secondAbility.discription;
+        secondAbilityType.text = cardModel.abilities.secondAbility.type.ToString();
+
+        Label thirdAbilityName = cardRoot.Q<Label>("thirdAbilityName");
+        Label thirdAbilityDiscription = cardRoot.Q<Label>("thirdAbilityDiscription");
+        Label thirdAbilityType = cardRoot.Q<Label>("thirdAbilityType");
+        thirdAbilityName.text = cardModel.abilities.thirdAbility.name;
+        thirdAbilityDiscription.text = cardModel.abilities.thirdAbility.discription;
+        thirdAbilityType.text = cardModel.abilities.thirdAbility.type.ToString();
+
+        Label fourthAbilityName = cardRoot.Q<Label>("fourthAbilityName");
+        Label fourthAbilityDiscription = cardRoot.Q<Label>("fourthAbilityDiscription");
+        Label fourthAbilityType = cardRoot.Q<Label>("fourthAbilityType");
+        fourthAbilityName.text = cardModel.abilities.fourthAbility.name;
+        fourthAbilityDiscription.text = cardModel.abilities.fourthAbility.discription;
+        fourthAbilityType.text = cardModel.abilities.fourthAbility.type.ToString();
     }
 
-    public static void SetImagesUIToolkit(VisualElement root, CardModel model)
+    public static void UpdateAbilities3D(GameObject cardRoot, CardModel cardModel)
     {
-        root.Q<VisualElement>("pokemonImage").style.backgroundImage =
-            new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{model.imageName}"));
+        TextMeshPro firstAbilityName = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FirstAbility/FirstAbilityName").GetComponent<TextMeshPro>();
+        TextMeshPro firstAbilityDiscription = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FirstAbility/FirstAbilityDiscription").GetComponent<TextMeshPro>();
+        TextMeshPro firstAbilityType = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FirstAbility/FirstAbilityType").GetComponent<TextMeshPro>();
+        firstAbilityName.text = cardModel.abilities.firstAbility.name;
+        firstAbilityDiscription.text = cardModel.abilities.firstAbility.discription;
+        firstAbilityType.text = cardModel.abilities.firstAbility.type.ToString();
 
-        root.Q<VisualElement>("mainElement").style.backgroundImage =
-            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{model.mainElement.ToString().ToLowerInvariant()}"));
+        TextMeshPro secondAbilityName = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/SecondAbility/SecondAbilityName").GetComponent<TextMeshPro>();
+        TextMeshPro secondAbilityDiscription = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/SecondAbility/SecondAbilityDiscription").GetComponent<TextMeshPro>();
+        TextMeshPro secondAbilityType = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/SecondAbility/SecondAbilityType").GetComponent<TextMeshPro>();
+        secondAbilityName.text = cardModel.abilities.secondAbility.name;
+        secondAbilityDiscription.text = cardModel.abilities.secondAbility.discription;
+        secondAbilityType.text = cardModel.abilities.secondAbility.type.ToString();
 
-        root.Q<VisualElement>("secondaryElement").style.backgroundImage =
-            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{model.secondaryElement?.ToString().ToLowerInvariant()}"));
+        TextMeshPro thirdAbilityName = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/ThirdAbility/ThirdAbilityName").GetComponent<TextMeshPro>();
+        TextMeshPro thirdAbilityDiscription = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/ThirdAbility/ThirdAbilityDiscription").GetComponent<TextMeshPro>();
+        TextMeshPro thirdAbilityType = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/ThirdAbility/ThirdAbilityType").GetComponent<TextMeshPro>();
+        thirdAbilityName.text = cardModel.abilities.thirdAbility.name;
+        thirdAbilityDiscription.text = cardModel.abilities.thirdAbility.discription;
+        thirdAbilityType.text = cardModel.abilities.thirdAbility.type.ToString();
+
+        TextMeshPro fourthAbilityName = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FourthAbility/FourthAbilityName").GetComponent<TextMeshPro>();
+        TextMeshPro fourthAbilityDiscription = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FourthAbility/FourthAbilityDiscription").GetComponent<TextMeshPro>();
+        TextMeshPro fourthAbilityType = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FourthAbility/FourthAbilityType").GetComponent<TextMeshPro>();
+        fourthAbilityName.text = cardModel.abilities.fourthAbility.name;
+        fourthAbilityDiscription.text = cardModel.abilities.fourthAbility.discription;
+        fourthAbilityType.text = cardModel.abilities.fourthAbility.type.ToString();
     }
 
-    public static void SetImagesUGUI(GameObject root, CardModel model)
+    public static void UpdateAbilityDamageUIToolkit(VisualElement cardRoot, CardModel cardModel)
     {
-        UnityEngine.UI.Image pokemonImage = root.transform.Find("Body/PokemonImage").GetComponent<UnityEngine.UI.Image>();
-        pokemonImage.sprite = Resources.Load<Sprite>($"Sprites/PokemonImages/{model.imageName}");
+        Label firstAbilityDamage = cardRoot.Q<Label>("firstAbilityDamage");
+        if (cardModel.abilities.firstAbility.type == AbilityType.Physical)
+            firstAbilityDamage.text = (cardModel.stats.attack * cardModel.abilities.firstAbility.power / 50).ToString();
+        else if (cardModel.abilities.firstAbility.type == AbilityType.Special)
+            firstAbilityDamage.text = (cardModel.stats.specialAttack * cardModel.abilities.firstAbility.power / 50).ToString();
 
-        UnityEngine.UI.Image mainElementImage = root.transform.Find("Body/ElementsArea/MainElement").GetComponent<UnityEngine.UI.Image>();
-        mainElementImage.sprite = Resources.Load<Sprite>($"Sprites/Elements/{model.mainElement.ToString().ToLowerInvariant()}");
+        VisualElement firstAbilityDamageElement = cardRoot.Q<VisualElement>("firstAbilityDamageElement");
+        firstAbilityDamageElement.style.backgroundColor = new StyleColor(new Color32(226, 159, 159, 255));
 
-        UnityEngine.UI.Image secondaryElementImage = root.transform.Find("Body/ElementsArea/SecondaryElement").GetComponent<UnityEngine.UI.Image>();
-        secondaryElementImage.sprite = Resources.Load<Sprite>($"Sprites/Elements/{model.secondaryElement?.ToString().ToLowerInvariant()}");
+        Label secondAbilityDamage = cardRoot.Q<Label>("secondAbilityDamage");
+        if (cardModel.abilities.secondAbility.type == AbilityType.Physical)
+            secondAbilityDamage.text = (cardModel.stats.attack * cardModel.abilities.secondAbility.power / 50).ToString();
+        else if (cardModel.abilities.secondAbility.type == AbilityType.Special)
+            secondAbilityDamage.text = (cardModel.stats.specialAttack * cardModel.abilities.secondAbility.power / 50).ToString();
+
+        VisualElement secondAbilityDamageElement = cardRoot.Q<VisualElement>("secondAbilityDamageElement");
+        secondAbilityDamageElement.style.backgroundColor = new StyleColor(new Color32(226, 159, 159, 255));
+
+        Label fourthAbilityDamage = cardRoot.Q<Label>("fourthAbilityDamage");
+        if (cardModel.abilities.fourthAbility.type == AbilityType.Physical)
+            fourthAbilityDamage.text = (cardModel.stats.attack * cardModel.abilities.fourthAbility.power / 50).ToString();
+        else if (cardModel.abilities.fourthAbility.type == AbilityType.Special)
+            fourthAbilityDamage.text = (cardModel.stats.specialAttack * cardModel.abilities.fourthAbility.power / 50).ToString();
+
+        VisualElement fourthAbilityDamageElement = cardRoot.Q<VisualElement>("fourthAbilityDamageElement");
+        fourthAbilityDamageElement.style.backgroundColor = new StyleColor(new Color32(134, 211, 228, 255));
+    }
+
+    public static void UpdateAbilityDamage3D(GameObject cardRoot, CardModel cardModel)
+    {
+        TextMeshPro firstAbilityDamage = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FirstAbility/FirstAbilityDamage").GetComponent<TextMeshPro>();
+        if (cardModel.abilities.firstAbility.type == AbilityType.Physical)
+            firstAbilityDamage.text = (cardModel.stats.attack * cardModel.abilities.firstAbility.power / 50).ToString();
+        else if (cardModel.abilities.firstAbility.type == AbilityType.Special)
+            firstAbilityDamage.text = (cardModel.stats.specialAttack * cardModel.abilities.firstAbility.power / 50).ToString();
+
+        MeshRenderer firstAbilityDamagePlateMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FirstAbility/FirstAbilityDamagePlateMesh").GetComponent<MeshRenderer>();
+        firstAbilityDamagePlateMeshRenderer.material.color = new Color32(226, 159, 159, 255);
+
+        TextMeshPro secondAbilityDamage = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/SecondAbility/SecondAbilityDamage").GetComponent<TextMeshPro>();
+        if (cardModel.abilities.secondAbility.type == AbilityType.Physical)
+            secondAbilityDamage.text = (cardModel.stats.attack * cardModel.abilities.secondAbility.power / 50).ToString();
+        else if (cardModel.abilities.secondAbility.type == AbilityType.Special)
+            secondAbilityDamage.text = (cardModel.stats.specialAttack * cardModel.abilities.secondAbility.power / 50).ToString();
+
+        MeshRenderer secondAbilityDamagePlateMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/SecondAbility/SecondAbilityDamagePlateMesh").GetComponent<MeshRenderer>();
+        secondAbilityDamagePlateMeshRenderer.material.color = new Color32(226, 159, 159, 255);
+
+        TextMeshPro fourthAbilityDamage = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FourthAbility/FourthAbilityDamage").GetComponent<TextMeshPro>();
+        if (cardModel.abilities.fourthAbility.type == AbilityType.Physical)
+            fourthAbilityDamage.text = (cardModel.stats.attack * cardModel.abilities.fourthAbility.power / 50).ToString();
+        else if (cardModel.abilities.fourthAbility.type == AbilityType.Special)
+            fourthAbilityDamage.text = (cardModel.stats.specialAttack * cardModel.abilities.fourthAbility.power / 50).ToString();
+
+        MeshRenderer fourthAbilityDamagePlateMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FourthAbility/FourthAbilityDamagePlateMesh").GetComponent<MeshRenderer>();
+        fourthAbilityDamagePlateMeshRenderer.material.color = new Color32(134, 211, 228, 255);
+    }
+
+    public static void SetBodyImagesUIToolkit(VisualElement cardRoot, CardModel cardModel)
+    {
+        VisualElement pokemonImage = cardRoot.Q<VisualElement>("pokemonImage");
+        pokemonImage.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/PokemonImages/{cardModel.imageName}"));
+
+        CardUIToolkitVisualDataSO visualData = cardModel.uiToolkitVisualData;
+        pokemonImage.style.top = Length.Percent(visualData.topPercent);
+        pokemonImage.style.left = Length.Percent(visualData.leftPercent);
+        pokemonImage.style.rotate = new Rotate(Angle.Degrees(visualData.rotationAngle));
+        pokemonImage.style.scale = new StyleScale(new Vector2(visualData.scaleX, visualData.scaleY));
+
+        cardRoot.Q<VisualElement>("mainElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.mainElement.ToString().ToLowerInvariant()}"));
+
+        cardRoot.Q<VisualElement>("secondaryElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.secondaryElement?.ToString().ToLowerInvariant()}"));
+    }
+
+    public static void SetImages3D(GameObject cardRoot, CardModel cardModel)
+    {
+        Transform pokemonImageTransform = cardRoot.transform.Find("FrontUIContainer/Body/PokemonImage");
+
+        MeshRenderer pokemonImageMeshRenderer = pokemonImageTransform.GetComponent<MeshRenderer>();
+        pokemonImageMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/PokemonImages/{cardModel.imageName}"));
+
+        pokemonImageTransform.localPosition = cardModel.visualData.position;
+        pokemonImageTransform.localScale = cardModel.visualData.scale;
+        pokemonImageTransform.localEulerAngles = cardModel.visualData.rotation;
+
+        MeshRenderer mainElementImageMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Body/DefenseElements/MainElementImage").GetComponent<MeshRenderer>();
+        mainElementImageMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/Elements/{cardModel.mainElement.ToString().ToLowerInvariant()}"));
+
+        MeshRenderer secondaryElementImageMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Body/DefenseElements/SecondaryElementImage").GetComponent<MeshRenderer>();
+        secondaryElementImageMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/Elements/{cardModel.secondaryElement?.ToString().ToLowerInvariant()}"));
+
+        MeshRenderer firstAbilityElementMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FirstAbility/FirstAbilityElement").GetComponent<MeshRenderer>();
+        firstAbilityElementMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/Elements/{cardModel.abilities.firstAbility.element}"));
+
+        MeshRenderer secondAbilityElementMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/SecondAbility/SecondAbilityElement").GetComponent<MeshRenderer>();
+        secondAbilityElementMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/Elements/{cardModel.abilities.secondAbility.element}"));
+
+        MeshRenderer thirdAbilityElementMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/ThirdAbility/ThirdAbilityElement").GetComponent<MeshRenderer>();
+        thirdAbilityElementMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/Elements/{cardModel.abilities.thirdAbility.element}"));
+
+        MeshRenderer fourthAbilityElementMeshRenderer = cardRoot.transform.Find("FrontUIContainer/Footer/Abilities/FourthAbility/FourthAbilityElement").GetComponent<MeshRenderer>();
+        fourthAbilityElementMeshRenderer.material.SetTexture("_BaseMap", Resources.Load<Texture2D>($"Sprites/Elements/{cardModel.abilities.fourthAbility.element}"));
+    }
+
+    public static void SetAbilityElementsImagesUIToolkit(VisualElement cardRoot, CardModel cardModel)
+    {
+        cardRoot.Q<VisualElement>("firstAbilityElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.abilities.firstAbility.element.ToString().ToLowerInvariant()}"));
+
+        cardRoot.Q<VisualElement>("secondAbilityElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.abilities.secondAbility.element.ToString().ToLowerInvariant()}"));
+
+        cardRoot.Q<VisualElement>("thirdAbilityElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.abilities.thirdAbility.element.ToString().ToLowerInvariant()}"));
+
+        cardRoot.Q<VisualElement>("fourthAbilityElement").style.backgroundImage =
+            new StyleBackground(Resources.Load<Sprite>($"Sprites/Elements/{cardModel.abilities.fourthAbility.element.ToString().ToLowerInvariant()}"));
     }
 
     public static void BindVisualElementWithSvg(VisualElement visualElement, string xmlCode)
@@ -271,11 +287,15 @@ public static class CardViewHelper
         visualElement.style.backgroundImage = new StyleBackground(texture);
     }
 
-    public static void BindGameObjectWithSvg(GameObject gameObject, string xmlCode)
+    public static void BindHPWithBattleState3D(GameObject cardRoot, CardModel cardModel)
     {
-        Texture2D texture = SvgRenderer.SvgToTexture(xmlCode);
-        gameObject.GetComponent<UnityEngine.UI.Image>().sprite =
-            Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        TextMeshPro healthValue = cardRoot.transform.Find("FrontUIContainer/Body/Health/HealthValue").GetComponent<TextMeshPro>();
+        if (cardRoot.TryGetComponent<CardBattleState>(out var battleState))
+        {
+            battleState.CurrentHP = cardModel.health;
+            battleState.OnHPChanged += (newXP) => { healthValue.text = newXP.ToString(); };
+            healthValue.text = battleState.CurrentHP.ToString();
+        }
     }
 
     public static void UpdateGradientStops(XmlDocument document, Color color1, Color color2)

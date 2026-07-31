@@ -1,0 +1,78 @@
+.top-bar {    
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: flex-start; 
+    align-items: center;
+    background-color: var(--bg-top-panel);
+    border-bottom-width: 1px;
+    border-color: var(--top-panel-border-color);
+    padding: 30px 70px 30px 100px;
+}
+
+.profile-field {
+    width: 15%; 
+    height: 100%; 
+    flex-direction: row; 
+    justify-content: flex-start; 
+    flex-wrap: nowrap; 
+    flex-shrink: 1; 
+    background-color: var(--bg-profile-field);
+    border-width: 5px; 
+    border-color: var(--profile-field-border-color);
+    border-radius: 40px; 
+    padding: 10px 30px;
+}
+
+.user-image {
+    width: 28%; 
+    height: 100%; 
+    justify-content: center; 
+    align-items: center; 
+    background-image: resource("Sprites/google_icon"); 
+    background-color: rgba(0, 0, 0, 0.01); 
+    border-radius: 35px; 
+    margin-bottom: 0; 
+}
+
+.player-name {
+    width: 70%; 
+    height: 100%; 
+    flex-wrap: wrap; 
+    font-size: 30px; 
+    color: var(--player-name-text-color);
+    -unity-text-align: middle-center; 
+    white-space: normal; 
+    text-overflow: clip; 
+    margin: 0; 
+    padding: 0; 
+    left: 10px;
+}
+
+.nav-buttons {
+    width: 85%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-left: 0;
+    margin-right: 0; 
+}
+
+.nav-button {
+    width: 10%;
+    min-width: 100px;
+    min-height: 40px;
+    background-color: transparent;
+    border-width: 0;
+    margin: 0 10px;
+    padding: 0;
+}
+
+.nav-button_text {
+    width: 100%;
+    height: 100%;
+    font-size: 20px;
+    color: var(--top-nav-button-text-color);
+    margin: 0;
+    padding: 0;
+}

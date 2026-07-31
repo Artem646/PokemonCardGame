@@ -26,15 +26,20 @@ public class DeckCardController : BaseCardController
         CardControllerFactory.Init(template: DeckCardView.CardTemplate);
         DeckCardController cloneController = CardControllerFactory.Create<DeckCardController>(CardModel);
         cloneController?.UnregisterEvents();
-        IDeckCardView cloneView = cloneController?.DeckCardView;
-        if (cloneView != null)
-            CardOverlayManager.Instance?.ShowDeckCard(DeckCardView, cloneView);
+
+        IDeckCardView cloneCardView = cloneController.DeckCardView;
+        cloneCardView.ApplyCloneCardStyle();
+
+        CardOverlayManager.Instance.ShowDeckCard(DeckCardView, cloneCardView);
     }
 
     public override void AddToContainer(object container)
     {
         if (container is VisualElement visualElement)
+        {
+            DeckCardView.CardRoot.AddToClassList("deck-card");
             visualElement.Add(DeckCardView.CardRoot);
+        }
     }
 
     public override void RemoveFromContainer()
